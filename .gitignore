@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+npm-debug.log*
+themes/lfk-tailwind/assets/dist/*.map
+backups/
+.env
+.env.*
+!.env.example
+reports/ai-marketing-foundation-team-brief-*/
+reports/lfk-section-audit-*/

@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning For Kidz AI Marketing Foundation Brief</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #5d6678;
+      --line: #dfe4ec;
+      --panel: #ffffff;
+      --surface: #f7f9fb;
+      --blue: #2f6f9f;
+      --cyan: #42bedd;
+      --orange: #cc6f47;
+      --olive: #6d9444;
+      --gold: #a8871f;
+      --ready: #e6f6ed;
+      --ready-ink: #1e6a3d;
+      --good: #e9f3ff;
+      --good-ink: #245e8e;
+      --decision: #fff2dc;
+      --decision-ink: #87521c;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { max-width: 100%; display: block; }
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+    header.report-header {
+      padding: 28px 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--orange);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+    h1 {
+      margin: 0;
+      max-width: 980px;
+      font-size: 3.7rem;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .lead {
+      margin: 18px 0 0;
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 1.12rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section {
+      margin-top: 34px;
+      padding-top: 6px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 2rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; }
+    .summary {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .summary ul {
+      margin: 0;
+      padding-left: 22px;
+    }
+    .summary li + li { margin-top: 10px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 16px;
+      min-height: 150px;
+    }
+    .metric-value {
+      font-size: 3.2rem;
+      line-height: 1;
+      font-weight: 800;
+    }
+    .metric-label {
+      margin-top: 8px;
+      font-weight: 800;
+    }
+    .metric p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+    .metric-blue .metric-value { color: var(--blue); }
+    .metric-olive .metric-value { color: var(--olive); }
+    .metric-orange .metric-value { color: var(--orange); }
+    .metric-gold .metric-value { color: var(--gold); }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .visual {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .visual p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      font-weight: 800;
+      color: var(--ink);
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 800;
+      font-size: 0.86rem;
+    }
+    .status.ready { background: var(--ready); color: var(--ready-ink); }
+    .status.good { background: var(--good); color: var(--good-ink); }
+    .status.decision { background: var(--decision); color: var(--decision-ink); }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .shot {
+      margin: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .shot img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    figcaption {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .comparison {
+      margin-top: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .comparison > p { color: var(--muted); }
+    .screen-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .screen-pair figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .screen-pair img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    .process {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--cyan);
+      border-radius: 8px;
+      padding: 13px;
+      min-height: 160px;
+    }
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+    .step p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .app {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .app p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .phase {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .phase ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+    .message {
+      background: #1f2430;
+      color: #f7f9fb;
+      border-radius: 8px;
+      padding: 18px;
+      white-space: pre-wrap;
+      font-size: 0.98rem;
+    }
+    .message strong { color: #ffffff; }
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 920px) {
+      h1 { font-size: 2.6rem; }
+      h2 { font-size: 1.7rem; }
+      .metric-value { font-size: 2.7rem; }
+      .metrics, .chart-grid, .gallery, .screen-pair, .process, .apps, .roadmap {
+        grid-template-columns: 1fr;
+      }
+      .screen-pair img { height: 300px; }
+      table { min-width: 680px; }
+    }
+    @media (max-width: 520px) {
+      h1 { font-size: 2.35rem; }
+      h2 { font-size: 1.55rem; }
+      .lead { font-size: 1rem; }
+      .metric-value { font-size: 2.45rem; }
+      .button { width: 100%; justify-content: center; }
+    }
+    @media print {
+      body { background: #fff; }
+      .button, .actions { display: none; }
+      .page { width: auto; margin: 0; padding: 0; }
+      section { break-inside: avoid; }
+      .screen-pair img { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="report-header">
+      <p class="eyebrow">Team Brief - June 12, 2026</p>
+      <h1>Learning For Kidz: เปลี่ยนเว็บไซต์ให้เป็นฐานของ AI Marketing Engine</h1>
+      <p class="lead">Custom theme ไม่ใช่แค่เปลี่ยนหน้าตาเว็บ แต่เป็นก้าวแรกในการทำให้ทีมสร้าง marketing pages, promotion tools, business apps และ automation ได้เร็วขึ้น พร้อมหลักฐานก่อนและหลังทุกครั้ง</p>
+      <div class="actions">
+        <a class="button primary" href="lfk-section-audit-2026-06-11/">เปิด Full Section Audit</a>
+        <a class="button" href="team-brief-th.pdf">Download PDF</a>
+        <a class="button" href="team-message-th.md">เปิดข้อความสำหรับส่งทีม</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>Executive Summary / สรุปสำหรับทีม</h2>
+      <div class="summary">
+        <ul>
+          <li><strong>ใช่, หน้าเว็บโหลดดีขึ้นอย่างมีนัยสำคัญ.</strong> จาก audit 21 หน้า จำนวน request ลดลงค่ากลาง 79.8% และเวลา load event ลดลงค่ากลาง 88.6% เมื่อเทียบ custom theme local กับ production Elementor.</li>
+          <li><strong>Custom theme คือ foundation สำหรับ AI-ready marketing.</strong> เมื่อส่วนสำคัญกลายเป็น template และ component ที่ชัดเจน AI จะสร้างหน้า campaign, product page, report และ automation ได้เร็วกว่าแก้ Elementor ทีละหน้า.</li>
+          <li><strong>Commerce core พร้อมเป็นฐานแล้ว แต่ checkout ยังต้องตัดสินใจ.</strong> Shop/archive/product/cart ใกล้เคียง production และเร็วขึ้นมาก ส่วน checkout ต้องเลือกระหว่าง match Elementor ให้มากขึ้น หรือยอมรับ layout ที่เรียบกว่าเพื่อ speed และ maintainability.</li>
+          <li><strong>วิธีคุยกับทีมควรเป็น business roadmap.</strong> สื่อสารว่าเรากำลังสร้างระบบให้ทีมขอ solution/app ได้เร็วขึ้น ไม่ใช่แค่ทำเว็บใหม่.</li>
+        </ul>
+      </div>
+      <div class="metrics">
+      <article class="metric metric-blue">
+        <div class="metric-value">79.8%</div>
+        <div class="metric-label">จำนวน request ลดลง</div>
+        <p>ค่ากลางของ 21 หน้า: request ลดลงจาก production Elementor</p>
+      </article>
+    
+
+      <article class="metric metric-olive">
+        <div class="metric-value">64.1%</div>
+        <div class="metric-label">น้ำหนักหน้าเว็บลดลง</div>
+        <p>ค่ากลางของ decoded payload ที่ browser ต้องโหลด ลดลงจาก production</p>
+      </article>
+    
+
+      <article class="metric metric-orange">
+        <div class="metric-value">88.6%</div>
+        <div class="metric-label">เวลา load ลดลง</div>
+        <p>เวลา load event ลดลงจาก production เป็นตัวชี้วัดทิศทาง</p>
+      </article>
+    
+
+      <article class="metric metric-gold">
+        <div class="metric-value">21</div>
+        <div class="metric-label">หน้า audit แล้ว</div>
+        <p>รวม desktop และ mobile สำหรับหน้าหลักของ WooCommerce และ custom pages</p>
+      </article>
+    </div>
+    </section>
+
+    <section>
+      <h2>หลักฐานเรื่องความเร็ว</h2>
+      <p>คำตอบสั้นคือดีขึ้นชัดเจน. Percent ใน report นี้หมายถึง “ลดลงจาก production” โดยคำนวณแบบ (production - local) / production. ตัวอย่าง: request ลดลง 79.8% แปลว่า local เหลือ request ประมาณ 20.2% ของ production.</p>
+      <div class="chart-grid">
+        <article class="visual">
+          <img src="assets/performance_reduction.png" alt="Median performance reduction chart">
+          <p>ค่ากลางของ 21 route: request, payload, DOMContentLoaded และ load event ลดลงทั้งหมดเมื่อเทียบกับ production.</p>
+        </article>
+        <article class="visual">
+          <img src="assets/page_group_speed.png" alt="Page group request reduction chart">
+          <p>Commerce และ marketing pages ได้ประโยชน์มาก เพราะลด Elementor/WooCommerce wrapper และ asset ที่ไม่จำเป็น.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>สถานะตามส่วนของเว็บไซต์</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ส่วนของเว็บ</th>
+              <th>สถานะ</th>
+              <th>Feedback สำหรับทีม</th>
+              <th>งานต่อไป</th>
+            </tr>
+          </thead>
+          <tbody>
+      <tr>
+        <th scope="row">Header, menu, language, search, footer</th>
+        <td><span class="status ready">พร้อมเป็นฐาน</span></td>
+        <td>โครงสร้างหลักใกล้เคียงเว็บจริงและเร็วขึ้นมาก</td>
+        <td>ใช้เป็นระบบกลางของทุก marketing page</td>
+      </tr>
+    
+
+      <tr>
+        <th scope="row">Shop, category, brand, age archive</th>
+        <td><span class="status ready">พร้อมเป็นฐาน</span></td>
+        <td>มี hero, filter, product grid และ product card ที่ทีมใช้งานต่อได้</td>
+        <td>ตรวจ product count และ refinement ของ card ในรอบถัดไป</td>
+      </tr>
+    
+
+      <tr>
+        <th scope="row">Single product</th>
+        <td><span class="status good">ใกล้เคียงเว็บจริง</span></td>
+        <td>หน้าสินค้าใช้งานได้และเบากว่า Elementor ชัดเจน</td>
+        <td>ปรับ related products และ trust content ให้เหมือน production มากขึ้น</td>
+      </tr>
+    
+
+      <tr>
+        <th scope="row">Cart, account, wishlist</th>
+        <td><span class="status good">ใกล้เคียงเว็บจริง</span></td>
+        <td>flow หลักทำงานและ style รวมเข้ากับ theme แล้ว</td>
+        <td>ทดสอบ coupon, shipping, login และ edge cases ก่อนขึ้นจริง</td>
+      </tr>
+    
+
+      <tr>
+        <th scope="row">Checkout</th>
+        <td><span class="status decision">ต้องตัดสินใจ</span></td>
+        <td>เร็วขึ้นมาก แต่ layout ยัง utilitarian กว่า production</td>
+        <td>ต้องเลือกว่าจะ match Elementor สองคอลัมน์ หรือใช้ checkout ที่เรียบและเร็วกว่า</td>
+      </tr>
+    
+
+      <tr>
+        <th scope="row">Home, promotion, ages, brands</th>
+        <td><span class="status decision">ต้องปรับเชิงภาพ</span></td>
+        <td>first viewport และฐาน theme ดี แต่บาง section ยังไม่ rich เท่า Elementor</td>
+        <td>ใช้ custom components ทำ hero/cards/campaign modules ที่ AI reuse ได้</td>
+      </tr>
+    
+
+      <tr>
+        <th scope="row">Blog, search, contact, policy pages</th>
+        <td><span class="status good">ใช้ต่อได้</span></td>
+        <td>functional และเบากว่าเดิม โดยหน้ากฎหมาย/เนื้อหายังไม่จำเป็นต้องย้ายทั้งหมดทันที</td>
+        <td>ค่อยย้ายหน้า content ที่มีผลต่อ SEO และ campaign ก่อน</td>
+      </tr>
+    </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>ตัวเลขหน้าเว็บหลัก</h2>
+      <p class="note">ตารางนี้เอาไว้ใช้ตอบคำถามว่า “เร็วขึ้นแค่ไหน” แบบไม่ต้องเปิด technical log.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Requests: Prod -> Local</th>
+              <th>Request ลดลง</th>
+              <th>Load: Prod -> Local</th>
+              <th>Load time ลดลง</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">home</th>
+              <td>355 -> 83</td>
+              <td>76.6%</td>
+              <td>5089 -> 704 ms</td>
+              <td>86.2% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">shop</th>
+              <td>347 -> 66</td>
+              <td>81.0%</td>
+              <td>5331 -> 511 ms</td>
+              <td>90.4% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">product-category</th>
+              <td>346 -> 65</td>
+              <td>81.2%</td>
+              <td>8443 -> 665 ms</td>
+              <td>92.1% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">single-product</th>
+              <td>363 -> 72</td>
+              <td>80.2%</td>
+              <td>5553 -> 632 ms</td>
+              <td>88.6% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">cart</th>
+              <td>378 -> 117</td>
+              <td>69.0%</td>
+              <td>7897 -> 1935 ms</td>
+              <td>75.5% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">checkout</th>
+              <td>400 -> 137</td>
+              <td>65.8%</td>
+              <td>9377 -> 1711 ms</td>
+              <td>81.8% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">promotion</th>
+              <td>339 -> 67</td>
+              <td>80.2%</td>
+              <td>13712 -> 516 ms</td>
+              <td>96.2% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">ages-page</th>
+              <td>344 -> 57</td>
+              <td>83.4%</td>
+              <td>8522 -> 546 ms</td>
+              <td>93.6% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">brands-page</th>
+              <td>350 -> 71</td>
+              <td>79.7%</td>
+              <td>8273 -> 577 ms</td>
+              <td>93.0% ลดลง</td>
+            </tr>
+            
+
+            <tr>
+              <th scope="row">about-page</th>
+              <td>340 -> 150</td>
+              <td>55.9%</td>
+              <td>17972 -> 4037 ms</td>
+              <td>77.5% ลดลง</td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>ภาพรวม Screenshot Evidence</h2>
+      <p>ภาพเหล่านี้คือ contact sheet จาก audit ที่จับทั้ง production Elementor และ local custom theme. คลิกที่รูปเพื่อดูขนาดเต็ม.</p>
+      <div class="gallery">
+      <figure class="shot">
+        <a href="assets/desktop-commerce.png"><img src="assets/desktop-commerce.png" alt="Desktop commerce overview: product archive, product detail, cart, checkout"></a>
+        <figcaption>Desktop commerce overview: product archive, product detail, cart, checkout</figcaption>
+      </figure>
+    
+
+      <figure class="shot">
+        <a href="assets/mobile-commerce.png"><img src="assets/mobile-commerce.png" alt="Mobile commerce overview: key WooCommerce pages"></a>
+        <figcaption>Mobile commerce overview: key WooCommerce pages</figcaption>
+      </figure>
+    
+
+      <figure class="shot">
+        <a href="assets/desktop-content.png"><img src="assets/desktop-content.png" alt="Desktop content overview: blog, search, contact, custom pages"></a>
+        <figcaption>Desktop content overview: blog, search, contact, custom pages</figcaption>
+      </figure>
+    
+
+      <figure class="shot">
+        <a href="assets/mobile-content.png"><img src="assets/mobile-content.png" alt="Mobile content overview: content and marketing pages"></a>
+        <figcaption>Mobile content overview: content and marketing pages</figcaption>
+      </figure>
+    </div>
+    </section>
+
+    <section>
+      <h2>ภาพเทียบหน้าสำคัญ</h2>
+      <p>ส่วนนี้ช่วยให้ทีมเห็นว่าอะไรเข้าใกล้ production แล้ว และอะไรต้องตัดสินใจต่อ.</p>
+      
+      <article class="comparison">
+        <h3>Home / หน้าแรก</h3>
+        <p>Header และ first viewport เข้าใกล้ production แล้ว ส่วน lower sections ควรทำเป็น reusable marketing modules ในเฟสต่อไป</p>
+        <div class="screen-pair">
+          <figure>
+            <a href="assets/desktop-prod-home.png"><img src="assets/desktop-prod-home.png" alt="Home / หน้าแรก production screenshot"></a>
+            <figcaption>Production Elementor</figcaption>
+          </figure>
+          <figure>
+            <a href="assets/desktop-local-home.png"><img src="assets/desktop-local-home.png" alt="Home / หน้าแรก local custom theme screenshot"></a>
+            <figcaption>Local Custom Theme</figcaption>
+          </figure>
+        </div>
+      </article>
+    
+
+      <article class="comparison">
+        <h3>Shop archive / หน้ารวมสินค้า</h3>
+        <p>Custom theme มี filter และ grid พร้อมเป็นฐานสำหรับ product discovery และ campaign landing pages</p>
+        <div class="screen-pair">
+          <figure>
+            <a href="assets/desktop-prod-shop.png"><img src="assets/desktop-prod-shop.png" alt="Shop archive / หน้ารวมสินค้า production screenshot"></a>
+            <figcaption>Production Elementor</figcaption>
+          </figure>
+          <figure>
+            <a href="assets/desktop-local-shop.png"><img src="assets/desktop-local-shop.png" alt="Shop archive / หน้ารวมสินค้า local custom theme screenshot"></a>
+            <figcaption>Local Custom Theme</figcaption>
+          </figure>
+        </div>
+      </article>
+    
+
+      <article class="comparison">
+        <h3>Single product / หน้าสินค้า</h3>
+        <p>หน้าสินค้าเบาขึ้นมากและพร้อมต่อยอดเป็น AI product page assistant</p>
+        <div class="screen-pair">
+          <figure>
+            <a href="assets/desktop-prod-single-product.png"><img src="assets/desktop-prod-single-product.png" alt="Single product / หน้าสินค้า production screenshot"></a>
+            <figcaption>Production Elementor</figcaption>
+          </figure>
+          <figure>
+            <a href="assets/desktop-local-single-product.png"><img src="assets/desktop-local-single-product.png" alt="Single product / หน้าสินค้า local custom theme screenshot"></a>
+            <figcaption>Local Custom Theme</figcaption>
+          </figure>
+        </div>
+      </article>
+    
+
+      <article class="comparison">
+        <h3>Cart / ตะกร้า</h3>
+        <p>Cart ใกล้ production และ CTA สีหลักเข้ากับ brand แล้ว</p>
+        <div class="screen-pair">
+          <figure>
+            <a href="assets/desktop-prod-cart.png"><img src="assets/desktop-prod-cart.png" alt="Cart / ตะกร้า production screenshot"></a>
+            <figcaption>Production Elementor</figcaption>
+          </figure>
+          <figure>
+            <a href="assets/desktop-local-cart.png"><img src="assets/desktop-local-cart.png" alt="Cart / ตะกร้า local custom theme screenshot"></a>
+            <figcaption>Local Custom Theme</figcaption>
+          </figure>
+        </div>
+      </article>
+    
+
+      <article class="comparison">
+        <h3>Checkout / ชำระเงิน</h3>
+        <p>นี่คือหน้าที่ควรตัดสินใจเชิงธุรกิจ เพราะ speed ดีขึ้น แต่ visual match ยังต่างที่สุด</p>
+        <div class="screen-pair">
+          <figure>
+            <a href="assets/desktop-prod-checkout.png"><img src="assets/desktop-prod-checkout.png" alt="Checkout / ชำระเงิน production screenshot"></a>
+            <figcaption>Production Elementor</figcaption>
+          </figure>
+          <figure>
+            <a href="assets/desktop-local-checkout.png"><img src="assets/desktop-local-checkout.png" alt="Checkout / ชำระเงิน local custom theme screenshot"></a>
+            <figcaption>Local Custom Theme</figcaption>
+          </figure>
+        </div>
+      </article>
+    
+    </section>
+
+    <section>
+      <h2>Process: จาก Website Theme ไปสู่ AI Marketing App Factory</h2>
+      <p>วิธีคิดคือทำให้ทุกงาน marketing กลายเป็น workflow ที่ AI ช่วยสร้าง ทดสอบ และส่งหลักฐานให้ทีมตัดสินใจได้.</p>
+      <div class="process">
+        <article class="step"><strong>1. Business Need</strong><p>ทีมบอกโจทย์ เช่น โปรโมชัน, launch, landing page, report หรือ automation.</p></article>
+        <article class="step"><strong>2. AI Draft</strong><p>AI สร้างหน้า/app รุ่นแรกจาก theme components และ business rules.</p></article>
+        <article class="step"><strong>3. Auto Evidence</strong><p>ระบบจับ screenshot, page speed, section checklist และ before/after.</p></article>
+        <article class="step"><strong>4. Team Review</strong><p>ทีม non-technical ดูรายงานภาษาไทยและตัดสินใจด้วยภาพกับตัวเลข.</p></article>
+        <article class="step"><strong>5. Deploy</strong><p>สิ่งที่ผ่าน review ถูกนำขึ้น production แบบควบคุมความเสี่ยง.</p></article>
+        <article class="step"><strong>6. Reuse</strong><p>งานที่ดีถูกเก็บเป็น template เพื่อสร้างรอบต่อไปได้เร็วขึ้น.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Marketing Apps ที่ควรสร้างต่อจาก Foundation นี้</h2>
+      <div class="apps">
+        <article class="app"><h3>Campaign Landing Page Builder</h3><p>สร้างหน้าโปรโมชันตามเทศกาล พร้อม product grid, hero, coupon และ report.</p></article>
+        <article class="app"><h3>Product Page Assistant</h3><p>ช่วยปรับ headline, benefits, FAQ, SEO และ trust blocks สำหรับสินค้า.</p></article>
+        <article class="app"><h3>Bundle & Promotion Tool</h3><p>ทำชุดสินค้า age/brand/category พร้อม logic ส่วนลดและหน้า landing.</p></article>
+        <article class="app"><h3>Thai/English Content Assistant</h3><p>ช่วยแปล, สรุป, ทำ SEO article, product copy และ ad copy ให้สม่ำเสมอ.</p></article>
+        <article class="app"><h3>Screenshot Audit Generator</h3><p>ทุกครั้งที่แก้เว็บ จะได้ report before/after ให้ทีมดูอัตโนมัติ.</p></article>
+        <article class="app"><h3>Email/SMS Campaign Assistant</h3><p>ต่อยอดจาก promotion page ไปเป็นข้อความ follow-up และ abandoned cart.</p></article>
+        <article class="app"><h3>Review & Testimonial Collector</h3><p>เก็บรีวิว แยกตามสินค้า/อายุเด็ก แล้วนำกลับมาใช้บน landing/product pages.</p></article>
+        <article class="app"><h3>Business KPI Brief</h3><p>สรุปยอดขาย, page speed, conversion, campaign impact เป็นภาษาไทยสำหรับทีม.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Roadmap 30/60/90 วัน</h2>
+      <div class="roadmap">
+        <article class="phase">
+          <h3>30 วัน: Stabilize Foundation</h3>
+          <ul>
+            <li>Finalize checkout decision</li>
+            <li>QA product/archive/cart flows</li>
+            <li>ทำ report template ภาษาไทยให้ใช้ซ้ำ</li>
+            <li>กำหนด component library สำหรับ campaign pages</li>
+          </ul>
+        </article>
+        <article class="phase">
+          <h3>60 วัน: First AI Marketing Tools</h3>
+          <ul>
+            <li>Campaign landing page generator</li>
+            <li>Product page assistant</li>
+            <li>Promotion/bundle builder</li>
+            <li>Auto screenshot and speed audit</li>
+          </ul>
+        </article>
+        <article class="phase">
+          <h3>90 วัน: Automation Layer</h3>
+          <ul>
+            <li>Email/SMS workflow จาก campaign</li>
+            <li>SEO and content workflow</li>
+            <li>Business KPI weekly brief</li>
+            <li>Reusable playbook สำหรับทุกโปรเจกต์ใหม่</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>ข้อความสำหรับส่งทีม</h2>
+      <div class="message"><strong>สรุป:</strong> เราไม่ได้ทำแค่เปลี่ยน theme เว็บ แต่กำลังสร้าง foundation ให้บริษัททำ marketing, business apps และ automation ด้วย AI ได้เร็วขึ้น
+
+ตอนนี้เรา audit custom theme เทียบกับเว็บ production แล้ว 21 หน้า ผลคือจำนวน request ลดลงค่ากลาง 79.8% และเวลา load event ลดลงค่ากลาง 88.6%
+
+สิ่งที่พร้อมเป็นฐานแล้ว: header/footer, shop/archive, product page, cart, wishlist, account และหลายหน้า content
+
+สิ่งที่ต้องตัดสินใจต่อ: checkout จะให้เหมือน Elementor production มากขึ้น หรือใช้ layout ที่เรียบกว่าและเร็วกว่า
+
+เป้าหมายถัดไปคือทำให้ทีมสามารถขอหน้าโปรโมชัน, product campaign, report หรือ automation แล้วให้ AI สร้างเวอร์ชันแรกพร้อม screenshot และตัวเลขให้ review ได้ทันที</div>
+    </section>
+
+    <section>
+      <h2>ข้อควรเข้าใจ</h2>
+      <p class="note">ตัวเลข timing เป็น directional เพราะ production กับ local อยู่คนละระบบ hosting/CDN แต่จำนวน request และ payload reduction เป็นหลักฐานที่แข็งแรงว่า custom theme เบากว่า. ก่อนขึ้น production ต้องทดสอบ payment, shipping, coupon, login, mobile checkout และ tracking/analytics อีกครั้ง.</p>
+    </section>
+
+    <footer>
+      Source: Learning For Kidz section audit created 2026-06-11, Thai team brief generated 2026-06-12. Full audit: <a href="lfk-section-audit-2026-06-11/">Full audit</a>
+    </footer>
+  </main>
+</body>
+</html>

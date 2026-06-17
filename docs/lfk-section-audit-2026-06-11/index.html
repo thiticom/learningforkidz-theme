@@ -1,0 +1,349 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Learning for Kidz Theme Section Audit</title><style>
+body{font-family:Arial,sans-serif;margin:0;background:#f6f7f9;color:#111;line-height:1.45}.wrap{max-width:1180px;margin:0 auto;padding:28px}h1{margin:0 0 8px;font-size:30px}h2{font-size:24px;margin:0 0 8px}h3{font-size:16px;margin:18px 0 8px}.summary,.page-section{background:#fff;border:1px solid #ddd;border-radius:8px;padding:18px;margin:18px 0}.muted,.meta{color:#555}.toc{columns:3}.toc a{display:block;color:#2f78b8;text-decoration:none;margin:4px 0}.overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.overview img{width:100%;border:1px solid #ccc}.metrics{border-collapse:collapse;width:100%;max-width:760px;margin:12px 0}.metrics th,.metrics td{border:1px solid #ddd;padding:7px 9px;text-align:left}.metrics th{background:#f0f4f8}.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}.pair figure{margin:0}.pair figcaption{font-weight:700;font-size:13px;margin-bottom:5px}.pair img{width:100%;border:1px solid #ccc;background:white}.pair.mobile img{max-width:390px}@media(max-width:800px){.toc{columns:1}.overview,.pair{grid-template-columns:1fr}.wrap{padding:14px}}
+</style></head><body><div class="wrap">
+<h1>Learning for Kidz Theme Section Audit</h1>
+<p class="muted">Created 2026-06-11T04:24:26.008Z. Local test URL was Tailscale-only during QA. Production reference: <a href="https://www.learningforkidz.com">https://www.learningforkidz.com</a>.</p>
+<section class="summary"><h2>Executive Summary</h2>
+<p><strong>Yes, page load improves significantly on the measured custom-theme pages.</strong> Median request reduction was <strong>79.8%</strong>, median decoded payload reduction was <strong>64.1%</strong>. Average requests fell from <strong>351</strong> to <strong>91</strong>; average decoded payload fell from <strong>17,983 KB</strong> to <strong>7,423 KB</strong>.</p>
+<p class="muted">Timing is directional only because prod and local are different hosts/CDN paths. Request count and decoded payload are the strongest evidence.</p>
+</section>
+<section class="summary"><h2>Overview Sheets</h2><div class="overview"><figure><figcaption>Desktop commerce</figcaption><img src="desktop-commerce.png"></figure><figure><figcaption>Desktop content</figcaption><img src="desktop-content.png"></figure><figure><figcaption>Mobile commerce</figcaption><img src="mobile-commerce.png"></figure><figure><figcaption>Mobile content</figcaption><img src="mobile-content.png"></figure></div></section>
+<section class="summary"><h2>Sections</h2><div class="toc"><a href="#home">Home</a><a href="#shop">Shop Archive</a><a href="#product-category">Product Category</a><a href="#product-brand">Product Brand</a><a href="#age-taxonomy">Age Taxonomy</a><a href="#single-product">Single Product</a><a href="#article-archive">Article Archive</a><a href="#single-post">Single Post</a><a href="#search">Search</a><a href="#cart">Cart</a><a href="#checkout">Checkout</a><a href="#my-account">My Account</a><a href="#wishlist">Wishlist</a><a href="#contact">Contact</a><a href="#promotion">Promotion</a><a href="#ages-page">Ages Page</a><a href="#brands-page">Brands Page</a><a href="#about-page">About</a><a href="#refund-page">Refund</a><a href="#how-to-orders">How To Orders</a><a href="#privacy-page">Privacy</a></div></section>
+
+  <section class="page-section" id="home">
+    <h2>Home</h2>
+    <div class="meta"><strong>Good, not exact</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>First viewport is close. Local lower sections are more custom/static and show more homepage content in the first long capture than prod lazy Elementor sections.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>355</td><td>83</td><td>-76.6%</td></tr>
+      <tr><td>Decoded payload</td><td>18,174 KB</td><td>10,478 KB</td><td>-42.3%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>4732 ms</td><td>641 ms</td><td>-86.5%</td></tr>
+      <tr><td>Load</td><td>5089 ms</td><td>704 ms</td><td>-86.2%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-home.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-home.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-home.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-home.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="shop">
+    <h2>Shop Archive</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Large load improvement. Local uses custom archive template, desktop filter rail, and mobile product-first flow. Product count is 9 local vs 10 prod in sampled viewport.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>347</td><td>66</td><td>-81.0%</td></tr>
+      <tr><td>Decoded payload</td><td>18,269 KB</td><td>6,351 KB</td><td>-65.2%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>4981 ms</td><td>493 ms</td><td>-90.1%</td></tr>
+      <tr><td>Load</td><td>5331 ms</td><td>511 ms</td><td>-90.4%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-shop.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-shop.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-shop.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-shop.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="product-category">
+    <h2>Product Category</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Archive layout is close, with custom filters and grid. Product card styling differs slightly from Elementor cards.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>346</td><td>65</td><td>-81.2%</td></tr>
+      <tr><td>Decoded payload</td><td>17,455 KB</td><td>5,947 KB</td><td>-65.9%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>8122 ms</td><td>620 ms</td><td>-92.4%</td></tr>
+      <tr><td>Load</td><td>8443 ms</td><td>665 ms</td><td>-92.1%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-product-category.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-product-category.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-product-category.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-product-category.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="product-brand">
+    <h2>Product Brand</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Brand hero banner is present and close. Product cards/grid remain custom-theme style.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>346</td><td>66</td><td>-80.9%</td></tr>
+      <tr><td>Decoded payload</td><td>17,696 KB</td><td>6,483 KB</td><td>-63.4%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>4865 ms</td><td>724 ms</td><td>-85.1%</td></tr>
+      <tr><td>Load</td><td>5158 ms</td><td>740 ms</td><td>-85.7%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-product-brand.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-product-brand.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-product-brand.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-product-brand.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="age-taxonomy">
+    <h2>Age Taxonomy</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Age hero banner is present and close. Local loads correctly and product flow matches mobile well.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>344</td><td>63</td><td>-81.7%</td></tr>
+      <tr><td>Decoded payload</td><td>17,430 KB</td><td>5,898 KB</td><td>-66.2%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>4452 ms</td><td>587 ms</td><td>-86.8%</td></tr>
+      <tr><td>Load</td><td>4836 ms</td><td>625 ms</td><td>-87.1%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-age-taxonomy.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-age-taxonomy.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-age-taxonomy.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-age-taxonomy.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="single-product">
+    <h2>Single Product</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Gallery, summary, stock, add-to-cart, description, and related products render cleanly. Related product count/style differs slightly.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>363</td><td>72</td><td>-80.2%</td></tr>
+      <tr><td>Decoded payload</td><td>18,561 KB</td><td>6,030 KB</td><td>-67.5%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>5199 ms</td><td>591 ms</td><td>-88.6%</td></tr>
+      <tr><td>Load</td><td>5553 ms</td><td>632 ms</td><td>-88.6%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-single-product.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-single-product.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-single-product.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-single-product.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="article-archive">
+    <h2>Article Archive</h2>
+    <div class="meta"><strong>Functional, visually different</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Local custom card grid is stable and much lighter; prod Elementor layout is richer/editorial.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>351</td><td>68</td><td>-80.6%</td></tr>
+      <tr><td>Decoded payload</td><td>20,028 KB</td><td>7,087 KB</td><td>-64.6%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>7774 ms</td><td>469 ms</td><td>-94.0%</td></tr>
+      <tr><td>Load</td><td>8086 ms</td><td>574 ms</td><td>-92.9%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-article-archive.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-article-archive.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-article-archive.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-article-archive.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="single-post">
+    <h2>Single Post</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Content renders cleanly. Local has no horizontal overflow; prod reported small overflow in the crawl.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>364</td><td>69</td><td>-81.0%</td></tr>
+      <tr><td>Decoded payload</td><td>18,412 KB</td><td>6,149 KB</td><td>-66.6%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>7561 ms</td><td>454 ms</td><td>-94.0%</td></tr>
+      <tr><td>Load</td><td>7935 ms</td><td>532 ms</td><td>-93.3%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-single-post.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-single-post.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-single-post.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-single-post.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="search">
+    <h2>Search</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Search results render cleanly in custom product/article grids. Styling differs from Elementor but is usable.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>353</td><td>71</td><td>-79.9%</td></tr>
+      <tr><td>Decoded payload</td><td>18,360 KB</td><td>6,294 KB</td><td>-65.7%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>6790 ms</td><td>522 ms</td><td>-92.3%</td></tr>
+      <tr><td>Load</td><td>7076 ms</td><td>597 ms</td><td>-91.6%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-search.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-search.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-search.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-search.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="cart">
+    <h2>Cart</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Cart table and summary are stable; primary checkout CTA matches cyan direction. Minor spacing differences remain.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>378</td><td>117</td><td>-69.0%</td></tr>
+      <tr><td>Decoded payload</td><td>18,598 KB</td><td>8,366 KB</td><td>-55.0%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>6532 ms</td><td>1924 ms</td><td>-70.5%</td></tr>
+      <tr><td>Load</td><td>7897 ms</td><td>1935 ms</td><td>-75.5%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-cart.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-cart.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-cart.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-cart.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="checkout">
+    <h2>Checkout</h2>
+    <div class="meta"><strong>Needs polish</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Functional and faster, but biggest visual mismatch. Local form is longer and more utilitarian than prod two-column Elementor checkout.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>400</td><td>137</td><td>-65.8%</td></tr>
+      <tr><td>Decoded payload</td><td>18,889 KB</td><td>8,616 KB</td><td>-54.4%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>9112 ms</td><td>1682 ms</td><td>-81.5%</td></tr>
+      <tr><td>Load</td><td>9377 ms</td><td>1711 ms</td><td>-81.8%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-checkout.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-checkout.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-checkout.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-checkout.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="my-account">
+    <h2>My Account</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Login/account layout is clean. Minor spacing and form styling differences.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>357</td><td>85</td><td>-76.2%</td></tr>
+      <tr><td>Decoded payload</td><td>18,282 KB</td><td>6,968 KB</td><td>-61.9%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>6759 ms</td><td>544 ms</td><td>-92.0%</td></tr>
+      <tr><td>Load</td><td>7096 ms</td><td>634 ms</td><td>-91.1%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-my-account.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-my-account.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-my-account.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-my-account.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="wishlist">
+    <h2>Wishlist</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Simple wishlist state is stable and lighter. Less visual richness than prod.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>337</td><td>68</td><td>-79.8%</td></tr>
+      <tr><td>Decoded payload</td><td>17,330 KB</td><td>6,003 KB</td><td>-65.4%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>18142 ms</td><td>463 ms</td><td>-97.4%</td></tr>
+      <tr><td>Load</td><td>18482 ms</td><td>481 ms</td><td>-97.4%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-wishlist.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-wishlist.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-wishlist.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-wishlist.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="contact">
+    <h2>Contact</h2>
+    <div class="meta"><strong>Functional, visually simpler</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Form/contact information render correctly. Local is more utilitarian than prod Elementor page.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>352</td><td>91</td><td>-74.1%</td></tr>
+      <tr><td>Decoded payload</td><td>18,768 KB</td><td>9,460 KB</td><td>-49.6%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>7741 ms</td><td>544 ms</td><td>-93.0%</td></tr>
+      <tr><td>Load</td><td>8183 ms</td><td>1146 ms</td><td>-86.0%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-contact.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-contact.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-contact.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-contact.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="promotion">
+    <h2>Promotion</h2>
+    <div class="meta"><strong>Good</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Product grid is stable and fast. Product card styling differs from Elementor.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>339</td><td>67</td><td>-80.2%</td></tr>
+      <tr><td>Decoded payload</td><td>17,557 KB</td><td>6,308 KB</td><td>-64.1%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>13444 ms</td><td>472 ms</td><td>-96.5%</td></tr>
+      <tr><td>Load</td><td>13712 ms</td><td>516 ms</td><td>-96.2%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-promotion.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-promotion.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-promotion.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-promotion.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="ages-page">
+    <h2>Ages Page</h2>
+    <div class="meta"><strong>Needs visual polish</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Functional but visually different: local uses yellow/blue age pills, prod uses illustrated Elementor cards.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>344</td><td>57</td><td>-83.4%</td></tr>
+      <tr><td>Decoded payload</td><td>17,223 KB</td><td>5,834 KB</td><td>-66.1%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>8214 ms</td><td>515 ms</td><td>-93.7%</td></tr>
+      <tr><td>Load</td><td>8522 ms</td><td>546 ms</td><td>-93.6%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-ages-page.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-ages-page.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-ages-page.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-ages-page.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="brands-page">
+    <h2>Brands Page</h2>
+    <div class="meta"><strong>Good, simpler</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Logo grid is clean; prod feels more designed and card-like.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>350</td><td>71</td><td>-79.7%</td></tr>
+      <tr><td>Decoded payload</td><td>17,226 KB</td><td>6,044 KB</td><td>-64.9%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>7939 ms</td><td>482 ms</td><td>-93.9%</td></tr>
+      <tr><td>Load</td><td>8273 ms</td><td>577 ms</td><td>-93.0%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-brands-page.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-brands-page.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-brands-page.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-brands-page.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="about-page">
+    <h2>About</h2>
+    <div class="meta"><strong>Close</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Kept on Elementor/default locally, so visual match is strong. Still improves load, but less than fully custom routes.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>340</td><td>150</td><td>-55.9%</td></tr>
+      <tr><td>Decoded payload</td><td>17,358 KB</td><td>9,482 KB</td><td>-45.4%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>17857 ms</td><td>3707 ms</td><td>-79.2%</td></tr>
+      <tr><td>Load</td><td>17972 ms</td><td>4037 ms</td><td>-77.5%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-about-page.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-about-page.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-about-page.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-about-page.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="refund-page">
+    <h2>Refund</h2>
+    <div class="meta"><strong>Close</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Kept on Elementor/default locally. Strong visual match, moderate load improvement.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>339</td><td>149</td><td>-56.0%</td></tr>
+      <tr><td>Decoded payload</td><td>17,629 KB</td><td>9,340 KB</td><td>-47.0%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>7598 ms</td><td>3592 ms</td><td>-52.7%</td></tr>
+      <tr><td>Load</td><td>7866 ms</td><td>3937 ms</td><td>-49.9%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-refund-page.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-refund-page.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-refund-page.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-refund-page.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="how-to-orders">
+    <h2>How To Orders</h2>
+    <div class="meta"><strong>Close</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Kept on Elementor/default locally. Strong visual match, moderate load improvement.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>338</td><td>155</td><td>-54.1%</td></tr>
+      <tr><td>Decoded payload</td><td>17,071 KB</td><td>9,400 KB</td><td>-44.9%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>11638 ms</td><td>3687 ms</td><td>-68.3%</td></tr>
+      <tr><td>Load</td><td>12009 ms</td><td>4048 ms</td><td>-66.3%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-how-to-orders.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-how-to-orders.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-how-to-orders.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-how-to-orders.png"></figure></div>
+  </section>
+
+  <section class="page-section" id="privacy-page">
+    <h2>Privacy</h2>
+    <div class="meta"><strong>Close</strong> · Desktop status 200/200, Mobile status 200/200</div>
+    <p>Kept on Elementor/default locally. Strong visual match, moderate load improvement.</p>
+    <table class="metrics"><tr><th>Metric</th><th>Prod</th><th>Local</th><th>Reduction</th></tr>
+      <tr><td>Requests</td><td>338</td><td>149</td><td>-55.9%</td></tr>
+      <tr><td>Decoded payload</td><td>17,327 KB</td><td>9,341 KB</td><td>-46.1%</td></tr>
+      <tr><td>DOMContentLoaded</td><td>11155 ms</td><td>3617 ms</td><td>-67.6%</td></tr>
+      <tr><td>Load</td><td>11475 ms</td><td>3966 ms</td><td>-65.4%</td></tr>
+    </table>
+    <h3>Desktop</h3>
+    <div class="pair"><figure><figcaption>Prod</figcaption><img src="desktop-prod-privacy-page.png"></figure><figure><figcaption>Local</figcaption><img src="desktop-local-privacy-page.png"></figure></div>
+    <h3>Mobile</h3>
+    <div class="pair mobile"><figure><figcaption>Prod</figcaption><img src="mobile-prod-privacy-page.png"></figure><figure><figcaption>Local</figcaption><img src="mobile-local-privacy-page.png"></figure></div>
+  </section>
+</div></body></html>

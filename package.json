@@ -1,0 +1,13 @@
+{
+  "name": "learningforkidz-theme",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -c themes/lfk-tailwind/tailwind.config.js -i themes/lfk-tailwind/assets/src/theme.css -o themes/lfk-tailwind/assets/dist/theme.css --minify",
+    "watch": "tailwindcss -c themes/lfk-tailwind/tailwind.config.js -i themes/lfk-tailwind/assets/src/theme.css -o themes/lfk-tailwind/assets/dist/theme.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
+

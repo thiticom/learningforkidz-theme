@@ -1,0 +1,1717 @@
+{
+  "createdAt": "2026-06-11T04:16:44.845Z",
+  "note": "Fresh desktop cold-ish contexts. Timings compare different hosts, so bytes/request counts are more reliable than raw milliseconds.",
+  "pages": {
+    "home": {
+      "prod": {
+        "target": "prod",
+        "label": "home",
+        "url": "https://www.learningforkidz.com/",
+        "status": 200,
+        "error": "",
+        "wallMs": 5907,
+        "requestCount": 355,
+        "decodedBytes": 18610666,
+        "decodedKB": 18174,
+        "domContentLoadedMs": 4732,
+        "loadMs": 5089,
+        "resourceEntries": 140,
+        "transferKB": 473,
+        "encodedKB": 1787,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 115,
+          "script": 143,
+          "image": 68,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 4
+        },
+        "perfByType": {
+          "link": 57,
+          "script": 68,
+          "css": 6,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 5
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "home",
+        "url": "http://100.109.57.34:8085/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1524,
+        "requestCount": 83,
+        "decodedBytes": 10729390,
+        "decodedKB": 10478,
+        "domContentLoadedMs": 641,
+        "loadMs": 704,
+        "resourceEntries": 40,
+        "transferKB": 0,
+        "encodedKB": 62,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 4,
+          "script": 19,
+          "image": 58
+        },
+        "perfByType": {
+          "link": 2,
+          "script": 9,
+          "img": 29
+        }
+      }
+    },
+    "shop": {
+      "prod": {
+        "target": "prod",
+        "label": "shop",
+        "url": "https://www.learningforkidz.com/shop/",
+        "status": 200,
+        "error": "",
+        "wallMs": 6151,
+        "requestCount": 347,
+        "decodedBytes": 18707154,
+        "decodedKB": 18269,
+        "domContentLoadedMs": 4981,
+        "loadMs": 5331,
+        "resourceEntries": 130,
+        "transferKB": 789,
+        "encodedKB": 1594,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 108,
+          "script": 138,
+          "image": 71,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 50,
+          "script": 62,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 10
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "shop",
+        "url": "http://100.109.57.34:8085/shop/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1325,
+        "requestCount": 66,
+        "decodedBytes": 6503549,
+        "decodedKB": 6351,
+        "domContentLoadedMs": 493,
+        "loadMs": 511,
+        "resourceEntries": 25,
+        "transferKB": 63,
+        "encodedKB": 101,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 6,
+          "script": 20,
+          "image": 38
+        },
+        "perfByType": {
+          "link": 4,
+          "script": 10,
+          "css": 2,
+          "img": 9
+        }
+      }
+    },
+    "product-category": {
+      "prod": {
+        "target": "prod",
+        "label": "product-category",
+        "url": "https://www.learningforkidz.com/product-category/series/fine-motor/",
+        "status": 200,
+        "error": "",
+        "wallMs": 9264,
+        "requestCount": 346,
+        "decodedBytes": 17873700,
+        "decodedKB": 17455,
+        "domContentLoadedMs": 8122,
+        "loadMs": 8443,
+        "resourceEntries": 130,
+        "transferKB": 616,
+        "encodedKB": 1181,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 108,
+          "script": 137,
+          "image": 71,
+          "font": 10,
+          "fetch": 5,
+          "ping": 1,
+          "other": 4,
+          "xhr": 4
+        },
+        "perfByType": {
+          "link": 50,
+          "script": 62,
+          "css": 4,
+          "fetch": 3,
+          "iframe": 2,
+          "img": 9
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "product-category",
+        "url": "http://100.109.57.34:8085/product-category/series/fine-motor/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1476,
+        "requestCount": 65,
+        "decodedBytes": 6090158,
+        "decodedKB": 5947,
+        "domContentLoadedMs": 620,
+        "loadMs": 665,
+        "resourceEntries": 24,
+        "transferKB": 63,
+        "encodedKB": 101,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 6,
+          "script": 20,
+          "image": 37
+        },
+        "perfByType": {
+          "link": 4,
+          "script": 10,
+          "css": 2,
+          "img": 8
+        }
+      }
+    },
+    "product-brand": {
+      "prod": {
+        "target": "prod",
+        "label": "product-brand",
+        "url": "https://www.learningforkidz.com/product-brand/learning-resources/",
+        "status": 200,
+        "error": "",
+        "wallMs": 5983,
+        "requestCount": 346,
+        "decodedBytes": 18120819,
+        "decodedKB": 17696,
+        "domContentLoadedMs": 4865,
+        "loadMs": 5158,
+        "resourceEntries": 130,
+        "transferKB": 580,
+        "encodedKB": 1246,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 109,
+          "script": 137,
+          "image": 71,
+          "font": 10,
+          "ping": 1,
+          "fetch": 4,
+          "other": 4,
+          "xhr": 4
+        },
+        "perfByType": {
+          "link": 51,
+          "script": 62,
+          "img": 9,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "product-brand",
+        "url": "http://100.109.57.34:8085/product-brand/learning-resources/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1554,
+        "requestCount": 66,
+        "decodedBytes": 6638273,
+        "decodedKB": 6483,
+        "domContentLoadedMs": 724,
+        "loadMs": 740,
+        "resourceEntries": 25,
+        "transferKB": 63,
+        "encodedKB": 101,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 6,
+          "script": 20,
+          "image": 38
+        },
+        "perfByType": {
+          "link": 4,
+          "script": 10,
+          "css": 2,
+          "img": 9
+        }
+      }
+    },
+    "age-taxonomy": {
+      "prod": {
+        "target": "prod",
+        "label": "age-taxonomy",
+        "url": "https://www.learningforkidz.com/age/3-4-years/",
+        "status": 200,
+        "error": "",
+        "wallMs": 5666,
+        "requestCount": 344,
+        "decodedBytes": 17848356,
+        "decodedKB": 17430,
+        "domContentLoadedMs": 4452,
+        "loadMs": 4836,
+        "resourceEntries": 127,
+        "transferKB": 552,
+        "encodedKB": 1117,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 108,
+          "script": 138,
+          "image": 68,
+          "font": 10,
+          "other": 4,
+          "fetch": 4,
+          "ping": 1,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 50,
+          "script": 62,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 7
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "age-taxonomy",
+        "url": "http://100.109.57.34:8085/age/3-4-years/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1438,
+        "requestCount": 63,
+        "decodedBytes": 6039379,
+        "decodedKB": 5898,
+        "domContentLoadedMs": 587,
+        "loadMs": 625,
+        "resourceEntries": 22,
+        "transferKB": 63,
+        "encodedKB": 101,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 6,
+          "script": 20,
+          "image": 35
+        },
+        "perfByType": {
+          "link": 4,
+          "script": 10,
+          "css": 2,
+          "img": 6
+        }
+      }
+    },
+    "single-product": {
+      "prod": {
+        "target": "prod",
+        "label": "single-product",
+        "url": "https://www.learningforkidz.com/product/kanoodle-20th-anniversary-magenta/",
+        "status": 200,
+        "error": "",
+        "wallMs": 6374,
+        "requestCount": 363,
+        "decodedBytes": 19006814,
+        "decodedKB": 18561,
+        "domContentLoadedMs": 5199,
+        "loadMs": 5553,
+        "resourceEntries": 148,
+        "transferKB": 1587,
+        "encodedKB": 2170,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 115,
+          "script": 142,
+          "image": 77,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 4
+        },
+        "perfByType": {
+          "link": 57,
+          "script": 67,
+          "css": 4,
+          "fetch": 2,
+          "img": 16,
+          "iframe": 2
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "single-product",
+        "url": "http://100.109.57.34:8085/product/kanoodle-20th-anniversary-magenta/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1446,
+        "requestCount": 72,
+        "decodedBytes": 6174625,
+        "decodedKB": 6030,
+        "domContentLoadedMs": 591,
+        "loadMs": 632,
+        "resourceEntries": 31,
+        "transferKB": 64,
+        "encodedKB": 102,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 5,
+          "script": 23,
+          "image": 42
+        },
+        "perfByType": {
+          "link": 3,
+          "script": 13,
+          "css": 2,
+          "img": 13
+        }
+      }
+    },
+    "article-archive": {
+      "prod": {
+        "target": "prod",
+        "label": "article-archive",
+        "url": "https://www.learningforkidz.com/article/",
+        "status": 200,
+        "error": "",
+        "wallMs": 8914,
+        "requestCount": 351,
+        "decodedBytes": 20509015,
+        "decodedKB": 20028,
+        "domContentLoadedMs": 7774,
+        "loadMs": 8086,
+        "resourceEntries": 134,
+        "transferKB": 533,
+        "encodedKB": 3734,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 109,
+          "script": 140,
+          "image": 72,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 51,
+          "script": 65,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 10
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "article-archive",
+        "url": "http://100.109.57.34:8085/article/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1392,
+        "requestCount": 68,
+        "decodedBytes": 7257039,
+        "decodedKB": 7087,
+        "domContentLoadedMs": 469,
+        "loadMs": 574,
+        "resourceEntries": 25,
+        "transferKB": 18,
+        "encodedKB": 72,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 6,
+          "script": 15,
+          "image": 45
+        },
+        "perfByType": {
+          "link": 4,
+          "script": 5,
+          "img": 16
+        }
+      }
+    },
+    "single-post": {
+      "prod": {
+        "target": "prod",
+        "label": "single-post",
+        "url": "https://www.learningforkidz.com/%e0%b8%87%e0%b8%b2%e0%b8%99-alpha-skills-summit-expo-2026/",
+        "status": 200,
+        "error": "",
+        "wallMs": 8763,
+        "requestCount": 364,
+        "decodedBytes": 18853594,
+        "decodedKB": 18412,
+        "domContentLoadedMs": 7561,
+        "loadMs": 7935,
+        "resourceEntries": 146,
+        "transferKB": 723,
+        "encodedKB": 2110,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 111,
+          "script": 145,
+          "image": 78,
+          "font": 10,
+          "ping": 1,
+          "fetch": 4,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 53,
+          "script": 70,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 15
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "single-post",
+        "url": "http://100.109.57.34:8085/%e0%b8%87%e0%b8%b2%e0%b8%99-alpha-skills-summit-expo-2026/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1348,
+        "requestCount": 69,
+        "decodedBytes": 6296108,
+        "decodedKB": 6149,
+        "domContentLoadedMs": 454,
+        "loadMs": 532,
+        "resourceEntries": 23,
+        "transferKB": 17,
+        "encodedKB": 72,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 5,
+          "script": 15,
+          "image": 47
+        },
+        "perfByType": {
+          "link": 3,
+          "script": 5,
+          "img": 15
+        }
+      }
+    },
+    "search": {
+      "prod": {
+        "target": "prod",
+        "label": "search",
+        "url": "https://www.learningforkidz.com/?s=kanoodle",
+        "status": 200,
+        "error": "",
+        "wallMs": 7903,
+        "requestCount": 353,
+        "decodedBytes": 18800589,
+        "decodedKB": 18360,
+        "domContentLoadedMs": 6790,
+        "loadMs": 7076,
+        "resourceEntries": 135,
+        "transferKB": 99,
+        "encodedKB": 2150,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 105,
+          "script": 138,
+          "image": 79,
+          "font": 10,
+          "ping": 1,
+          "fetch": 5,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 47,
+          "script": 62,
+          "img": 17,
+          "fetch": 3,
+          "css": 4,
+          "iframe": 2
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "search",
+        "url": "http://100.109.57.34:8085/?s=kanoodle",
+        "status": 200,
+        "error": "",
+        "wallMs": 1410,
+        "requestCount": 71,
+        "decodedBytes": 6445347,
+        "decodedKB": 6294,
+        "domContentLoadedMs": 522,
+        "loadMs": 597,
+        "resourceEntries": 28,
+        "transferKB": 17,
+        "encodedKB": 79,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 5,
+          "script": 19,
+          "image": 45
+        },
+        "perfByType": {
+          "link": 3,
+          "script": 9,
+          "img": 16
+        }
+      }
+    },
+    "cart": {
+      "prod": {
+        "target": "prod",
+        "label": "cart",
+        "url": "https://www.learningforkidz.com/cart/",
+        "status": 200,
+        "error": "",
+        "wallMs": 8720,
+        "requestCount": 378,
+        "decodedBytes": 19044063,
+        "decodedKB": 18598,
+        "domContentLoadedMs": 6532,
+        "loadMs": 7897,
+        "resourceEntries": 163,
+        "transferKB": 603,
+        "encodedKB": 1876,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 106,
+          "script": 173,
+          "ping": 1,
+          "fetch": 5,
+          "image": 70,
+          "font": 10,
+          "other": 4,
+          "xhr": 3
+        },
+        "perfByType": {
+          "link": 48,
+          "script": 98,
+          "css": 4,
+          "fetch": 3,
+          "img": 8,
+          "iframe": 2
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "cart",
+        "url": "http://100.109.57.34:8085/cart/",
+        "status": 200,
+        "error": "",
+        "wallMs": 2751,
+        "requestCount": 117,
+        "decodedBytes": 8566558,
+        "decodedKB": 8366,
+        "domContentLoadedMs": 1924,
+        "loadMs": 1935,
+        "resourceEntries": 74,
+        "transferKB": 903,
+        "encodedKB": 949,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 9,
+          "script": 68,
+          "image": 37,
+          "font": 1
+        },
+        "perfByType": {
+          "link": 7,
+          "script": 58,
+          "img": 8,
+          "css": 1
+        }
+      }
+    },
+    "checkout": {
+      "prod": {
+        "target": "prod",
+        "label": "checkout",
+        "url": "https://www.learningforkidz.com/checkout/",
+        "status": 200,
+        "error": "",
+        "wallMs": 10208,
+        "requestCount": 400,
+        "decodedBytes": 19341843,
+        "decodedKB": 18889,
+        "domContentLoadedMs": 9112,
+        "loadMs": 9377,
+        "resourceEntries": 182,
+        "transferKB": 685,
+        "encodedKB": 1953,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 112,
+          "script": 186,
+          "image": 71,
+          "font": 10,
+          "other": 4,
+          "fetch": 5,
+          "ping": 1,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 54,
+          "script": 110,
+          "css": 5,
+          "fetch": 3,
+          "img": 8,
+          "iframe": 2
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "checkout",
+        "url": "http://100.109.57.34:8085/checkout/",
+        "status": 200,
+        "error": "",
+        "wallMs": 2531,
+        "requestCount": 137,
+        "decodedBytes": 8822593,
+        "decodedKB": 8616,
+        "domContentLoadedMs": 1682,
+        "loadMs": 1711,
+        "resourceEntries": 94,
+        "transferKB": 989,
+        "encodedKB": 1029,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 15,
+          "script": 82,
+          "image": 37,
+          "font": 1
+        },
+        "perfByType": {
+          "link": 13,
+          "script": 72,
+          "img": 7,
+          "css": 2
+        }
+      }
+    },
+    "my-account": {
+      "prod": {
+        "target": "prod",
+        "label": "my-account",
+        "url": "https://www.learningforkidz.com/my-account/",
+        "status": 200,
+        "error": "",
+        "wallMs": 7927,
+        "requestCount": 357,
+        "decodedBytes": 18721096,
+        "decodedKB": 18282,
+        "domContentLoadedMs": 6759,
+        "loadMs": 7096,
+        "resourceEntries": 140,
+        "transferKB": 513,
+        "encodedKB": 1792,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 109,
+          "script": 150,
+          "image": 70,
+          "font": 10,
+          "ping": 1,
+          "fetch": 3,
+          "other": 4,
+          "xhr": 4
+        },
+        "perfByType": {
+          "link": 51,
+          "script": 74,
+          "css": 4,
+          "fetch": 1,
+          "img": 8,
+          "iframe": 2
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "my-account",
+        "url": "http://100.109.57.34:8085/my-account/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1449,
+        "requestCount": 85,
+        "decodedBytes": 7134840,
+        "decodedKB": 6968,
+        "domContentLoadedMs": 544,
+        "loadMs": 634,
+        "resourceEntries": 42,
+        "transferKB": 492,
+        "encodedKB": 546,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 12,
+          "script": 34,
+          "image": 36,
+          "font": 1
+        },
+        "perfByType": {
+          "link": 10,
+          "script": 24,
+          "img": 7,
+          "css": 1
+        }
+      }
+    },
+    "wishlist": {
+      "prod": {
+        "target": "prod",
+        "label": "wishlist",
+        "url": "https://www.learningforkidz.com/wishlists/",
+        "status": 200,
+        "error": "",
+        "wallMs": 19303,
+        "requestCount": 337,
+        "decodedBytes": 17745823,
+        "decodedKB": 17330,
+        "domContentLoadedMs": 18142,
+        "loadMs": 18482,
+        "resourceEntries": 121,
+        "transferKB": 408,
+        "encodedKB": 1303,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 103,
+          "script": 135,
+          "image": 69,
+          "font": 10,
+          "ping": 1,
+          "fetch": 4,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 45,
+          "script": 60,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 8
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "wishlist",
+        "url": "http://100.109.57.34:8085/wishlists/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1295,
+        "requestCount": 68,
+        "decodedBytes": 6147025,
+        "decodedKB": 6003,
+        "domContentLoadedMs": 463,
+        "loadMs": 481,
+        "resourceEntries": 25,
+        "transferKB": 29,
+        "encodedKB": 89,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 9,
+          "script": 21,
+          "image": 36
+        },
+        "perfByType": {
+          "link": 7,
+          "script": 11,
+          "img": 7
+        }
+      }
+    },
+    "contact": {
+      "prod": {
+        "target": "prod",
+        "label": "contact",
+        "url": "https://www.learningforkidz.com/contact-us/",
+        "status": 200,
+        "error": "",
+        "wallMs": 9012,
+        "requestCount": 352,
+        "decodedBytes": 19218465,
+        "decodedKB": 18768,
+        "domContentLoadedMs": 7741,
+        "loadMs": 8183,
+        "resourceEntries": 118,
+        "transferKB": 408,
+        "encodedKB": 977,
+        "byResourceType": {
+          "document": 8,
+          "stylesheet": 106,
+          "script": 148,
+          "image": 65,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 6
+        },
+        "perfByType": {
+          "link": 46,
+          "script": 60,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 3,
+          "img": 3
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "contact",
+        "url": "http://100.109.57.34:8085/contact-us/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1962,
+        "requestCount": 91,
+        "decodedBytes": 9687258,
+        "decodedKB": 9460,
+        "domContentLoadedMs": 544,
+        "loadMs": 1146,
+        "resourceEntries": 27,
+        "transferKB": 406,
+        "encodedKB": 458,
+        "byResourceType": {
+          "document": 5,
+          "stylesheet": 8,
+          "script": 37,
+          "image": 37,
+          "font": 1,
+          "fetch": 2,
+          "xhr": 1
+        },
+        "perfByType": {
+          "link": 3,
+          "script": 13,
+          "img": 7,
+          "iframe": 2,
+          "fetch": 2
+        }
+      }
+    },
+    "promotion": {
+      "prod": {
+        "target": "prod",
+        "label": "promotion",
+        "url": "https://www.learningforkidz.com/promotion/",
+        "status": 200,
+        "error": "",
+        "wallMs": 14533,
+        "requestCount": 339,
+        "decodedBytes": 17978421,
+        "decodedKB": 17557,
+        "domContentLoadedMs": 13444,
+        "loadMs": 13712,
+        "resourceEntries": 122,
+        "transferKB": 712,
+        "encodedKB": 1498,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 103,
+          "script": 135,
+          "image": 71,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 45,
+          "script": 60,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 9
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "promotion",
+        "url": "http://100.109.57.34:8085/promotion/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1330,
+        "requestCount": 67,
+        "decodedBytes": 6459555,
+        "decodedKB": 6308,
+        "domContentLoadedMs": 472,
+        "loadMs": 516,
+        "resourceEntries": 23,
+        "transferKB": 0,
+        "encodedKB": 62,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 4,
+          "script": 19,
+          "image": 42
+        },
+        "perfByType": {
+          "link": 2,
+          "script": 9,
+          "img": 12
+        }
+      }
+    },
+    "ages-page": {
+      "prod": {
+        "target": "prod",
+        "label": "ages-page",
+        "url": "https://www.learningforkidz.com/ages/",
+        "status": 200,
+        "error": "",
+        "wallMs": 9339,
+        "requestCount": 344,
+        "decodedBytes": 17636637,
+        "decodedKB": 17223,
+        "domContentLoadedMs": 8214,
+        "loadMs": 8522,
+        "resourceEntries": 127,
+        "transferKB": 596,
+        "encodedKB": 1165,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 105,
+          "script": 139,
+          "image": 70,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 47,
+          "script": 64,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 8
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "ages-page",
+        "url": "http://100.109.57.34:8085/ages/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1357,
+        "requestCount": 57,
+        "decodedBytes": 5974414,
+        "decodedKB": 5834,
+        "domContentLoadedMs": 515,
+        "loadMs": 546,
+        "resourceEntries": 14,
+        "transferKB": 0,
+        "encodedKB": 55,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 4,
+          "script": 15,
+          "image": 36
+        },
+        "perfByType": {
+          "link": 2,
+          "script": 5,
+          "img": 7
+        }
+      }
+    },
+    "brands-page": {
+      "prod": {
+        "target": "prod",
+        "label": "brands-page",
+        "url": "https://www.learningforkidz.com/brands/",
+        "status": 200,
+        "error": "",
+        "wallMs": 9098,
+        "requestCount": 350,
+        "decodedBytes": 17638966,
+        "decodedKB": 17226,
+        "domContentLoadedMs": 7939,
+        "loadMs": 8273,
+        "resourceEntries": 131,
+        "transferKB": 551,
+        "encodedKB": 1119,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 105,
+          "script": 140,
+          "image": 74,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 6
+        },
+        "perfByType": {
+          "link": 47,
+          "script": 64,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 12
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "brands-page",
+        "url": "http://100.109.57.34:8085/brands/",
+        "status": 200,
+        "error": "",
+        "wallMs": 1394,
+        "requestCount": 71,
+        "decodedBytes": 6188755,
+        "decodedKB": 6044,
+        "domContentLoadedMs": 482,
+        "loadMs": 577,
+        "resourceEntries": 28,
+        "transferKB": 0,
+        "encodedKB": 55,
+        "byResourceType": {
+          "document": 2,
+          "stylesheet": 4,
+          "script": 15,
+          "image": 50
+        },
+        "perfByType": {
+          "link": 2,
+          "script": 5,
+          "img": 21
+        }
+      }
+    },
+    "about-page": {
+      "prod": {
+        "target": "prod",
+        "label": "about-page",
+        "url": "https://www.learningforkidz.com/about-us/",
+        "status": 200,
+        "error": "",
+        "wallMs": 18790,
+        "requestCount": 340,
+        "decodedBytes": 17774624,
+        "decodedKB": 17358,
+        "domContentLoadedMs": 17857,
+        "loadMs": 17972,
+        "resourceEntries": 123,
+        "transferKB": 431,
+        "encodedKB": 1326,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 103,
+          "script": 135,
+          "image": 71,
+          "font": 10,
+          "ping": 1,
+          "fetch": 5,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 45,
+          "script": 60,
+          "css": 4,
+          "fetch": 3,
+          "iframe": 2,
+          "img": 9
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "about-page",
+        "url": "http://100.109.57.34:8085/about-us/",
+        "status": 200,
+        "error": "",
+        "wallMs": 4851,
+        "requestCount": 150,
+        "decodedBytes": 9709064,
+        "decodedKB": 9482,
+        "domContentLoadedMs": 3707,
+        "loadMs": 4037,
+        "resourceEntries": 103,
+        "transferKB": 777,
+        "encodedKB": 817,
+        "byResourceType": {
+          "document": 4,
+          "stylesheet": 41,
+          "script": 63,
+          "image": 38,
+          "font": 2,
+          "other": 1,
+          "fetch": 1
+        },
+        "perfByType": {
+          "link": 39,
+          "script": 52,
+          "img": 8,
+          "css": 1,
+          "iframe": 2,
+          "fetch": 1
+        }
+      }
+    },
+    "refund-page": {
+      "prod": {
+        "target": "prod",
+        "label": "refund-page",
+        "url": "https://www.learningforkidz.com/refund/",
+        "status": 200,
+        "error": "",
+        "wallMs": 8685,
+        "requestCount": 339,
+        "decodedBytes": 18052444,
+        "decodedKB": 17629,
+        "domContentLoadedMs": 7598,
+        "loadMs": 7866,
+        "resourceEntries": 121,
+        "transferKB": 408,
+        "encodedKB": 1303,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 103,
+          "script": 135,
+          "image": 70,
+          "ping": 1,
+          "fetch": 5,
+          "font": 10,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 45,
+          "script": 60,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 8
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "refund-page",
+        "url": "http://100.109.57.34:8085/refund/",
+        "status": 200,
+        "error": "",
+        "wallMs": 4750,
+        "requestCount": 149,
+        "decodedBytes": 9563755,
+        "decodedKB": 9340,
+        "domContentLoadedMs": 3592,
+        "loadMs": 3937,
+        "resourceEntries": 102,
+        "transferKB": 777,
+        "encodedKB": 817,
+        "byResourceType": {
+          "document": 4,
+          "stylesheet": 41,
+          "script": 63,
+          "image": 37,
+          "font": 2,
+          "other": 1,
+          "fetch": 1
+        },
+        "perfByType": {
+          "link": 39,
+          "script": 52,
+          "img": 7,
+          "css": 1,
+          "iframe": 2,
+          "fetch": 1
+        }
+      }
+    },
+    "how-to-orders": {
+      "prod": {
+        "target": "prod",
+        "label": "how-to-orders",
+        "url": "https://www.learningforkidz.com/how-to-orders/",
+        "status": 200,
+        "error": "",
+        "wallMs": 12826,
+        "requestCount": 338,
+        "decodedBytes": 17480673,
+        "decodedKB": 17071,
+        "domContentLoadedMs": 11638,
+        "loadMs": 12009,
+        "resourceEntries": 119,
+        "transferKB": 438,
+        "encodedKB": 1006,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 103,
+          "script": 136,
+          "image": 68,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 6
+        },
+        "perfByType": {
+          "link": 45,
+          "script": 60,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 6
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "how-to-orders",
+        "url": "http://100.109.57.34:8085/how-to-orders/",
+        "status": 200,
+        "error": "",
+        "wallMs": 4864,
+        "requestCount": 155,
+        "decodedBytes": 9625146,
+        "decodedKB": 9400,
+        "domContentLoadedMs": 3687,
+        "loadMs": 4048,
+        "resourceEntries": 108,
+        "transferKB": 777,
+        "encodedKB": 817,
+        "byResourceType": {
+          "document": 4,
+          "stylesheet": 41,
+          "script": 63,
+          "image": 43,
+          "font": 2,
+          "other": 1,
+          "fetch": 1
+        },
+        "perfByType": {
+          "link": 39,
+          "script": 52,
+          "img": 13,
+          "css": 1,
+          "iframe": 2,
+          "fetch": 1
+        }
+      }
+    },
+    "privacy-page": {
+      "prod": {
+        "target": "prod",
+        "label": "privacy-page",
+        "url": "https://www.learningforkidz.com/privacy-policy/",
+        "status": 200,
+        "error": "",
+        "wallMs": 12293,
+        "requestCount": 338,
+        "decodedBytes": 17742544,
+        "decodedKB": 17327,
+        "domContentLoadedMs": 11155,
+        "loadMs": 11475,
+        "resourceEntries": 121,
+        "transferKB": 408,
+        "encodedKB": 1303,
+        "byResourceType": {
+          "document": 6,
+          "stylesheet": 103,
+          "script": 135,
+          "image": 70,
+          "font": 10,
+          "fetch": 4,
+          "ping": 1,
+          "other": 4,
+          "xhr": 5
+        },
+        "perfByType": {
+          "link": 45,
+          "script": 60,
+          "css": 4,
+          "fetch": 2,
+          "iframe": 2,
+          "img": 8
+        }
+      },
+      "local": {
+        "target": "local",
+        "label": "privacy-page",
+        "url": "http://100.109.57.34:8085/privacy-policy/",
+        "status": 200,
+        "error": "",
+        "wallMs": 4782,
+        "requestCount": 149,
+        "decodedBytes": 9564677,
+        "decodedKB": 9341,
+        "domContentLoadedMs": 3617,
+        "loadMs": 3966,
+        "resourceEntries": 102,
+        "transferKB": 777,
+        "encodedKB": 817,
+        "byResourceType": {
+          "document": 4,
+          "stylesheet": 41,
+          "script": 63,
+          "image": 37,
+          "font": 2,
+          "other": 1,
+          "fetch": 1
+        },
+        "perfByType": {
+          "link": 39,
+          "script": 52,
+          "img": 7,
+          "css": 1,
+          "iframe": 2,
+          "fetch": 1
+        }
+      }
+    }
+  },
+  "summaryRows": [
+    {
+      "label": "home",
+      "prodReq": 355,
+      "localReq": 83,
+      "reqReductionPct": 76.6,
+      "prodKB": 18174,
+      "localKB": 10478,
+      "kbReductionPct": 42.3,
+      "prodDCL": 4732,
+      "localDCL": 641,
+      "dclChangePct": 86.5,
+      "prodLoad": 5089,
+      "localLoad": 704,
+      "loadChangePct": 86.2
+    },
+    {
+      "label": "shop",
+      "prodReq": 347,
+      "localReq": 66,
+      "reqReductionPct": 81,
+      "prodKB": 18269,
+      "localKB": 6351,
+      "kbReductionPct": 65.2,
+      "prodDCL": 4981,
+      "localDCL": 493,
+      "dclChangePct": 90.1,
+      "prodLoad": 5331,
+      "localLoad": 511,
+      "loadChangePct": 90.4
+    },
+    {
+      "label": "product-category",
+      "prodReq": 346,
+      "localReq": 65,
+      "reqReductionPct": 81.2,
+      "prodKB": 17455,
+      "localKB": 5947,
+      "kbReductionPct": 65.9,
+      "prodDCL": 8122,
+      "localDCL": 620,
+      "dclChangePct": 92.4,
+      "prodLoad": 8443,
+      "localLoad": 665,
+      "loadChangePct": 92.1
+    },
+    {
+      "label": "product-brand",
+      "prodReq": 346,
+      "localReq": 66,
+      "reqReductionPct": 80.9,
+      "prodKB": 17696,
+      "localKB": 6483,
+      "kbReductionPct": 63.4,
+      "prodDCL": 4865,
+      "localDCL": 724,
+      "dclChangePct": 85.1,
+      "prodLoad": 5158,
+      "localLoad": 740,
+      "loadChangePct": 85.7
+    },
+    {
+      "label": "age-taxonomy",
+      "prodReq": 344,
+      "localReq": 63,
+      "reqReductionPct": 81.7,
+      "prodKB": 17430,
+      "localKB": 5898,
+      "kbReductionPct": 66.2,
+      "prodDCL": 4452,
+      "localDCL": 587,
+      "dclChangePct": 86.8,
+      "prodLoad": 4836,
+      "localLoad": 625,
+      "loadChangePct": 87.1
+    },
+    {
+      "label": "single-product",
+      "prodReq": 363,
+      "localReq": 72,
+      "reqReductionPct": 80.2,
+      "prodKB": 18561,
+      "localKB": 6030,
+      "kbReductionPct": 67.5,
+      "prodDCL": 5199,
+      "localDCL": 591,
+      "dclChangePct": 88.6,
+      "prodLoad": 5553,
+      "localLoad": 632,
+      "loadChangePct": 88.6
+    },
+    {
+      "label": "article-archive",
+      "prodReq": 351,
+      "localReq": 68,
+      "reqReductionPct": 80.6,
+      "prodKB": 20028,
+      "localKB": 7087,
+      "kbReductionPct": 64.6,
+      "prodDCL": 7774,
+      "localDCL": 469,
+      "dclChangePct": 94,
+      "prodLoad": 8086,
+      "localLoad": 574,
+      "loadChangePct": 92.9
+    },
+    {
+      "label": "single-post",
+      "prodReq": 364,
+      "localReq": 69,
+      "reqReductionPct": 81,
+      "prodKB": 18412,
+      "localKB": 6149,
+      "kbReductionPct": 66.6,
+      "prodDCL": 7561,
+      "localDCL": 454,
+      "dclChangePct": 94,
+      "prodLoad": 7935,
+      "localLoad": 532,
+      "loadChangePct": 93.3
+    },
+    {
+      "label": "search",
+      "prodReq": 353,
+      "localReq": 71,
+      "reqReductionPct": 79.9,
+      "prodKB": 18360,
+      "localKB": 6294,
+      "kbReductionPct": 65.7,
+      "prodDCL": 6790,
+      "localDCL": 522,
+      "dclChangePct": 92.3,
+      "prodLoad": 7076,
+      "localLoad": 597,
+      "loadChangePct": 91.6
+    },
+    {
+      "label": "cart",
+      "prodReq": 378,
+      "localReq": 117,
+      "reqReductionPct": 69,
+      "prodKB": 18598,
+      "localKB": 8366,
+      "kbReductionPct": 55,
+      "prodDCL": 6532,
+      "localDCL": 1924,
+      "dclChangePct": 70.5,
+      "prodLoad": 7897,
+      "localLoad": 1935,
+      "loadChangePct": 75.5
+    },
+    {
+      "label": "checkout",
+      "prodReq": 400,
+      "localReq": 137,
+      "reqReductionPct": 65.8,
+      "prodKB": 18889,
+      "localKB": 8616,
+      "kbReductionPct": 54.4,
+      "prodDCL": 9112,
+      "localDCL": 1682,
+      "dclChangePct": 81.5,
+      "prodLoad": 9377,
+      "localLoad": 1711,
+      "loadChangePct": 81.8
+    },
+    {
+      "label": "my-account",
+      "prodReq": 357,
+      "localReq": 85,
+      "reqReductionPct": 76.2,
+      "prodKB": 18282,
+      "localKB": 6968,
+      "kbReductionPct": 61.9,
+      "prodDCL": 6759,
+      "localDCL": 544,
+      "dclChangePct": 92,
+      "prodLoad": 7096,
+      "localLoad": 634,
+      "loadChangePct": 91.1
+    },
+    {
+      "label": "wishlist",
+      "prodReq": 337,
+      "localReq": 68,
+      "reqReductionPct": 79.8,
+      "prodKB": 17330,
+      "localKB": 6003,
+      "kbReductionPct": 65.4,
+      "prodDCL": 18142,
+      "localDCL": 463,
+      "dclChangePct": 97.4,
+      "prodLoad": 18482,
+      "localLoad": 481,
+      "loadChangePct": 97.4
+    },
+    {
+      "label": "contact",
+      "prodReq": 352,
+      "localReq": 91,
+      "reqReductionPct": 74.1,
+      "prodKB": 18768,
+      "localKB": 9460,
+      "kbReductionPct": 49.6,
+      "prodDCL": 7741,
+      "localDCL": 544,
+      "dclChangePct": 93,
+      "prodLoad": 8183,
+      "localLoad": 1146,
+      "loadChangePct": 86
+    },
+    {
+      "label": "promotion",
+      "prodReq": 339,
+      "localReq": 67,
+      "reqReductionPct": 80.2,
+      "prodKB": 17557,
+      "localKB": 6308,
+      "kbReductionPct": 64.1,
+      "prodDCL": 13444,
+      "localDCL": 472,
+      "dclChangePct": 96.5,
+      "prodLoad": 13712,
+      "localLoad": 516,
+      "loadChangePct": 96.2
+    },
+    {
+      "label": "ages-page",
+      "prodReq": 344,
+      "localReq": 57,
+      "reqReductionPct": 83.4,
+      "prodKB": 17223,
+      "localKB": 5834,
+      "kbReductionPct": 66.1,
+      "prodDCL": 8214,
+      "localDCL": 515,
+      "dclChangePct": 93.7,
+      "prodLoad": 8522,
+      "localLoad": 546,
+      "loadChangePct": 93.6
+    },
+    {
+      "label": "brands-page",
+      "prodReq": 350,
+      "localReq": 71,
+      "reqReductionPct": 79.7,
+      "prodKB": 17226,
+      "localKB": 6044,
+      "kbReductionPct": 64.9,
+      "prodDCL": 7939,
+      "localDCL": 482,
+      "dclChangePct": 93.9,
+      "prodLoad": 8273,
+      "localLoad": 577,
+      "loadChangePct": 93
+    },
+    {
+      "label": "about-page",
+      "prodReq": 340,
+      "localReq": 150,
+      "reqReductionPct": 55.9,
+      "prodKB": 17358,
+      "localKB": 9482,
+      "kbReductionPct": 45.4,
+      "prodDCL": 17857,
+      "localDCL": 3707,
+      "dclChangePct": 79.2,
+      "prodLoad": 17972,
+      "localLoad": 4037,
+      "loadChangePct": 77.5
+    },
+    {
+      "label": "refund-page",
+      "prodReq": 339,
+      "localReq": 149,
+      "reqReductionPct": 56,
+      "prodKB": 17629,
+      "localKB": 9340,
+      "kbReductionPct": 47,
+      "prodDCL": 7598,
+      "localDCL": 3592,
+      "dclChangePct": 52.7,
+      "prodLoad": 7866,
+      "localLoad": 3937,
+      "loadChangePct": 49.9
+    },
+    {
+      "label": "how-to-orders",
+      "prodReq": 338,
+      "localReq": 155,
+      "reqReductionPct": 54.1,
+      "prodKB": 17071,
+      "localKB": 9400,
+      "kbReductionPct": 44.9,
+      "prodDCL": 11638,
+      "localDCL": 3687,
+      "dclChangePct": 68.3,
+      "prodLoad": 12009,
+      "localLoad": 4048,
+      "loadChangePct": 66.3
+    },
+    {
+      "label": "privacy-page",
+      "prodReq": 338,
+      "localReq": 149,
+      "reqReductionPct": 55.9,
+      "prodKB": 17327,
+      "localKB": 9341,
+      "kbReductionPct": 46.1,
+      "prodDCL": 11155,
+      "localDCL": 3617,
+      "dclChangePct": 67.6,
+      "prodLoad": 11475,
+      "localLoad": 3966,
+      "loadChangePct": 65.4
+    }
+  ],
+  "aggregate": {
+    "requestReductionMedianPct": 79.8,
+    "kbReductionMedianPct": 64.1,
+    "dclChangeMedianPct": 90.1,
+    "loadChangeMedianPct": 88.6,
+    "prodReqAvg": 351,
+    "localReqAvg": 91,
+    "prodKBAvg": 17983,
+    "localKBAvg": 7423
+  }
+}
