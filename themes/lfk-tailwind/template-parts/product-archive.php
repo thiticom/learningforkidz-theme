@@ -18,7 +18,7 @@ $archive_title = function_exists( 'woocommerce_page_title' ) ? woocommerce_page_
 $description   = is_tax() ? term_description() : '';
 $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_product_archive_hero_image_id() : 0;
 ?>
-<div class="lfk-product-archive" role="main">
+<div class="lfk-product-archive<?php echo $hero_image_id ? ' lfk-product-archive--has-hero' : ''; ?>" role="main">
 	<div class="lfk-shell">
 		<?php if ( function_exists( 'woocommerce_breadcrumb' ) ) : ?>
 			<div class="lfk-breadcrumbs">

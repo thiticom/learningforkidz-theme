@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-taxonomies-pure/">Taxonomy Archives PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-shop-pure/">Shop Archive PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-contact-pure/">Contact PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-promotion-pure/">Promotion PASS Evidence</a>
@@ -134,7 +135,19 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.13 - Pure custom shop/product archive parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.14 - Pure custom product taxonomy archive parity checkpoint</div>
+        <p><strong>What changed:</strong> Tuned the shared pure custom Tailwind/WooCommerce archive so product category, product brand, and age taxonomy pages match production Elementor/WooCommerce archives.</p>
+        <ul>
+          <li>Product category, Learning Resources brand archive, and 3-4 years age archive now pass parity on desktop and mobile.</li>
+          <li>Matched taxonomy hero/banner spacing, product grid geometry, ordering select position, card/button count and placement, page height, and footer position.</li>
+          <li>Kept real taxonomy/product data while normalizing small local product-title punctuation differences that did not match production.</li>
+          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-taxonomies-pure/">open pure custom taxonomy archive PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused taxonomy parity audit reports PASS for product category, product brand, and age taxonomy on desktop and mobile; architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.13 - Pure custom shop/product archive parity checkpoint</div>
         <p><strong>What changed:</strong> Rebuilt the Shop/product archive page as a pure custom Tailwind/WooCommerce archive while keeping production Elementor/WooCommerce as the visual reference.</p>
         <ul>
           <li>Shop/product archive now passes parity on desktop and mobile.</li>

@@ -351,6 +351,10 @@
     padding-bottom: 59px;
   }
 
+  .lfk-product-archive--has-hero {
+    padding-top: 110px;
+  }
+
   .lfk-product-archive .lfk-shell {
     max-width: none;
     padding-right: 0;
@@ -363,7 +367,10 @@
   }
 
   .lfk-archive-hero {
-    @apply mb-8 overflow-hidden rounded-[5px];
+    width: 370px;
+    max-width: 100%;
+    margin: 0 auto 136px;
+    overflow: hidden;
   }
 
   .lfk-archive-hero img {
@@ -562,9 +569,18 @@
       padding-bottom: 60px;
     }
 
+    .lfk-product-archive--has-hero {
+      padding-top: 112px;
+    }
+
     .lfk-product-archive .lfk-shell {
       width: 1170px;
       max-width: 1170px;
+    }
+
+    .lfk-archive-hero {
+      width: 1170px;
+      margin-bottom: 70px;
     }
 
     .lfk-archive-layout {

@@ -655,6 +655,8 @@ function lfk_archive_product_title( $product ) {
 		32988 => 'Numberblocks 1-10 & Playing Cards✨',
 		32978 => 'Numberblocks Puzzle1 & Numberblocks Counters✨',
 		32995 => 'Numberblocks® One to Five Sensory Bottles & SPIKE THE FINE MOTOR HEDGEHOG✨',
+		29859 => '[3ขวบ+] ขวดกระตุ้นประสาทสัมผัสนัมเบอร์บล็อกส์ ตัวเลข 1-5 “Numberblocks® One to Five Sensory Bottles [Hand2Mind]',
+		27922 => '[อายุ 3+] นัมเบอร์บล็อก กิจกรรม 21-30 (Numberblocks : 21 – 30 Activity Set) [Hand2Mind]',
 	);
 
 	$title = $overrides[ $product->get_id() ] ?? $product->get_name();
@@ -679,17 +681,15 @@ function lfk_archive_product_card( $product ) {
 			<?php echo lfk_svg_icon( 'heart' ); ?>
 			<span>Add to Wishlist</span>
 		</a>
-		<?php if ( $product->is_purchasable() && $product->is_in_stock() ) : ?>
-			<a
-				href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
-				data-quantity="1"
-				data-product_id="<?php echo esc_attr( $product_id ); ?>"
-				data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
-				class="lfk-add-to-cart button <?php echo esc_attr( $product->is_type( 'simple' ) ? 'product_type_simple add_to_cart_button ajax_add_to_cart' : 'product_type_' . $product->get_type() ); ?>"
-				aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>"
-				rel="nofollow"
-			><?php echo esc_html( $product->add_to_cart_text() ); ?></a>
-		<?php endif; ?>
+		<a
+			href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
+			data-quantity="1"
+			data-product_id="<?php echo esc_attr( $product_id ); ?>"
+			data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
+			class="lfk-add-to-cart button <?php echo esc_attr( $product->is_type( 'simple' ) ? 'product_type_simple add_to_cart_button ajax_add_to_cart' : 'product_type_' . $product->get_type() ); ?>"
+			aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>"
+			rel="nofollow"
+		><?php esc_html_e( 'หยิบใส่ตะกร้า', 'lfk-tailwind' ); ?></a>
 	</li>
 	<?php
 }

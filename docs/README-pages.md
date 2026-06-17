@@ -6,6 +6,7 @@ Serve this folder with GitHub Pages using the repository `main` branch and `/doc
 - `team-brief-th.pdf`: downloadable PDF
 - `version-log.html`: reader-facing version and update log
 - `lfk-section-audit-2026-06-11/`: full visual audit
+- `theme-parity-audit-2026-06-17-taxonomies-pure/`: pure custom product taxonomy archive PASS evidence
 - `theme-parity-audit-2026-06-17-shop-pure/`: pure custom shop/product archive PASS evidence
 - `theme-parity-audit-2026-06-17-contact-pure/`: pure custom contact page PASS evidence
 - `theme-parity-audit-2026-06-17-promotion-pure/`: pure custom promotion page PASS evidence
