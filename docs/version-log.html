@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-single-product-pure/">Single Product Visual PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-taxonomies-pure/">Taxonomy Archives PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-shop-pure/">Shop Archive PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-contact-pure/">Contact PASS Evidence</a>
@@ -135,7 +136,19 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.14 - Pure custom product taxonomy archive parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.15 - Pure custom single product visual parity checkpoint</div>
+        <p><strong>What changed:</strong> Tuned the pure custom Tailwind/WooCommerce single-product template so the Kanoodle product detail page visually matches production Elementor/WooCommerce on desktop and mobile.</p>
+        <ul>
+          <li>Matched gallery stage, thumbnail grid, non-square lifestyle image ratio, product title, price, stock timing text, add-to-cart button, description section, related-products grid geometry, page height, and footer position.</li>
+          <li>Removed the duplicate local stock display inside the add-to-cart area so stock appears once like production.</li>
+          <li>Recorded related-product names as CONTENT/DATA DIFFERENCE because production randomizes those recommendations between audit requests; layout/boxes remain checked strictly.</li>
+          <li>Published the checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-single-product-pure/">open pure custom single product visual PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused single-product parity audit reports 0 NEEDS FIX on desktop and mobile, with only the documented related-products content/data note; architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.14 - Pure custom product taxonomy archive parity checkpoint</div>
         <p><strong>What changed:</strong> Tuned the shared pure custom Tailwind/WooCommerce archive so product category, product brand, and age taxonomy pages match production Elementor/WooCommerce archives.</p>
         <ul>
           <li>Product category, Learning Resources brand archive, and 3-4 years age archive now pass parity on desktop and mobile.</li>

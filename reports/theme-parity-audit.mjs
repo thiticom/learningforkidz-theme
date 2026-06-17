@@ -370,6 +370,29 @@ function compareStyles(prodStyle, localStyle, props) {
   return Object.keys(delta).length ? delta : null;
 }
 
+function relatedHeadingStart(headings) {
+  return headings.findIndex((heading) => heading.text === 'สินค้าที่เกี่ยวข้อง');
+}
+
+function headingTextForComparison(routeKey, headings, index) {
+  const relatedStart = routeKey === 'single-product' ? relatedHeadingStart(headings) : -1;
+  if (relatedStart >= 0 && index > relatedStart) {
+    return `related-product-${index - relatedStart}`;
+  }
+  return headings[index]?.text || '';
+}
+
+function headingSignature(routeKey, headings) {
+  return headings.map((heading, index) => `${heading.tag}:${headingTextForComparison(routeKey, headings, index)}`).join('|');
+}
+
+function relatedHeadingEvidence(headings) {
+  const relatedStart = relatedHeadingStart(headings);
+  return relatedStart >= 0
+    ? headings.slice(relatedStart + 1).map((heading) => ({ tag: heading.tag, text: heading.text, box: heading.box }))
+    : [];
+}
+
 function classify(routeKey, viewportName, prod, local) {
   const issues = [];
   const add = (section, status, detail, evidence = {}) => issues.push({ section, status, detail, evidence });
@@ -430,14 +453,22 @@ function classify(routeKey, viewportName, prod, local) {
     }
   }
 
-  const prodHeadingSig = prod.headings.map((heading) => `${heading.tag}:${heading.text}`).join('|');
-  const localHeadingSig = local.headings.map((heading) => `${heading.tag}:${heading.text}`).join('|');
+  const prodRawHeadingSig = prod.headings.map((heading) => `${heading.tag}:${heading.text}`).join('|');
+  const localRawHeadingSig = local.headings.map((heading) => `${heading.tag}:${heading.text}`).join('|');
+  const prodHeadingSig = headingSignature(routeKey, prod.headings);
+  const localHeadingSig = headingSignature(routeKey, local.headings);
   if (prodHeadingSig !== localHeadingSig) {
     add('headings', 'NEEDS FIX', 'Visible heading sequence/text differs', {
       prod: prod.headings.map((heading) => ({ tag: heading.tag, text: heading.text, box: heading.box })),
       local: local.headings.map((heading) => ({ tag: heading.tag, text: heading.text, box: heading.box })),
     });
   } else {
+    if (routeKey === 'single-product' && prodRawHeadingSig !== localRawHeadingSig) {
+      add('related products', 'CONTENT/DATA DIFFERENCE', 'Production randomizes related product selections; compare card layout/boxes instead of exact product-title text', {
+        prod: relatedHeadingEvidence(prod.headings),
+        local: relatedHeadingEvidence(local.headings),
+      });
+    }
     prod.headings.forEach((prodHeading, index) => {
       const localHeading = local.headings[index];
       for (const prop of ['fontSize', 'lineHeight', 'fontWeight', 'color']) {
