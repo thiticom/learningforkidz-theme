@@ -18,7 +18,7 @@ $archive_title = function_exists( 'woocommerce_page_title' ) ? woocommerce_page_
 $description   = is_tax() ? term_description() : '';
 $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_product_archive_hero_image_id() : 0;
 ?>
-<main id="primary" class="lfk-product-archive">
+<div class="lfk-product-archive" role="main">
 	<div class="lfk-shell">
 		<?php if ( function_exists( 'woocommerce_breadcrumb' ) ) : ?>
 			<div class="lfk-breadcrumbs">
@@ -38,23 +38,11 @@ $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_pr
 			</div>
 		<?php endif; ?>
 
-		<header class="lfk-archive-header">
-			<div class="lfk-archive-copy">
-				<h1 class="lfk-archive-title"><?php echo esc_html( $archive_title ); ?></h1>
-				<?php if ( $description ) : ?>
-					<div class="lfk-archive-description"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
-				<?php endif; ?>
-				<?php if ( lfk_product_archive_result_count() ) : ?>
-					<p class="lfk-result-count"><?php echo esc_html( lfk_product_archive_result_count() ); ?></p>
-				<?php endif; ?>
+		<?php if ( $description ) : ?>
+			<div class="lfk-archive-intro" aria-label="<?php echo esc_attr( $archive_title ); ?>">
+				<div class="lfk-archive-description"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
 			</div>
-
-			<?php if ( function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
-				<div class="lfk-archive-ordering">
-					<?php woocommerce_catalog_ordering(); ?>
-				</div>
-			<?php endif; ?>
-		</header>
+		<?php endif; ?>
 
 		<?php if ( function_exists( 'woocommerce_output_all_notices' ) ) : ?>
 			<?php woocommerce_output_all_notices(); ?>
@@ -63,7 +51,7 @@ $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_pr
 		<?php if ( have_posts() ) : ?>
 			<div class="lfk-archive-layout">
 				<aside class="lfk-archive-sidebar" aria-label="<?php esc_attr_e( 'Product filters', 'lfk-tailwind' ); ?>">
-					<h2><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></h2>
+					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></div>
 					<?php
 					lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
 					lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
@@ -71,30 +59,31 @@ $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_pr
 					?>
 				</aside>
 
-				<div class="lfk-archive-products">
-					<div class="lfk-product-grid lfk-archive-grid">
+				<section class="lfk-archive-products" aria-label="<?php echo esc_attr( $archive_title ); ?>">
+					<?php if ( function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
+						<div class="lfk-archive-ordering">
+							<?php woocommerce_catalog_ordering(); ?>
+						</div>
+					<?php endif; ?>
+
+					<ul class="lfk-archive-product-list">
 						<?php
 						while ( have_posts() ) :
 							the_post();
-							lfk_product_card( wc_get_product( get_the_ID() ) );
+							lfk_archive_product_card( wc_get_product( get_the_ID() ) );
 						endwhile;
 						?>
-					</div>
-				</div>
+					</ul>
+				</section>
 			</div>
 
-			<?php if ( function_exists( 'woocommerce_pagination' ) ) : ?>
-				<div class="lfk-pagination">
-					<?php woocommerce_pagination(); ?>
-				</div>
-			<?php endif; ?>
 		<?php else : ?>
 			<div class="lfk-empty-state">
 				<?php do_action( 'woocommerce_no_products_found' ); ?>
 			</div>
 		<?php endif; ?>
 	</div>
-</main>
+</div>
 <?php
 if ( function_exists( 'wc_reset_loop' ) ) {
 	wc_reset_loop();

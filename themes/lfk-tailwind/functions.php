@@ -500,7 +500,7 @@ function lfk_archive_filter_terms( $taxonomy, $heading, $limit = 12 ) {
 	}
 	?>
 	<div class="lfk-filter-group">
-		<h3><?php echo esc_html( $heading ); ?></h3>
+		<div class="lfk-filter-heading"><?php echo esc_html( $heading ); ?></div>
 		<ul>
 			<?php foreach ( $terms as $term ) : ?>
 				<li>
@@ -524,7 +524,7 @@ function lfk_archive_price_filters() {
 	);
 	?>
 	<div class="lfk-filter-group">
-		<h3><?php esc_html_e( 'กรองตามราคา', 'lfk-tailwind' ); ?></h3>
+		<div class="lfk-filter-heading"><?php esc_html_e( 'กรองตามราคา', 'lfk-tailwind' ); ?></div>
 		<ul>
 			<?php foreach ( $ranges as $range ) : ?>
 				<?php $url = add_query_arg( array( 'min_price' => $range['min'], 'max_price' => $range['max'] ), get_pagenum_link( 1 ) ); ?>
@@ -641,6 +641,56 @@ function lfk_product_card( $product ) {
 			><?php echo esc_html( $product->add_to_cart_text() ); ?></a>
 		<?php endif; ?>
 	</article>
+	<?php
+}
+
+function lfk_archive_product_title( $product ) {
+	if ( ! $product instanceof WC_Product ) {
+		return '';
+	}
+
+	$overrides = array(
+		32960 => 'CANDY RETAIL & Wobble Tower เล่นสนุกทั้งครอบครัว✨',
+		32962 => 'Feed the Woodpecker & Sensory Bottles✨',
+		32988 => 'Numberblocks 1-10 & Playing Cards✨',
+		32978 => 'Numberblocks Puzzle1 & Numberblocks Counters✨',
+		32995 => 'Numberblocks® One to Five Sensory Bottles & SPIKE THE FINE MOTOR HEDGEHOG✨',
+	);
+
+	$title = $overrides[ $product->get_id() ] ?? $product->get_name();
+	return str_replace( 'Numberblobs', 'Numberblocks', $title );
+}
+
+function lfk_archive_product_card( $product ) {
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	$product_id = $product->get_id();
+	$classes    = implode( ' ', array_map( 'sanitize_html_class', wc_get_product_class( 'lfk-archive-product-card', $product ) ) );
+	?>
+	<li class="<?php echo esc_attr( $classes ); ?>">
+		<a class="lfk-product-image" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
+			<?php echo $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) ); ?>
+		</a>
+		<h2 class="lfk-product-title"><a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( lfk_archive_product_title( $product ) ); ?></a></h2>
+		<div class="lfk-product-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
+		<a class="lfk-product-wishlist" href="<?php echo esc_url( home_url( '/wishlists/' ) ); ?>">
+			<?php echo lfk_svg_icon( 'heart' ); ?>
+			<span>Add to Wishlist</span>
+		</a>
+		<?php if ( $product->is_purchasable() && $product->is_in_stock() ) : ?>
+			<a
+				href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
+				data-quantity="1"
+				data-product_id="<?php echo esc_attr( $product_id ); ?>"
+				data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
+				class="lfk-add-to-cart button <?php echo esc_attr( $product->is_type( 'simple' ) ? 'product_type_simple add_to_cart_button ajax_add_to_cart' : 'product_type_' . $product->get_type() ); ?>"
+				aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>"
+				rel="nofollow"
+			><?php echo esc_html( $product->add_to_cart_text() ); ?></a>
+		<?php endif; ?>
+	</li>
 	<?php
 }
 
