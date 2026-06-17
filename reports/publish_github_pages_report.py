@@ -188,6 +188,8 @@ def version_log_html() -> str:
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="strict-checkout-audit-2026-06-17-pure/">Pure Checkout PASS Evidence</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-cart-pure/">Pure Cart PASS Evidence</a>
       <a class="button" href="team-brief-th.pdf">Download PDF ล่าสุด</a>
       <a class="button" href="https://github.com/thiticom/learningforkidz-theme/commits/main">Technical Commit Log</a>
     </div>
@@ -195,7 +197,42 @@ def version_log_html() -> str:
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.2 - Checkout and footer parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.6 - Pure custom checkout parity checkpoint</div>
+        <p><strong>What changed:</strong> Rebuilt checkout as a pure custom WooCommerce/Tailwind template while using production Elementor only as the visual reference.</p>
+        <ul>
+          <li>Checkout now passes strict parity on desktop and mobile.</li>
+          <li>Matched billing/shipping fields, coupon box, order summary rows, shipping note, payment methods, terms/privacy area, place order button, mobile stacking, and footer position.</li>
+          <li>Broader checkout route audit also passes with zero Elementor/WooLentor dependency styles, scripts, or rendered main-content nodes.</li>
+          <li>Published the valid checkpoint with screenshots: <a href="strict-checkout-audit-2026-06-17-pure/">open pure custom checkout PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, strict checkout audit reports PASS for desktop and mobile, broader checkout route audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in the custom checkout path.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.5 - Pure custom cart parity checkpoint</div>
+        <p><strong>What changed:</strong> Rebuilt cart parity using the pure custom Tailwind/WooCommerce path. Production Elementor remains the visual blueprint only.</p>
+        <ul>
+          <li>Cart page now passes the strict parity audit on desktop and mobile.</li>
+          <li>Matched product table/card layout, coupon area, cart totals, shipping label/radios, checkout button, page height, and footer position.</li>
+          <li>Hardened the parity audit to compare the real content section, buttons, and form field geometry/CSS.</li>
+          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-cart-pure/">open pure custom cart PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, strict cart audit reports PASS for desktop and mobile, and local architecture evidence shows no Elementor/WooLentor styles, scripts, or rendered main-content nodes.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.4 - Pure custom theme architecture correction</div>
+        <p><strong>What changed:</strong> Updated the implementation direction so production Elementor is used only as the visual reference. Local/staging cart and checkout now use custom WooCommerce/Tailwind templates instead of rendering stored Elementor page content.</p>
+        <ul>
+          <li>Removed the cart/checkout path that rendered Elementor page content locally.</li>
+          <li>Removed cloned Elementor upload CSS rewriting and trimmed Elementor/WooLentor assets from cart/checkout while preserving WooCommerce checkout/payment scripts.</li>
+          <li>Updated the parity audit harness with an architecture gate: local pages fail if they require Elementor/WooLentor assets or rendered main-content nodes.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for functions/cart/checkout/single product, and local cart/checkout architecture checks found no Elementor/WooLentor styles, scripts, or main-content nodes.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.2 - Superseded checkout and footer parity checkpoint</div>
         <p><strong>What changed:</strong> Tightened the custom theme checkout page against production Elementor/WooLentor output and added a repeatable strict checkout audit script.</p>
         <ul>
           <li>Checkout now renders the stored Elementor checkout content instead of the generic shortcode shell.</li>
@@ -268,7 +305,9 @@ def main() -> None:
         "- `index.html`: Thai team communication brief\n"
         "- `team-brief-th.pdf`: downloadable PDF\n"
         "- `version-log.html`: reader-facing version and update log\n"
-        "- `lfk-section-audit-2026-06-11/`: full visual audit\n",
+        "- `lfk-section-audit-2026-06-11/`: full visual audit\n"
+        "- `strict-checkout-audit-2026-06-17-pure/`: pure custom checkout PASS evidence\n"
+        "- `theme-parity-audit-2026-06-17-cart-pure/`: pure custom cart PASS evidence\n",
         encoding="utf-8",
     )
 

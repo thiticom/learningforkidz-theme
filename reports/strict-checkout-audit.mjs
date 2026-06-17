@@ -18,8 +18,7 @@ const VIEWPORTS = {
 };
 
 const SECTION_SELECTORS = {
-  main: 'main, #primary, .elementor-location-single, .site-main',
-  notices: '.woocommerce-notices-wrapper, .woocommerce-error, .woocommerce-info, .woocommerce-message',
+  notices: '.woocommerce-notices-wrapper:not(:empty), .woocommerce-error, .woocommerce-message',
   couponToggle: '.woocommerce-form-coupon-toggle, .e-coupon-box, .coupon',
   couponForm: 'form.checkout_coupon, .woocommerce-form-coupon',
   checkoutForm: 'form.checkout, form[name="checkout"]',
@@ -112,7 +111,13 @@ async function extractPage(page) {
       const computed = getComputedStyle(el);
       return Object.fromEntries(styleProps.map((prop) => [prop, computed[prop]]));
     };
-    const one = (selector) => document.querySelector(selector);
+    const isVisible = (el) => {
+      if (!el) return false;
+      const box = boxOf(el);
+      const style = getComputedStyle(el);
+      return !!box && box.w > 0 && box.h > 0 && style.display !== 'none' && style.visibility !== 'hidden';
+    };
+    const one = (selector) => [...document.querySelectorAll(selector)].find(isVisible) || null;
     const sectionSnapshot = (selector) => {
       const el = one(selector);
       if (!el) return null;
@@ -133,8 +138,10 @@ async function extractPage(page) {
       const explicit = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null;
       return clean(aria || explicit?.innerText || wrapped?.innerText || field.closest('p, .form-row, .woocommerce-input-wrapper')?.innerText || '');
     };
+    const dependencyPattern = /elementor|woolentor|post-\d+\.css/i;
+    const mainEl = document.querySelector('main, #primary, .site-main, form.checkout, [data-elementor-type="wp-page"], .elementor');
     const fields = [...document.querySelectorAll('form.checkout input, form.checkout select, form.checkout textarea, form[name="checkout"] input, form[name="checkout"] select, form[name="checkout"] textarea')]
-      .filter((field) => field.type !== 'hidden')
+      .filter((field) => field.type !== 'hidden' && isVisible(field))
       .map((field, index) => ({
         index,
         tag: field.tagName.toLowerCase(),
@@ -150,7 +157,7 @@ async function extractPage(page) {
         style: styleOf(field),
       }));
     const buttons = [...document.querySelectorAll('button, input[type="submit"], a.button, .button')]
-      .filter((el) => clean(el.innerText || el.value))
+      .filter((el) => isVisible(el) && clean(el.innerText || el.value))
       .map((el, index) => ({
         index,
         tag: el.tagName.toLowerCase(),
@@ -187,6 +194,18 @@ async function extractPage(page) {
         scrollHeight: document.documentElement.scrollHeight,
       },
       sections: Object.fromEntries(Object.entries(sectionSelectors).map(([name, selector]) => [name, sectionSnapshot(selector)])),
+      architecture: {
+        dependencyStyles: [...document.querySelectorAll('link[rel="stylesheet"]')]
+          .map((link) => link.href)
+          .filter((href) => dependencyPattern.test(href)),
+        dependencyScripts: [...document.scripts]
+          .map((script) => script.src)
+          .filter(Boolean)
+          .filter((src) => dependencyPattern.test(src)),
+        mainDependencyNodes: mainEl
+          ? mainEl.querySelectorAll('[class*="elementor"], [data-elementor-type], [class*="woolentor"]').length
+          : 0,
+      },
       headings: [...document.querySelectorAll('h1,h2,h3,h4')].map((el, index) => ({
         index,
         tag: el.tagName.toLowerCase(),
@@ -220,6 +239,14 @@ function classify(prod, local, viewport) {
   const issues = [];
   const add = (label, status, detail, evidence = {}) => issues.push({ label, status, detail, evidence });
 
+  if (local.architecture.dependencyStyles.length || local.architecture.dependencyScripts.length || local.architecture.mainDependencyNodes > 0) {
+    add('architecture', 'NEEDS FIX', 'Local checkout depends on Elementor/WooLentor assets or rendered nodes', {
+      styles: local.architecture.dependencyStyles,
+      scripts: local.architecture.dependencyScripts,
+      mainDependencyNodes: local.architecture.mainDependencyNodes,
+    });
+  }
+
   for (const name of Object.keys(SECTION_SELECTORS)) {
     const prodSection = prod.sections[name];
     const localSection = local.sections[name];
@@ -237,7 +264,9 @@ function classify(prod, local, viewport) {
           localBox: localSection.box,
         });
       }
-      for (const prop of ['display', 'gridTemplateColumns', 'flexDirection', 'fontSize', 'backgroundColor', 'borderRadius', 'borderCollapse', 'borderSpacing', 'boxShadow']) {
+      const sectionStyleProps = ['display', 'gridTemplateColumns', 'flexDirection', 'fontSize', 'backgroundColor', 'borderRadius', 'borderCollapse', 'borderSpacing', 'boxShadow']
+        .filter((prop) => !(name === 'checkoutForm' && ['display', 'gridTemplateColumns', 'flexDirection'].includes(prop)));
+      for (const prop of sectionStyleProps) {
         if ((prodSection.style?.[prop] || '') !== (localSection.style?.[prop] || '')) {
           add(name, 'NEEDS FIX', `Section CSS differs for ${name}.${prop}`, {
             prod: prodSection.style?.[prop] || '',

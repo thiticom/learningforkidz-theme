@@ -354,7 +354,8 @@
       <p class="lead">Custom theme ไม่ใช่แค่เปลี่ยนหน้าตาเว็บ แต่เป็นก้าวแรกในการทำให้ทีมสร้าง marketing pages, promotion tools, business apps และ automation ได้เร็วขึ้น พร้อมหลักฐานก่อนและหลังทุกครั้ง</p>
       <div class="actions">
         <a class="button primary" href="lfk-section-audit-2026-06-11/">เปิด Full Section Audit</a>
-        <a class="button" href="theme-parity-audit-2026-06-17-cart/">Superseded Cart Evidence</a>
+        <a class="button" href="strict-checkout-audit-2026-06-17-pure/">Pure Checkout Evidence</a>
+        <a class="button" href="theme-parity-audit-2026-06-17-cart-pure/">Pure Cart Evidence</a>
         <a class="button" href="team-brief-th.pdf">Download PDF</a>
         <a class="button" href="version-log.html">Version Log</a>
         <a class="button" href="team-message-th.md">เปิดข้อความสำหรับส่งทีม</a>
@@ -367,7 +368,7 @@
         <ul>
           <li><strong>ใช่, หน้าเว็บโหลดดีขึ้นอย่างมีนัยสำคัญ.</strong> จาก audit 21 หน้า จำนวน request ลดลงค่ากลาง 79.8% และเวลา load event ลดลงค่ากลาง 88.6% เมื่อเทียบ custom theme local กับ production Elementor.</li>
           <li><strong>Custom theme คือ foundation สำหรับ AI-ready marketing.</strong> เมื่อส่วนสำคัญกลายเป็น template และ component ที่ชัดเจน AI จะสร้างหน้า campaign, product page, report และ automation ได้เร็วกว่าแก้ Elementor ทีละหน้า.</li>
-          <li><strong>Commerce core กำลังถูก lock ให้เทียบ production ทีละหน้า.</strong> กติกาล่าสุดคือ custom theme ต้องเป็น Tailwind/WooCommerce แท้ ไม่ render Elementor content ใน local/staging. Checkout และ cart จึงกำลังถูก rebuild ให้ match visual โดยไม่พึ่ง Elementor runtime.</li>
+          <li><strong>Commerce core เริ่ม lock เป็น pure custom แล้ว.</strong> Cart และ checkout ผ่านหลักฐานรอบล่าสุดแบบ Tailwind/WooCommerce แท้ โดยใช้ production Elementor เป็น visual reference เท่านั้น ไม่ render Elementor content ใน local/staging.</li>
           <li><strong>วิธีคุยกับทีมควรเป็น business roadmap.</strong> สื่อสารว่าเรากำลังสร้างระบบให้ทีมขอ solution/app ได้เร็วขึ้น ไม่ใช่แค่ทำเว็บใหม่.</li>
         </ul>
       </div>
@@ -455,17 +456,17 @@
 
       <tr>
         <th scope="row">Cart, account, wishlist</th>
-        <td><span class="status good">ใกล้เคียงเว็บจริง</span></td>
-        <td>flow หลักทำงานและ style รวมเข้ากับ theme แล้ว</td>
-        <td>ทดสอบ coupon, shipping, login และ edge cases ก่อนขึ้นจริง</td>
+        <td><span class="status ready">Cart ผ่าน pure custom</span></td>
+        <td>Cart ผ่าน strict parity audit แล้ว ส่วน account/wishlist ยังต้อง QA เพิ่ม</td>
+        <td>ทดสอบ login, wishlist และ edge cases ก่อนขึ้นจริง</td>
       </tr>
     
 
       <tr>
         <th scope="row">Checkout</th>
-        <td><span class="status decision">ต้องตัดสินใจ</span></td>
-        <td>เร็วขึ้นมาก แต่ layout ยัง utilitarian กว่า production</td>
-        <td>ต้องเลือกว่าจะ match Elementor สองคอลัมน์ หรือใช้ checkout ที่เรียบและเร็วกว่า</td>
+        <td><span class="status ready">ผ่าน pure custom</span></td>
+        <td>ผ่าน strict checkout audit และ broader checkout route audit บน desktop/mobile</td>
+        <td>ทดสอบ payment provider จริง, coupon apply, validation และ tracking ก่อนขึ้น production</td>
       </tr>
     
 
@@ -743,7 +744,7 @@
         <article class="phase">
           <h3>30 วัน: Stabilize Foundation</h3>
           <ul>
-            <li>Finalize checkout decision</li>
+            <li>QA real checkout payment, coupon, validation, and tracking</li>
             <li>QA product/archive/cart flows</li>
             <li>ทำ report template ภาษาไทยให้ใช้ซ้ำ</li>
             <li>กำหนด component library สำหรับ campaign pages</li>

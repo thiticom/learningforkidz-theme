@@ -166,6 +166,65 @@ add_filter( 'gettext', function ( $translation, $text, $domain ) {
 	return $translation;
 }, 10, 3 );
 
+add_filter( 'gettext', function ( $translation, $text, $domain ) {
+	if ( 'woocommerce' !== $domain || ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+		return $translation;
+	}
+
+	$checkout_translations = array(
+		'Billing details' => __( 'รายละเอียดการเรียกเก็บเงิน', 'lfk-tailwind' ),
+		'Ship to a different address?' => __( 'จัดส่งไปยังที่อยู่อื่นหรือไม่?', 'lfk-tailwind' ),
+		'Your order' => __( 'การสั่งซื้อของคุณ', 'lfk-tailwind' ),
+		'Have a coupon?' => __( 'มีคูปองมั้ย?', 'lfk-tailwind' ),
+		'Click here to enter your code' => __( 'คลิกที่นี่เพื่อป้อนรหัสคูปองของคุณ', 'lfk-tailwind' ),
+		'Returning customer?' => __( 'เป็นลูกค้าเก่าใช่ไหม?', 'lfk-tailwind' ),
+		'Click here to login' => __( 'คลิกที่นี่เพื่อเข้าสู่ระบบ', 'lfk-tailwind' ),
+		'Create an account?' => __( 'สร้างบัญชี?', 'lfk-tailwind' ),
+	);
+
+	return $checkout_translations[ $text ] ?? $translation;
+}, 10, 3 );
+
+add_filter( 'woocommerce_checkout_fields', function ( $fields ) {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+		return $fields;
+	}
+
+	if ( isset( $fields['billing']['billing_company'] ) ) {
+		$fields['billing']['billing_company']['label'] = __( 'ชื่อบริษัท', 'lfk-tailwind' );
+	}
+
+	if ( isset( $fields['billing']['billing_email'] ) ) {
+		$fields['billing']['billing_email']['label'] = __( 'ที่อยู่อีเมล์', 'lfk-tailwind' );
+	}
+
+	return $fields;
+}, 1000 );
+
+add_filter( 'woocommerce_form_field_args', function ( $args, $key ) {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+		return $args;
+	}
+
+	if ( 'billing_company' === $key ) {
+		$args['label'] = __( 'ชื่อบริษัท', 'lfk-tailwind' );
+	}
+
+	if ( 'billing_email' === $key ) {
+		$args['label'] = __( 'ที่อยู่อีเมล์', 'lfk-tailwind' );
+	}
+
+	return $args;
+}, 1000, 2 );
+
+add_filter( 'woocommerce_enable_order_notes_field', function ( $enabled ) {
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		return false;
+	}
+
+	return $enabled;
+} );
+
 function lfk_should_trim_plugin_assets() {
 	if ( is_admin() ) {
 		return false;
