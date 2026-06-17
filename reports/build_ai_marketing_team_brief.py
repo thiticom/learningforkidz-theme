@@ -665,6 +665,7 @@ def build_html(perf: dict, screenshot_paths: dict[str, str], rows: list[dict]) -
         <a class="button primary" href="{FULL_AUDIT_PATH}">เปิด Full Section Audit</a>
         <a class="button" href="{LOCAL_SITE_URL}">เปิด Local Test Site</a>
         <a class="button" href="team-brief-th.pdf">Download PDF</a>
+        <a class="button" href="version-log.html">Version Log</a>
         <a class="button" href="team-message-th.md">เปิดข้อความสำหรับส่งทีม</a>
       </div>
     </header>
@@ -880,6 +881,7 @@ This folder contains a Thai-first communication report for non-technical stakeho
 
 - `index.html` and `report.html`: browser report
 - `team-brief-th.pdf`: printable/shareable PDF export of the same report
+- `version-log.html`: public update log for non-technical reviewers
 - `assets/`: chart PNG/SVG files and selected screenshot evidence
 - `team-message-th.md`: paste-ready Thai team message
 - `source-notes.json`: source metadata and chart map
