@@ -988,6 +988,108 @@
     }
   }
 
+  .lfk-brand-directory-page {
+    padding-top: 19px;
+    padding-bottom: 24px;
+    background: transparent;
+  }
+
+  .lfk-brand-directory-page .lfk-shell {
+    max-width: 1365px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .lfk-brand-visual-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 435px);
+    gap: 30px;
+    align-items: start;
+  }
+
+  .lfk-brand-visual-card {
+    width: 435px;
+    height: 358px;
+    background: transparent;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .lfk-brand-visual-card.is-large {
+    height: 473px;
+  }
+
+  .lfk-brand-visual-card a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: #222222;
+  }
+
+  .lfk-brand-visual-card img {
+    display: block;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 20px;
+    object-fit: contain;
+  }
+
+  .lfk-brand-visual-card.is-large img {
+    width: 415px;
+    height: 415px;
+  }
+
+  .lfk-brand-visual-card h2 {
+    width: 415px;
+    margin: 0;
+    color: #222222;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .lfk-brand-directory-page + .lfk-site-footer {
+    min-height: 706px;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-brand-directory-page {
+      padding-top: 17px;
+      padding-bottom: 24px;
+    }
+
+    .lfk-brand-directory-page .lfk-shell {
+      max-width: 390px;
+    }
+
+    .lfk-brand-visual-grid {
+      grid-template-columns: 390px;
+    }
+
+    .lfk-brand-visual-card {
+      width: 390px;
+    }
+
+    .lfk-brand-visual-card.is-large {
+      height: 428px;
+    }
+
+    .lfk-brand-visual-card h2 {
+      width: 370px;
+    }
+
+    .lfk-brand-visual-card.is-large img {
+      width: 370px;
+      height: 370px;
+    }
+
+    .lfk-brand-directory-page + .lfk-site-footer {
+      min-height: 568px;
+    }
+  }
+
   .lfk-search-form {
     @apply mt-5 flex max-w-[620px] flex-col gap-3 sm:flex-row;
   }
