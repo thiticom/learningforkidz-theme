@@ -457,6 +457,161 @@
     @apply object-contain;
   }
 
+  .lfk-promotion-page {
+    background: transparent;
+  }
+
+  .lfk-promotion-stage {
+    width: 1365px;
+    max-width: 100%;
+    margin: 0 auto 2px;
+    padding-top: 19px;
+    padding-bottom: 85px;
+    background: transparent;
+  }
+
+  .lfk-promotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 420px);
+    column-gap: 51.5px;
+    row-gap: 48px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lfk-promotion-card {
+    display: block;
+    width: 420px;
+    min-width: 0;
+    color: #515151;
+  }
+
+  .lfk-promotion-image {
+    display: block;
+    width: 420px;
+    height: 420px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .lfk-promotion-image img {
+    display: block;
+    width: 420px;
+    height: 420px;
+    object-fit: cover;
+  }
+
+  .lfk-promotion-title {
+    width: 420px;
+    margin: 16px 0 0;
+    color: #cc3366;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19.2px;
+  }
+
+  .lfk-promotion-title a {
+    color: inherit;
+  }
+
+  .lfk-promotion-card:nth-child(-n+4) .lfk-promotion-title {
+    min-height: 35px;
+  }
+
+  .lfk-promotion-card:nth-child(n+5) .lfk-promotion-title {
+    min-height: 54px;
+  }
+
+  .lfk-promotion-meta {
+    height: 95px;
+    color: #515151;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lfk-promotion-price {
+    padding-top: 12px;
+    font-weight: 400;
+  }
+
+  .lfk-promotion-wishlist {
+    display: block;
+    margin-top: 8px;
+    color: #515151;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .lfk-promotion-add-to-cart {
+    display: inline-flex;
+    width: 127px;
+    height: 36px;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 3px;
+    background: #e9e6ed;
+    color: #515151;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 16px;
+  }
+
+  .lfk-promotion-page + .lfk-site-footer {
+    min-height: 706px;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-promotion-stage {
+      width: 390px;
+      margin-bottom: 0;
+      padding-top: 17px;
+      padding-bottom: 88px;
+    }
+
+    .lfk-promotion-grid {
+      grid-template-columns: repeat(2, 187px);
+      column-gap: 16px;
+    }
+
+    .lfk-promotion-card,
+    .lfk-promotion-image,
+    .lfk-promotion-image img,
+    .lfk-promotion-title {
+      width: 187px;
+    }
+
+    .lfk-promotion-image,
+    .lfk-promotion-image img {
+      height: 187px;
+    }
+
+    .lfk-promotion-card:nth-child(1) .lfk-promotion-title,
+    .lfk-promotion-card:nth-child(4) .lfk-promotion-title {
+      min-height: 74px;
+    }
+
+    .lfk-promotion-card:nth-child(2) .lfk-promotion-title,
+    .lfk-promotion-card:nth-child(3) .lfk-promotion-title {
+      min-height: 55px;
+    }
+
+    .lfk-promotion-card:nth-child(n+5) .lfk-promotion-title {
+      min-height: 93px;
+    }
+
+    .lfk-promotion-page + .lfk-site-footer {
+      min-height: 568px;
+    }
+  }
+
   .lfk-pagination {
     @apply mt-12 flex justify-center;
   }
