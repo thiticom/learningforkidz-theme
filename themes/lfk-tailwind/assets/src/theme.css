@@ -659,6 +659,220 @@
     @apply mb-4 ml-6 inline-block md:float-right;
   }
 
+  .lfk-static-page {
+    padding-top: 21px;
+    padding-bottom: 0;
+  }
+
+  .lfk-static-page .lfk-shell {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .lfk-static-content {
+    max-width: none;
+  }
+
+  .lfk-static-content .lfk-rich-text {
+    color: #333333;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .lfk-static-content .lfk-rich-text h1,
+  .lfk-static-content .lfk-rich-text h2 {
+    margin: 0;
+    color: #222222;
+    font-family: Roboto, sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 32px;
+    text-align: center;
+  }
+
+  .lfk-static-page-about-us .lfk-rich-text h1 {
+    font-size: 40px;
+    line-height: 40px;
+  }
+
+  .lfk-static-page-refund {
+    min-height: 478px;
+  }
+
+  .lfk-static-page-privacy-policy {
+    min-height: 656px;
+  }
+
+  .lfk-static-page-how-to-orders {
+    min-height: 3279px;
+    padding-top: 19px;
+  }
+
+  .lfk-static-content .lfk-rich-text p {
+    margin: 0 0 14px;
+  }
+
+  .lfk-static-content .lfk-rich-text img {
+    border-radius: 0;
+  }
+
+  .lfk-static-page-about-us .lfk-rich-text p {
+    max-width: 1365px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .lfk-static-page-about-us .lfk-rich-text img {
+    width: 642px;
+    margin: 20px auto 0;
+  }
+
+  .lfk-static-page-refund .lfk-rich-text,
+  .lfk-static-page-privacy-policy .lfk-rich-text {
+    text-align: left;
+  }
+
+  .lfk-static-page-refund .lfk-rich-text p,
+  .lfk-static-page-privacy-policy .lfk-rich-text p {
+    max-width: 1365px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .lfk-static-page-refund .lfk-rich-text h2,
+  .lfk-static-page-privacy-policy .lfk-rich-text h2 {
+    margin-bottom: 14px;
+  }
+
+  .lfk-static-page-how-to-orders + .lfk-site-footer {
+    min-height: 706px;
+  }
+
+  .lfk-how-to-content h2 {
+    text-align: left;
+  }
+
+  .lfk-how-to-steps {
+    margin-top: 24px;
+  }
+
+  .lfk-how-to-step {
+    position: relative;
+    height: 472px;
+  }
+
+  .lfk-how-to-step:nth-child(5) {
+    height: 672px;
+  }
+
+  .lfk-how-to-step:nth-child(6) {
+    height: 644px;
+  }
+
+  .lfk-how-to-caption {
+    position: absolute;
+    top: 328px;
+    left: 0;
+    width: 260px;
+  }
+
+  .lfk-how-to-step:nth-child(n+5) .lfk-how-to-caption {
+    top: 594px;
+  }
+
+  .lfk-how-to-media {
+    position: absolute;
+    top: 0;
+    left: 383px;
+    width: 600px;
+  }
+
+  .lfk-how-to-media img {
+    width: 600px;
+    height: 400px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .lfk-how-to-step:nth-child(n+5) .lfk-how-to-media img {
+    height: 600px;
+    background: #c3c3c3;
+    object-fit: contain;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-static-page {
+      padding-top: 21px;
+    }
+
+    .lfk-static-content .lfk-rich-text h1,
+    .lfk-static-content .lfk-rich-text h2 {
+      font-size: 32px;
+      line-height: 32px;
+    }
+
+    .lfk-static-page-about-us {
+      min-height: 657px;
+    }
+
+    .lfk-static-page-about-us .lfk-rich-text h1 {
+      font-size: 40px;
+      line-height: 40px;
+    }
+
+    .lfk-static-page-refund {
+      min-height: 892px;
+    }
+
+    .lfk-static-page-privacy-policy {
+      min-height: 1374px;
+    }
+
+    .lfk-static-page-privacy-policy + .lfk-site-footer,
+    .lfk-static-page-how-to-orders + .lfk-site-footer {
+      min-height: 568px;
+    }
+
+    .lfk-static-page-how-to-orders {
+      min-height: 2325px;
+      padding-top: 17px;
+    }
+
+    .lfk-how-to-step {
+      height: 332px;
+    }
+
+    .lfk-how-to-step:nth-child(5),
+    .lfk-how-to-step:nth-child(6) {
+      height: 462px;
+    }
+
+    .lfk-how-to-caption {
+      top: 260px;
+      width: 100%;
+    }
+
+    .lfk-how-to-step:nth-child(n+5) .lfk-how-to-caption {
+      top: 390px;
+    }
+
+    .lfk-how-to-media {
+      left: 0;
+      width: 100%;
+    }
+
+    .lfk-how-to-media img {
+      width: 100%;
+      height: 260px;
+    }
+
+    .lfk-how-to-step:nth-child(n+5) .lfk-how-to-media img {
+      height: 390px;
+    }
+  }
+
   .lfk-directory-page,
   .lfk-contact-page,
   .lfk-search-page,

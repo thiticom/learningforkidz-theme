@@ -58,6 +58,10 @@ function lfk_theme_template_path( $template_name ) {
 	return $template ? $template : '';
 }
 
+function lfk_static_page_slugs() {
+	return array( 'about-us', 'refund', 'how-to-orders', 'privacy-policy' );
+}
+
 function lfk_custom_template_include( $template ) {
 	if ( is_admin() ) {
 		return $template;
@@ -78,6 +82,10 @@ function lfk_custom_template_include( $template ) {
 	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists' ) ) ) {
 		$page_template = lfk_theme_template_path( 'page-' . get_post_field( 'post_name', get_queried_object_id() ) . '.php' );
 		return $page_template ?: $template;
+	}
+
+	if ( is_page( lfk_static_page_slugs() ) ) {
+		return lfk_theme_template_path( 'page-static.php' ) ?: $template;
 	}
 
 	if ( function_exists( 'is_product' ) && is_product() ) {
@@ -242,7 +250,7 @@ function lfk_should_trim_plugin_assets() {
 		return true;
 	}
 
-	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'my-account' ) ) ) {
+	if ( is_page( array_merge( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'my-account' ), lfk_static_page_slugs() ) ) ) {
 		return true;
 	}
 

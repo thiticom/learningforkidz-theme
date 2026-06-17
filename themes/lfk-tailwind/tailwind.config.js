@@ -3,6 +3,12 @@ module.exports = {
     './themes/lfk-tailwind/**/*.php',
     './themes/lfk-tailwind/assets/js/**/*.js'
   ],
+  safelist: [
+    'lfk-static-page-about-us',
+    'lfk-static-page-refund',
+    'lfk-static-page-how-to-orders',
+    'lfk-static-page-privacy-policy'
+  ],
   theme: {
     extend: {
       colors: {
@@ -25,4 +31,3 @@ module.exports = {
   },
   plugins: []
 };
-
