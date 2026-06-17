@@ -159,7 +159,11 @@ function lfk_should_trim_plugin_assets() {
 		return true;
 	}
 
-	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'cart', 'checkout', 'my-account' ) ) ) {
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		return false;
+	}
+
+	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'cart', 'my-account' ) ) ) {
 		return true;
 	}
 

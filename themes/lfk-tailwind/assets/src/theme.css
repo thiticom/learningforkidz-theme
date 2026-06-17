@@ -785,6 +785,28 @@
     @apply min-h-[130px];
   }
 
+  body.woocommerce-checkout .lfk-checkout-page {
+    margin-top: -5px;
+    padding-top: 0;
+    background-color: #ffffff;
+  }
+
+  body.woocommerce-checkout .lfk-checkout-page .elementor-heading-title {
+    font-size: 32px !important;
+    line-height: 32px !important;
+    font-weight: 600 !important;
+  }
+
+  body.woocommerce-checkout .lfk-checkout-page .elementor-widget-heading {
+    margin-bottom: 20px !important;
+  }
+
+  body.woocommerce-checkout .lfk-checkout-page .woocommerce-billing-fields h3,
+  body.woocommerce-checkout .lfk-checkout-page .woocommerce-shipping-fields h3,
+  body.woocommerce-checkout .lfk-checkout-page #order_review_heading {
+    line-height: 16.8px !important;
+  }
+
   .lfk-contact-form input[type="submit"],
   .lfk-woocommerce-page button,
   .lfk-woocommerce-page .button,
@@ -802,6 +824,49 @@
   .lfk-woocommerce-page #place_order:hover {
     background-color: #2f78b8 !important;
     color: #ffffff !important;
+  }
+
+  body.woocommerce-checkout .lfk-checkout-page #place_order {
+    background-color: #5bc0de !important;
+    color: #ffffff !important;
+  }
+
+  body.woocommerce-checkout .lfk-checkout-page #shipping_method::after {
+    content: "- จัดส่งโดย Flash Express กรณีมีขนาดเกิน 100 ซม หรือน้ำหนักเกิน 10 กิโลกรัมจัดส่งโดยขนส่งเอกชน";
+    display: block;
+    margin: 16px 0;
+    color: #69727d;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  body.woocommerce-checkout .lfk-checkout-page .woocommerce-checkout-review-order-table {
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+  }
+
+  @media (min-width: 768px) {
+    body.woocommerce-checkout .lfk-checkout-page #customer_details {
+      margin-bottom: 7px !important;
+    }
+
+    body.woocommerce-checkout .lfk-checkout-page .woocommerce-terms-and-conditions-wrapper {
+      min-height: 121px !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    body.woocommerce-checkout .lfk-checkout-page {
+      margin-top: -7px;
+    }
+
+    body.woocommerce-checkout .lfk-checkout-page #customer_details {
+      margin-bottom: 8px !important;
+    }
+
+    body.woocommerce-checkout .lfk-checkout-page .woocommerce-terms-and-conditions-wrapper {
+      min-height: 170px !important;
+    }
   }
 
   .lfk-map {
@@ -941,7 +1006,7 @@
   }
 
   .lfk-site-footer {
-    @apply bg-[#222222] py-12 text-white;
+    @apply bg-[#242729] pt-12 text-white;
   }
 
   .lfk-footer-grid {
@@ -953,20 +1018,20 @@
   }
 
   .lfk-site-footer h5 {
-    @apply mb-4 text-[18px] font-semibold text-white;
+    @apply mb-5 text-[20px] font-semibold leading-5 text-white;
   }
 
   .lfk-footer-subhead {
-    @apply mt-7;
+    @apply mt-5;
   }
 
   .lfk-footer-column {
-    @apply flex flex-col items-center gap-2 text-[14px] leading-6 md:items-start;
+    @apply flex flex-col items-center gap-0 text-[14px] leading-[21px] md:items-start;
   }
 
   .lfk-footer-column a,
   .lfk-footer-column p {
-    @apply m-0 text-white/95 hover:text-lfk-yellow;
+    @apply m-0 leading-[21px] text-white/95 hover:text-lfk-yellow;
   }
 
   .lfk-socials {
@@ -990,11 +1055,30 @@
   }
 
   .lfk-payment-images {
-    @apply mt-5 flex flex-col gap-4;
+    @apply mt-5 flex flex-col gap-5;
   }
 
   .lfk-payment-images img {
-    @apply h-auto w-full max-w-[305px];
+    @apply h-auto w-full max-w-[180px];
+  }
+
+  .lfk-footer-mobile-grid {
+    display: none;
+  }
+
+  .lfk-footer-copyright {
+    margin-top: 0;
+    padding: 15px 0 29px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 18px;
+    color: #ffffff;
+  }
+
+  @media (min-width: 768px) {
+    .lfk-footer-grid {
+      min-height: 361px;
+    }
   }
 
   .lfk-back-to-top {
@@ -1007,6 +1091,133 @@
 }
 
 @media (max-width: 767px) {
+  .lfk-site-footer {
+    background-color: #242729;
+    padding: 60px 10px 0;
+  }
+
+  .lfk-footer-grid {
+    display: none;
+  }
+
+  .lfk-footer-mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+
+  .lfk-footer-mobile-cell {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .lfk-footer-mobile-brand > a,
+  .lfk-footer-mobile-brand img {
+    display: block;
+    width: 114px;
+    height: 80px;
+  }
+
+  .lfk-footer-mobile-follow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .lfk-footer-mobile-cell h5,
+  .lfk-footer-mobile-follow h5 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  .lfk-footer-mobile-socials {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .lfk-footer-mobile-socials a {
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: #ffffff;
+  }
+
+  .lfk-footer-mobile-socials a:nth-child(1) {
+    background-color: #3b5998;
+  }
+
+  .lfk-footer-mobile-socials a:nth-child(2) {
+    background-color: #e4405f;
+  }
+
+  .lfk-footer-mobile-socials a:nth-child(3) {
+    background-color: #69727d;
+  }
+
+  .lfk-footer-mobile-socials a:nth-child(4) {
+    background-color: #00c300;
+  }
+
+  .lfk-footer-mobile-socials a:nth-child(5) {
+    background-color: #cd201f;
+  }
+
+  .lfk-footer-mobile-socials svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .lfk-footer-mobile-links {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .lfk-footer-mobile-links a {
+    display: flex;
+    min-height: 21px;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .lfk-footer-mobile-security,
+  .lfk-footer-mobile-cards {
+    display: block;
+    width: 175px;
+    height: auto;
+  }
+
+  .lfk-footer-mobile-security {
+    max-height: 35px;
+  }
+
+  .lfk-footer-mobile-cards {
+    max-height: 29px;
+  }
+
+  .lfk-footer-copyright {
+    margin: 60px -10px 0;
+    padding: 15px 0 29px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
   .lfk-header-inner {
     min-height: 96px;
     display: grid;
