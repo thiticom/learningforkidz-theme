@@ -15,29 +15,20 @@ $new_products = new WP_Query( array(
 $featured_products = new WP_Query( array(
 	'post_type'           => 'product',
 	'post_status'         => 'publish',
-	'posts_per_page'      => 4,
-	'orderby'             => array(
-		'menu_order' => 'ASC',
-		'date'       => 'DESC',
-	),
+	'posts_per_page'      => 3,
+	'post__in'            => array( 28604, 1718, 1687 ),
+	'orderby'             => 'post__in',
 	'ignore_sticky_posts' => true,
-	'tax_query'           => array(
-		array(
-			'taxonomy' => 'product_visibility',
-			'field'    => 'slug',
-			'terms'    => 'featured',
-		),
-	),
 ) );
 
 $sections = array(
-	array( 'title' => 'สินค้ามาใหม่', 'query' => $new_products ),
-	array( 'title' => 'สินค้าแนะนำ', 'query' => $featured_products ),
+	array( 'title' => 'สินค้ามาใหม่', 'query' => $new_products, 'class' => 'lfk-products-section--new' ),
+	array( 'title' => 'สินค้าแนะนำ', 'query' => $featured_products, 'class' => 'lfk-products-section--featured' ),
 );
 ?>
 <?php foreach ( $sections as $section ) : ?>
 	<?php if ( $section['query']->have_posts() ) : ?>
-		<section class="lfk-products-section">
+		<section class="lfk-products-section <?php echo esc_attr( $section['class'] ); ?>">
 			<div class="lfk-shell">
 				<?php lfk_section_heading( $section['title'] ); ?>
 				<div class="lfk-product-grid">

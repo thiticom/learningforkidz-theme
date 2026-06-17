@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Full Pure Custom Theme Visual PASS Evidence</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #5d6678;
+      --line: #dfe4ec;
+      --panel: #ffffff;
+      --surface: #f7f9fb;
+      --blue: #2f6f9f;
+      --cyan: #42bedd;
+      --green: #1e6a3d;
+      --green-bg: #e6f6ed;
+      --orange: #cc6f47;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { display: block; max-width: 100%; }
+    .page {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--orange);
+      font-weight: 800;
+    }
+    h1 {
+      margin: 0;
+      font-size: 3rem;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.65rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+      line-height: 1.35;
+    }
+    p { margin: 0 0 12px; }
+    .lead {
+      max-width: 900px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section { margin-top: 32px; }
+    .summary, .route {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-weight: 900;
+      font-size: 0.86rem;
+    }
+    .routes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .shot-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .shot-links a {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 9px;
+      background: #fbfcfe;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    ul { margin: 8px 0 0; padding-left: 22px; }
+    li + li { margin-top: 6px; }
+    @media (max-width: 760px) {
+      h1 { font-size: 2.15rem; }
+      .routes { grid-template-columns: 1fr; }
+      .button { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Pure Custom Theme Checkpoint</p>
+    <h1>Full Visual PASS Evidence</h1>
+    <p class="lead">รอบนี้ตรวจครบทุกหน้า custom theme เทียบกับ production Elementor/WooCommerce ทั้ง desktop และ mobile. ผลลัพธ์คือไม่มีรายการ NEEDS FIX เหลืออยู่ และ checkout/cart ยังผ่าน strict parity.</p>
+
+    <div class="actions">
+      <a class="button primary" href="../version-log.html">Back to Version Log</a>
+      <a class="button" href="theme-parity-audit.json">Audit JSON</a>
+      <a class="button" href="../">Open Team Report</a>
+    </div>
+
+    <section>
+      <h2>Checklist</h2>
+      <div class="summary">
+        <p><span class="status">VISUAL PASS</span> Full custom theme audit: desktop + mobile</p>
+        <ul>
+          <li>0 NEEDS FIX across all audited routes and viewports.</li>
+          <li>Checkout, cart, product archives, product taxonomies, article pages, search, account, wishlist, contact, promotion, ages, brands, static pages, and Home all pass.</li>
+          <li>Only note: single-product related products are CONTENT/DATA DIFFERENCE because production randomizes recommendations; the layout/boxes still pass.</li>
+          <li>Architecture gate remains pure custom theme: local pages use custom templates/CSS and WooCommerce hooks, not Elementor-rendered local page content.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Route Evidence</h2>
+      <div class="routes">
+        <article class="route"><h3>Home</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-home.png">Prod desktop</a><a href="desktop-local-home.png">Local desktop</a><a href="mobile-prod-home.png">Prod mobile</a><a href="mobile-local-home.png">Local mobile</a></div></article>
+        <article class="route"><h3>Shop Archive</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-shop.png">Prod desktop</a><a href="desktop-local-shop.png">Local desktop</a><a href="mobile-prod-shop.png">Prod mobile</a><a href="mobile-local-shop.png">Local mobile</a></div></article>
+        <article class="route"><h3>Product Category</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-product-category.png">Prod desktop</a><a href="desktop-local-product-category.png">Local desktop</a><a href="mobile-prod-product-category.png">Prod mobile</a><a href="mobile-local-product-category.png">Local mobile</a></div></article>
+        <article class="route"><h3>Product Brand</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-product-brand.png">Prod desktop</a><a href="desktop-local-product-brand.png">Local desktop</a><a href="mobile-prod-product-brand.png">Prod mobile</a><a href="mobile-local-product-brand.png">Local mobile</a></div></article>
+        <article class="route"><h3>Age Taxonomy</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-age-taxonomy.png">Prod desktop</a><a href="desktop-local-age-taxonomy.png">Local desktop</a><a href="mobile-prod-age-taxonomy.png">Prod mobile</a><a href="mobile-local-age-taxonomy.png">Local mobile</a></div></article>
+        <article class="route"><h3>Single Product</h3><p><span class="status">PASS</span> layout, with related-products content/data note</p><div class="shot-links"><a href="desktop-prod-single-product.png">Prod desktop</a><a href="desktop-local-single-product.png">Local desktop</a><a href="mobile-prod-single-product.png">Prod mobile</a><a href="mobile-local-single-product.png">Local mobile</a></div></article>
+        <article class="route"><h3>Article Archive</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-article-archive.png">Prod desktop</a><a href="desktop-local-article-archive.png">Local desktop</a><a href="mobile-prod-article-archive.png">Prod mobile</a><a href="mobile-local-article-archive.png">Local mobile</a></div></article>
+        <article class="route"><h3>Single Post</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-single-post.png">Prod desktop</a><a href="desktop-local-single-post.png">Local desktop</a><a href="mobile-prod-single-post.png">Prod mobile</a><a href="mobile-local-single-post.png">Local mobile</a></div></article>
+        <article class="route"><h3>Search</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-search.png">Prod desktop</a><a href="desktop-local-search.png">Local desktop</a><a href="mobile-prod-search.png">Prod mobile</a><a href="mobile-local-search.png">Local mobile</a></div></article>
+        <article class="route"><h3>Cart</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-cart.png">Prod desktop</a><a href="desktop-local-cart.png">Local desktop</a><a href="mobile-prod-cart.png">Prod mobile</a><a href="mobile-local-cart.png">Local mobile</a></div></article>
+        <article class="route"><h3>Checkout</h3><p><span class="status">PASS</span> strict parity</p><div class="shot-links"><a href="desktop-prod-checkout.png">Prod desktop</a><a href="desktop-local-checkout.png">Local desktop</a><a href="mobile-prod-checkout.png">Prod mobile</a><a href="mobile-local-checkout.png">Local mobile</a></div></article>
+        <article class="route"><h3>My Account</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-my-account.png">Prod desktop</a><a href="desktop-local-my-account.png">Local desktop</a><a href="mobile-prod-my-account.png">Prod mobile</a><a href="mobile-local-my-account.png">Local mobile</a></div></article>
+        <article class="route"><h3>Wishlist</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-wishlist.png">Prod desktop</a><a href="desktop-local-wishlist.png">Local desktop</a><a href="mobile-prod-wishlist.png">Prod mobile</a><a href="mobile-local-wishlist.png">Local mobile</a></div></article>
+        <article class="route"><h3>Contact</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-contact.png">Prod desktop</a><a href="desktop-local-contact.png">Local desktop</a><a href="mobile-prod-contact.png">Prod mobile</a><a href="mobile-local-contact.png">Local mobile</a></div></article>
+        <article class="route"><h3>Promotion</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-promotion.png">Prod desktop</a><a href="desktop-local-promotion.png">Local desktop</a><a href="mobile-prod-promotion.png">Prod mobile</a><a href="mobile-local-promotion.png">Local mobile</a></div></article>
+        <article class="route"><h3>Ages Page</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-ages-page.png">Prod desktop</a><a href="desktop-local-ages-page.png">Local desktop</a><a href="mobile-prod-ages-page.png">Prod mobile</a><a href="mobile-local-ages-page.png">Local mobile</a></div></article>
+        <article class="route"><h3>Brands Page</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-brands-page.png">Prod desktop</a><a href="desktop-local-brands-page.png">Local desktop</a><a href="mobile-prod-brands-page.png">Prod mobile</a><a href="mobile-local-brands-page.png">Local mobile</a></div></article>
+        <article class="route"><h3>About</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-about-page.png">Prod desktop</a><a href="desktop-local-about-page.png">Local desktop</a><a href="mobile-prod-about-page.png">Prod mobile</a><a href="mobile-local-about-page.png">Local mobile</a></div></article>
+        <article class="route"><h3>Refund</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-refund-page.png">Prod desktop</a><a href="desktop-local-refund-page.png">Local desktop</a><a href="mobile-prod-refund-page.png">Prod mobile</a><a href="mobile-local-refund-page.png">Local mobile</a></div></article>
+        <article class="route"><h3>How To Orders</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-how-to-orders.png">Prod desktop</a><a href="desktop-local-how-to-orders.png">Local desktop</a><a href="mobile-prod-how-to-orders.png">Prod mobile</a><a href="mobile-local-how-to-orders.png">Local mobile</a></div></article>
+        <article class="route"><h3>Privacy Policy</h3><p><span class="status">PASS</span></p><div class="shot-links"><a href="desktop-prod-privacy-page.png">Prod desktop</a><a href="desktop-local-privacy-page.png">Local desktop</a><a href="mobile-prod-privacy-page.png">Prod mobile</a><a href="mobile-local-privacy-page.png">Local mobile</a></div></article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

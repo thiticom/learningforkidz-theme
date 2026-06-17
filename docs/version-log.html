@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-full-pure/">Full Theme PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-final-pages-pure/">Search + My Account PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-posts-pure/">Article Pages PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-single-product-pure/">Single Product Visual PASS Evidence</a>
@@ -138,7 +139,20 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.17 - Pure custom search and account parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.18 - Full pure custom theme parity checkpoint</div>
+        <p><strong>What changed:</strong> Completed the full pure custom Tailwind/WooCommerce theme parity loop, including Home, all WooCommerce pages, all custom pages, article pages, and static pages.</p>
+        <ul>
+          <li>Full audit now reports 0 NEEDS FIX across all desktop and mobile routes.</li>
+          <li>Home now passes parity after matching hero carousel clones, age band, intro copy, brand carousel, product sections, media overlap, Kanoodle strip, article carousel, footer, and mobile-specific spacing.</li>
+          <li>Checkout and cart remain strict PASS on desktop and mobile.</li>
+          <li>Single-product related products remain documented as CONTENT/DATA DIFFERENCE because production randomizes recommendations; layout/boxes pass.</li>
+          <li>Published the full checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-full-pure/">open full pure custom theme PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for touched templates, focused Home parity audit reports PASS on desktop and mobile, and full all-routes parity audit reports 0 NEEDS FIX with no Elementor/WooLentor runtime dependency in the local custom theme path.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.17 - Pure custom search and account parity checkpoint</div>
         <p><strong>What changed:</strong> Tuned the pure custom Search results and My Account login/register pages so the final required custom pages visually match production Elementor/WooCommerce on desktop and mobile.</p>
         <ul>
           <li>Search results now pass parity on desktop and mobile.</li>

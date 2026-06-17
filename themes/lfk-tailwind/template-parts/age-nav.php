@@ -12,7 +12,7 @@ if ( empty( $terms ) || is_wp_error( $terms ) ) {
 ?>
 <section class="lfk-age-band" aria-label="<?php esc_attr_e( 'Shop by age', 'lfk-tailwind' ); ?>">
 	<div class="lfk-age-inner">
-		<h2 class="lfk-age-title">Shop By Age</h2>
+		<h4 class="lfk-age-title">Shop By Age</h4>
 		<div class="lfk-age-list">
 			<?php foreach ( $terms as $term ) : ?>
 				<a class="lfk-age-pill" href="<?php echo esc_url( get_term_link( $term ) ); ?>"><?php echo esc_html( $term->name ); ?></a>
@@ -20,4 +20,3 @@ if ( empty( $terms ) || is_wp_error( $terms ) ) {
 		</div>
 	</div>
 </section>
-

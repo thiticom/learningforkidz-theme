@@ -5,6 +5,7 @@ $kanoodle_items = array(
 	array( 'href' => '/product/kanoodle-extreme/', 'src' => '2025/06/Kanoodle-extreme.jpg', 'alt' => 'Kanoodle Extreme' ),
 	array( 'href' => '/product/kanoodle-head-to-head/', 'src' => '2025/06/Kanoodle-head-to-head.jpg', 'alt' => 'Kanoodle Head-to-Head' ),
 );
+$kanoodle_track = array_merge( $kanoodle_items, $kanoodle_items, $kanoodle_items );
 ?>
 <section class="lfk-media-section">
 	<div class="lfk-shell">
@@ -23,7 +24,7 @@ $kanoodle_items = array(
 	<div class="lfk-shell">
 		<?php lfk_section_heading( 'ของเล่นฝึกสมอง: ไวรัลบน TikTok' ); ?>
 		<div class="lfk-kanoodle-grid">
-			<?php foreach ( $kanoodle_items as $item ) : ?>
+			<?php foreach ( $kanoodle_track as $item ) : ?>
 				<a class="lfk-kanoodle-card" href="<?php echo esc_url( home_url( $item['href'] ) ); ?>">
 					<img src="<?php echo esc_url( lfk_remote_upload_url( $item['src'] ) ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" width="300" height="300" loading="lazy">
 				</a>
