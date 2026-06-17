@@ -77,12 +77,8 @@ while ( have_posts() ) :
 				</section>
 
 				<section class="lfk-single-summary">
-					<h1><?php echo esc_html( $product->get_name() ); ?></h1>
+					<h2 class="lfk-single-title"><?php echo esc_html( $product->get_name() ); ?></h2>
 					<div class="lfk-single-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
-
-					<?php if ( $product->get_short_description() ) : ?>
-						<div class="lfk-single-short lfk-rich-text"><?php echo wp_kses_post( apply_filters( 'woocommerce_short_description', $product->get_short_description() ) ); ?></div>
-					<?php endif; ?>
 
 					<?php echo wp_kses_post( wc_get_stock_html( $product ) ); ?>
 
@@ -110,7 +106,7 @@ while ( have_posts() ) :
 			</div>
 
 			<section class="lfk-product-description">
-				<h2><?php esc_html_e( 'รายละเอียดสินค้า', 'lfk-tailwind' ); ?></h2>
+				<h2><?php esc_html_e( 'คำอธิบาย', 'lfk-tailwind' ); ?></h2>
 				<div class="lfk-rich-text">
 					<?php the_content(); ?>
 				</div>

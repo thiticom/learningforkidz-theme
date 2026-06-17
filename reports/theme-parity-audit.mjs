@@ -169,6 +169,8 @@ async function extractPage(page) {
           return bScore - aScore;
         })[0] || null;
     };
+    const dependencyPattern = /elementor|woolentor|post-\d+\.css/i;
+    const mainEl = pickMain();
     const visibleText = clean(document.body.innerText || '');
     const duplicateText = {};
     for (const chunk of visibleText.split(/(?<=[.!?])\s+|\n+/)) {
@@ -213,8 +215,20 @@ async function extractPage(page) {
       },
       landmarks: {
         header: snapshot('.elementor-location-header, header, .lfk-header'),
-        main: snapshotElement(pickMain(), 'main, #primary, .site-main, .elementor-location-single, .elementor-page, .elementor'),
+        main: snapshotElement(mainEl, 'main, #primary, .site-main, .elementor-location-single, .elementor-page, .elementor'),
         footer: snapshot('footer, .lfk-site-footer, .elementor-location-footer'),
+      },
+      architecture: {
+        dependencyStyles: [...document.querySelectorAll('link[rel="stylesheet"]')]
+          .map((link) => link.href)
+          .filter((href) => dependencyPattern.test(href)),
+        dependencyScripts: [...document.scripts]
+          .map((script) => script.src)
+          .filter(Boolean)
+          .filter((src) => dependencyPattern.test(src)),
+        mainDependencyNodes: mainEl
+          ? mainEl.querySelectorAll('[class*="elementor"], [data-elementor-type], [class*="woolentor"]').length
+          : 0,
       },
       headings: [...document.querySelectorAll('h1,h2,h3,h4')]
         .filter(visible)
@@ -300,6 +314,14 @@ function compareBoxes(prodBox, localBox, strict = false) {
 function classify(routeKey, viewportName, prod, local) {
   const issues = [];
   const add = (section, status, detail, evidence = {}) => issues.push({ section, status, detail, evidence });
+
+  if (local.architecture.dependencyStyles.length || local.architecture.dependencyScripts.length || local.architecture.mainDependencyNodes > 0) {
+    add('architecture', 'NEEDS FIX', 'Local custom theme path depends on Elementor/WooLentor assets or rendered nodes', {
+      styles: local.architecture.dependencyStyles,
+      scripts: local.architecture.dependencyScripts,
+      mainDependencyNodes: local.architecture.mainDependencyNodes,
+    });
+  }
 
   if (local.viewport.scrollWidth > local.viewport.clientWidth + 2) {
     add('page', 'NEEDS FIX', 'Local page has horizontal overflow', {

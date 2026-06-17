@@ -146,37 +146,25 @@ function lfk_is_local_site() {
 	return in_array( $host, array( '127.0.0.1', 'localhost' ), true ) || str_ends_with( (string) $host, '.local' );
 }
 
-function lfk_rewrite_cloned_upload_asset_url( $src ) {
-	$host = wp_parse_url( home_url(), PHP_URL_HOST );
-	if ( in_array( $host, array( 'learningforkidz.com', 'www.learningforkidz.com' ), true ) ) {
-		return $src;
-	}
-
-	if ( preg_match( '#/elementor/css/post-(133|134)\.css#', $src ) ) {
-		return $src;
-	}
-
-	$origins = array(
-		'https://www.learningforkidz.com/wp-content/uploads',
-		'http://www.learningforkidz.com/wp-content/uploads',
-		'https://learningforkidz.com/wp-content/uploads',
-		'http://learningforkidz.com/wp-content/uploads',
-	);
-
-	foreach ( $origins as $origin ) {
-		if ( 0 === strpos( $src, $origin ) ) {
-			return content_url( 'uploads' ) . substr( $src, strlen( $origin ) );
-		}
-	}
-
-	return $src;
-}
-add_filter( 'style_loader_src', 'lfk_rewrite_cloned_upload_asset_url', 20 );
-add_filter( 'script_loader_src', 'lfk_rewrite_cloned_upload_asset_url', 20 );
-
 function lfk_is_contact_page() {
 	return is_page( 'contact-us' );
 }
+
+add_filter( 'gettext', function ( $translation, $text, $domain ) {
+	if ( 'woocommerce' !== $domain || ! function_exists( 'is_cart' ) || ! is_cart() ) {
+		return $translation;
+	}
+
+	if ( 'Cart totals' === $text ) {
+		return __( 'ยอดรวมสินค้าในรถเข็น', 'lfk-tailwind' );
+	}
+
+	if ( 'Proceed to checkout' === $text ) {
+		return __( 'ดำเนินการชำระเงิน', 'lfk-tailwind' );
+	}
+
+	return $translation;
+}, 10, 3 );
 
 function lfk_should_trim_plugin_assets() {
 	if ( is_admin() ) {
@@ -188,11 +176,11 @@ function lfk_should_trim_plugin_assets() {
 	}
 
 	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
-		return false;
+		return true;
 	}
 
 	if ( function_exists( 'is_cart' ) && is_cart() ) {
-		return false;
+		return true;
 	}
 
 	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'my-account' ) ) ) {
@@ -244,6 +232,7 @@ function lfk_dequeue_local_recaptcha() {
 		'e-popup',
 		'e-swiper',
 		'elementor-frontend',
+		'elementor-gf-local-anuphan',
 		'elementor-post-25298',
 		'elementor-post-29086',
 		'elementor-post-29093',
@@ -309,14 +298,10 @@ function lfk_dequeue_local_recaptcha() {
 		'elementor-pro-frontend',
 		'elementor-pro-webpack-runtime',
 		'elementor-webpack-runtime',
-		'googlepay-button-component',
 		'imagesloaded',
-		'omise-atome-js',
-		'omise-download-promptpay-as-png',
 		'photoswipe',
 		'photoswipe-ui-default',
 		'pro-elements-handlers',
-		'selectWoo',
 		'slick',
 		'smartmenus',
 		'swiper',
@@ -325,6 +310,13 @@ function lfk_dequeue_local_recaptcha() {
 		'woolentor-quickview',
 		'yith-wcan-shortcodes',
 	);
+
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+		$scripts[] = 'googlepay-button-component';
+		$scripts[] = 'omise-atome-js';
+		$scripts[] = 'omise-download-promptpay-as-png';
+		$scripts[] = 'selectWoo';
+	}
 
 	if ( ! lfk_is_contact_page() ) {
 		$scripts[] = 'contact-form-7';
@@ -564,7 +556,7 @@ function lfk_product_card( $product ) {
 		<a class="lfk-product-image" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
 			<?php echo $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) ); ?>
 		</a>
-		<a class="lfk-product-title" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( $product->get_name() ); ?></a>
+		<h2 class="lfk-product-title"><a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h2>
 		<div class="lfk-product-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 		<a class="lfk-product-wishlist" href="<?php echo esc_url( home_url( '/wishlists/' ) ); ?>">
 			<?php echo lfk_svg_icon( 'heart' ); ?>

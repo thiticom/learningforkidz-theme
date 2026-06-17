@@ -117,7 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-cart/">Cart PASS Checkpoint</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-cart/">Superseded Cart Evidence</a>
       <a class="button" href="team-brief-th.pdf">Download PDF ล่าสุด</a>
       <a class="button" href="https://github.com/thiticom/learningforkidz-theme/commits/main">Technical Commit Log</a>
     </div>
@@ -125,15 +125,27 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.3 - Cart parity and audit harness checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.4 - Pure custom theme architecture correction</div>
+        <p><strong>What changed:</strong> Updated the implementation direction so production Elementor is used only as the visual reference. Local/staging cart and checkout now use custom WooCommerce/Tailwind templates instead of rendering stored Elementor page content.</p>
+        <ul>
+          <li>Removed the cart/checkout path that rendered Elementor page content locally.</li>
+          <li>Removed cloned Elementor upload CSS rewriting and trimmed Elementor/WooLentor assets from cart/checkout while preserving WooCommerce checkout/payment scripts.</li>
+          <li>Updated the parity audit harness with an architecture gate: local pages fail if they require Elementor/WooLentor assets or rendered main-content nodes.</li>
+          <li>Cart visual parity is being rebuilt in pure custom CSS; the previous cart checkpoint remains available only as superseded evidence, not final sign-off.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for functions/cart/checkout/single product, and local cart/checkout architecture checks found no Elementor/WooLentor styles, scripts, or main-content nodes.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.3 - Cart parity and audit harness checkpoint</div>
         <p><strong>What changed:</strong> Cart now matches production Elementor/WooLentor output in the focused parity audit, and the broader theme parity checker is available for the remaining page loop.</p>
         <ul>
           <li>Cart now renders the stored Elementor cart content when available, with a fallback shortcode shell only when page content is absent.</li>
           <li>Matched cart title, product rows, coupon area, cart totals title, shipping note, subtotal/total rows, checkout button, footer position, and mobile stacking.</li>
           <li>Added `reports/theme-parity-audit.mjs` to compare prod/local desktop and mobile screenshots, landmarks, headings, buttons, forms, images, sections, dimensions, CSS, and duplicate text.</li>
-          <li>Published a reader-facing cart checkpoint with desktop/mobile screenshots: <a href="theme-parity-audit-2026-06-17-cart/">open cart checkpoint</a>.</li>
+          <li>Published a reader-facing cart checkpoint with desktop/mobile screenshots: <a href="theme-parity-audit-2026-06-17-cart/">open superseded cart checkpoint</a>.</li>
         </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for cart/functions/checkout, strict checkout audit returned PASS for desktop and mobile, and focused cart parity audit returned PASS for desktop and mobile.</p>
+        <p><strong>Verification:</strong> Superseded by v2026.06.17.4 because the checkpoint relied on rendering Elementor cart content locally, which is no longer allowed by the final architecture rule.</p>
       </article>
 
       <article class="entry">

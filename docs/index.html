@@ -354,7 +354,7 @@
       <p class="lead">Custom theme ไม่ใช่แค่เปลี่ยนหน้าตาเว็บ แต่เป็นก้าวแรกในการทำให้ทีมสร้าง marketing pages, promotion tools, business apps และ automation ได้เร็วขึ้น พร้อมหลักฐานก่อนและหลังทุกครั้ง</p>
       <div class="actions">
         <a class="button primary" href="lfk-section-audit-2026-06-11/">เปิด Full Section Audit</a>
-        <a class="button" href="theme-parity-audit-2026-06-17-cart/">Cart PASS Checkpoint</a>
+        <a class="button" href="theme-parity-audit-2026-06-17-cart/">Superseded Cart Evidence</a>
         <a class="button" href="team-brief-th.pdf">Download PDF</a>
         <a class="button" href="version-log.html">Version Log</a>
         <a class="button" href="team-message-th.md">เปิดข้อความสำหรับส่งทีม</a>
@@ -367,7 +367,7 @@
         <ul>
           <li><strong>ใช่, หน้าเว็บโหลดดีขึ้นอย่างมีนัยสำคัญ.</strong> จาก audit 21 หน้า จำนวน request ลดลงค่ากลาง 79.8% และเวลา load event ลดลงค่ากลาง 88.6% เมื่อเทียบ custom theme local กับ production Elementor.</li>
           <li><strong>Custom theme คือ foundation สำหรับ AI-ready marketing.</strong> เมื่อส่วนสำคัญกลายเป็น template และ component ที่ชัดเจน AI จะสร้างหน้า campaign, product page, report และ automation ได้เร็วกว่าแก้ Elementor ทีละหน้า.</li>
-          <li><strong>Commerce core กำลังถูก lock ให้เทียบ production ทีละหน้า.</strong> Checkout ผ่าน strict checkpoint แล้ว และ cart ผ่าน desktop/mobile parity checkpoint ล่าสุด ส่วน shop/archive/product/custom pages ยังต้องวน audit และแก้ต่อเป็นลำดับถัดไป.</li>
+          <li><strong>Commerce core กำลังถูก lock ให้เทียบ production ทีละหน้า.</strong> กติกาล่าสุดคือ custom theme ต้องเป็น Tailwind/WooCommerce แท้ ไม่ render Elementor content ใน local/staging. Checkout และ cart จึงกำลังถูก rebuild ให้ match visual โดยไม่พึ่ง Elementor runtime.</li>
           <li><strong>วิธีคุยกับทีมควรเป็น business roadmap.</strong> สื่อสารว่าเรากำลังสร้างระบบให้ทีมขอ solution/app ได้เร็วขึ้น ไม่ใช่แค่ทำเว็บใหม่.</li>
         </ul>
       </div>
@@ -679,7 +679,7 @@
 
       <article class="comparison">
         <h3>Cart / ตะกร้า</h3>
-        <p>Cart ผ่าน focused parity audit ล่าสุดแล้ว ทั้ง desktop และ mobile</p>
+        <p>ภาพชุดนี้เป็นหลักฐานเก่าที่ถูก supersede แล้ว เพราะ checkpoint นั้นยังพึ่ง Elementor content ใน local. เวอร์ชันถัดไปต้องเป็น custom Tailwind/Woo ล้วน.</p>
         <div class="screen-pair">
           <figure>
             <a href="theme-parity-audit-2026-06-17-cart/desktop-prod-cart.png"><img src="theme-parity-audit-2026-06-17-cart/desktop-prod-cart.png" alt="Cart / ตะกร้า production screenshot"></a>
