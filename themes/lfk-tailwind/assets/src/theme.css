@@ -1335,6 +1335,216 @@
     @apply min-h-[130px];
   }
 
+  .lfk-contact-stage {
+    width: 1365px;
+    max-width: 100%;
+    margin: 45px auto 50px;
+    padding: 10px 0;
+    background: transparent;
+  }
+
+  .lfk-contact-page-title {
+    width: 1170px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 20px;
+    color: #dd9933;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 32px;
+    text-align: center;
+  }
+
+  .lfk-contact-card {
+    display: grid;
+    grid-template-columns: 383px 767px;
+    gap: 20px;
+    width: 1170px;
+    height: 965px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .lfk-contact-info-panel {
+    height: 965px;
+    padding: 30px;
+    background: #191717;
+    color: #ffffff;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+  }
+
+  .lfk-contact-info-panel h2 {
+    margin: 0 0 24px;
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .lfk-contact-info-panel p {
+    margin: 0 0 16px;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lfk-contact-info-panel a {
+    color: #ffffff;
+  }
+
+  .lfk-contact-company {
+    font-weight: 600;
+  }
+
+  .lfk-contact-panel-socials {
+    margin-top: 22px;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .lfk-contact-panel-socials a {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    color: #ffffff;
+  }
+
+  .lfk-contact-panel-socials a:nth-child(1) {
+    background-color: #3b5998;
+  }
+
+  .lfk-contact-panel-socials a:nth-child(2) {
+    background-color: #e4405f;
+  }
+
+  .lfk-contact-panel-socials a:nth-child(3) {
+    background-color: #69727d;
+  }
+
+  .lfk-contact-panel-socials a:nth-child(4) {
+    background-color: #00c300;
+  }
+
+  .lfk-contact-panel-socials a:nth-child(5) {
+    background-color: #cd201f;
+  }
+
+  .lfk-contact-form-panel {
+    height: 965px;
+    padding: 27px 30px 30px;
+    background: #ffffff;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+  }
+
+  .lfk-contact-form-panel .screen-reader-response,
+  .lfk-contact-form-panel .hidden-fields-container,
+  .lfk-contact-form-panel .wpcf7-response-output,
+  .lfk-contact-form-panel .wpcf7-spinner {
+    display: none;
+  }
+
+  .lfk-contact-form-panel .wpcf7-form p {
+    margin: 0 0 11px;
+  }
+
+  .lfk-contact-form-panel .wpcf7-form p:nth-of-type(4) {
+    margin-bottom: 18px;
+  }
+
+  .lfk-contact-form-panel label,
+  .lfk-contact-form-panel .wpcf7-form-control-wrap {
+    display: block;
+    color: #000000;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lfk-contact-form-panel input[type="text"],
+  .lfk-contact-form-panel input[type="email"],
+  .lfk-contact-form-panel textarea {
+    display: block;
+    width: 100%;
+    height: 42px;
+    min-height: 42px;
+    border: 1px solid #666666;
+    border-radius: 3px;
+    background: #ffffff;
+    padding: 6px 8px;
+    color: #000000;
+    font-size: 16px;
+    line-height: 24px;
+    outline: none;
+  }
+
+  .lfk-contact-form-panel textarea {
+    height: 258px;
+    min-height: 258px;
+  }
+
+  .lfk-contact-form-panel input[type="submit"] {
+    display: inline-flex;
+    width: 52px;
+    height: 42px;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dd9933;
+    border-radius: 100px;
+    background: #dd9933;
+    padding: 0;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .lfk-contact-map {
+    margin-top: 34px;
+  }
+
+  .lfk-contact-map iframe {
+    display: block;
+    width: 100%;
+    height: 300px;
+    border: 0;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-contact-stage {
+      width: 390px;
+      margin-top: 43px;
+      margin-bottom: 50px;
+    }
+
+    .lfk-contact-page-title {
+      width: 370px;
+    }
+
+    .lfk-contact-card {
+      grid-template-columns: 370px;
+      grid-template-rows: 352px 966px;
+      width: 370px;
+      height: 1338px;
+    }
+
+    .lfk-contact-info-panel {
+      height: 352px;
+    }
+
+    .lfk-contact-form-panel {
+      height: 966px;
+    }
+
+    .lfk-contact-custom-page + .lfk-site-footer {
+      min-height: 568px;
+    }
+  }
+
   body.woocommerce-checkout .lfk-checkout-page {
     margin-top: 0;
     padding-top: 0;
