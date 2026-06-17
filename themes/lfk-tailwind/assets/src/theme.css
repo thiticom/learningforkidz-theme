@@ -2022,9 +2022,61 @@
     @apply inline-flex min-h-[40px] items-center border border-[#d8e1ea] px-4 text-[14px] font-semibold text-lfk-blue hover:border-lfk-blue hover:bg-lfk-blue hover:text-white;
   }
 
-  .lfk-wishlist-page .wishlist-title,
-  .lfk-wishlist-page h2 {
-    @apply mb-5 text-[24px] font-semibold text-[#222222];
+  .lfk-wishlist-page {
+    min-height: 174px;
+    padding-top: 19px;
+    padding-bottom: 0;
+  }
+
+  .lfk-wishlist-page .lfk-shell {
+    max-width: none;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .lfk-wishlist-content {
+    color: #333333;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lfk-wishlist-content > h2:first-child {
+    margin: 0;
+    color: #222222;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .lfk-wishlist-page .typo {
+    margin: 0;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .lfk-wishlist-page .typo h2 {
+    margin: 8px 0 16px;
+    color: #333333;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 38.4px;
+  }
+
+  .lfk-wishlist-page .typo p {
+    margin: 0;
+    color: #333333;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-wishlist-page {
+      min-height: 222px;
+      padding-top: 17px;
+    }
   }
 
   .lfk-promo-banner {

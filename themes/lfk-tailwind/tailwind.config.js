@@ -7,7 +7,8 @@ module.exports = {
     'lfk-static-page-about-us',
     'lfk-static-page-refund',
     'lfk-static-page-how-to-orders',
-    'lfk-static-page-privacy-policy'
+    'lfk-static-page-privacy-policy',
+    'typo'
   ],
   theme: {
     extend: {
