@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-cart/">Cart PASS Checkpoint</a>
       <a class="button" href="team-brief-th.pdf">Download PDF ล่าสุด</a>
       <a class="button" href="https://github.com/thiticom/learningforkidz-theme/commits/main">Technical Commit Log</a>
     </div>
@@ -124,7 +125,19 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.2 - Checkout and footer parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.3 - Cart parity and audit harness checkpoint</div>
+        <p><strong>What changed:</strong> Cart now matches production Elementor/WooLentor output in the focused parity audit, and the broader theme parity checker is available for the remaining page loop.</p>
+        <ul>
+          <li>Cart now renders the stored Elementor cart content when available, with a fallback shortcode shell only when page content is absent.</li>
+          <li>Matched cart title, product rows, coupon area, cart totals title, shipping note, subtotal/total rows, checkout button, footer position, and mobile stacking.</li>
+          <li>Added `reports/theme-parity-audit.mjs` to compare prod/local desktop and mobile screenshots, landmarks, headings, buttons, forms, images, sections, dimensions, CSS, and duplicate text.</li>
+          <li>Published a reader-facing cart checkpoint with desktop/mobile screenshots: <a href="theme-parity-audit-2026-06-17-cart/">open cart checkpoint</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for cart/functions/checkout, strict checkout audit returned PASS for desktop and mobile, and focused cart parity audit returned PASS for desktop and mobile.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.2 - Checkout and footer parity checkpoint</div>
         <p><strong>What changed:</strong> Tightened the custom theme checkout page against production Elementor/WooLentor output and added a repeatable strict checkout audit script.</p>
         <ul>
           <li>Checkout now renders the stored Elementor checkout content instead of the generic shortcode shell.</li>

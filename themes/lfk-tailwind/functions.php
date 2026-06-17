@@ -146,6 +146,34 @@ function lfk_is_local_site() {
 	return in_array( $host, array( '127.0.0.1', 'localhost' ), true ) || str_ends_with( (string) $host, '.local' );
 }
 
+function lfk_rewrite_cloned_upload_asset_url( $src ) {
+	$host = wp_parse_url( home_url(), PHP_URL_HOST );
+	if ( in_array( $host, array( 'learningforkidz.com', 'www.learningforkidz.com' ), true ) ) {
+		return $src;
+	}
+
+	if ( preg_match( '#/elementor/css/post-(133|134)\.css#', $src ) ) {
+		return $src;
+	}
+
+	$origins = array(
+		'https://www.learningforkidz.com/wp-content/uploads',
+		'http://www.learningforkidz.com/wp-content/uploads',
+		'https://learningforkidz.com/wp-content/uploads',
+		'http://learningforkidz.com/wp-content/uploads',
+	);
+
+	foreach ( $origins as $origin ) {
+		if ( 0 === strpos( $src, $origin ) ) {
+			return content_url( 'uploads' ) . substr( $src, strlen( $origin ) );
+		}
+	}
+
+	return $src;
+}
+add_filter( 'style_loader_src', 'lfk_rewrite_cloned_upload_asset_url', 20 );
+add_filter( 'script_loader_src', 'lfk_rewrite_cloned_upload_asset_url', 20 );
+
 function lfk_is_contact_page() {
 	return is_page( 'contact-us' );
 }
@@ -163,7 +191,11 @@ function lfk_should_trim_plugin_assets() {
 		return false;
 	}
 
-	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'cart', 'my-account' ) ) ) {
+	if ( function_exists( 'is_cart' ) && is_cart() ) {
+		return false;
+	}
+
+	if ( is_page( array( 'promotion', 'ages', 'brands', 'contact-us', 'wishlists', 'my-account' ) ) ) {
 		return true;
 	}
 

@@ -791,6 +791,61 @@
     background-color: #ffffff;
   }
 
+  body.woocommerce-cart .lfk-cart-page {
+    margin-top: -5px;
+    background-color: #ffffff;
+  }
+
+  body.woocommerce-cart .lfk-cart-page .elementor-heading-title {
+    font-size: 32px !important;
+    line-height: 32px !important;
+    font-weight: 600 !important;
+    color: #222222 !important;
+  }
+
+  body.woocommerce-cart .lfk-cart-page .elementor-widget-heading {
+    margin-bottom: 20px !important;
+  }
+
+  body.woocommerce-cart .lfk-cart-page .woocommerce-cart-form table,
+  body.woocommerce-cart .lfk-cart-page .woocommerce-cart-form tr,
+  body.woocommerce-cart .lfk-cart-page .woocommerce-cart-form th,
+  body.woocommerce-cart .lfk-cart-page .woocommerce-cart-form td {
+    color: #333333;
+    font-size: 14.4px;
+    line-height: 21.6px;
+  }
+
+  body.woocommerce-cart .lfk-cart-page .cart_totals h2 {
+    line-height: 16.8px !important;
+  }
+
+  body.woocommerce-cart .lfk-cart-page .cart_totals table,
+  body.woocommerce-cart .lfk-cart-page .cart_totals tr,
+  body.woocommerce-cart .lfk-cart-page .cart_totals th,
+  body.woocommerce-cart .lfk-cart-page .cart_totals td,
+  body.woocommerce-cart .lfk-cart-page #shipping_method,
+  body.woocommerce-cart .lfk-cart-page .woocommerce-shipping-calculator {
+    color: #333333;
+    font-size: 14.4px;
+    line-height: 21.6px;
+  }
+
+  body.woocommerce-cart .lfk-cart-page .woocommerce-shipping-destination {
+    color: #69727d;
+    font-size: 14.4px;
+    line-height: 21.6px;
+  }
+
+  body.woocommerce-cart .lfk-cart-page #shipping_method::after {
+    content: "- จัดส่งโดย Flash Express กรณีมีขนาดเกิน 100 ซม หรือน้ำหนักเกิน 10 กิโลกรัมจัดส่งโดยขนส่งเอกชน";
+    display: block;
+    margin: 16px 0;
+    color: #333333;
+    font-size: 14.4px;
+    line-height: 21.6px;
+  }
+
   body.woocommerce-checkout .lfk-checkout-page .elementor-heading-title {
     font-size: 32px !important;
     line-height: 32px !important;
@@ -841,7 +896,7 @@
   }
 
   body.woocommerce-checkout .lfk-checkout-page .woocommerce-checkout-review-order-table {
-    border-collapse: collapse !important;
+    border-collapse: separate !important;
     border-spacing: 0 !important;
   }
 

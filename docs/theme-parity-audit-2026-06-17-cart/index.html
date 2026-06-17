@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cart Parity Checkpoint - Learning For Kidz</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #5d6678;
+      --line: #dfe4ec;
+      --panel: #ffffff;
+      --surface: #f7f9fb;
+      --cyan: #42bedd;
+      --blue: #2f6f9f;
+      --green: #1e6a3d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { display: block; width: 100%; }
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 0;
+      font-size: 3rem;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.7rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; }
+    .lead {
+      max-width: 850px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 1.06rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section { margin-top: 30px; }
+    .summary {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #e6f6ed;
+      color: var(--green);
+      font-weight: 900;
+      font-size: 0.88rem;
+    }
+    ul { margin: 10px 0 0; padding-left: 22px; }
+    li + li { margin-top: 6px; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    figure {
+      margin: 0;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    figure img {
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    .mobile img { aspect-ratio: 9 / 16; }
+    figcaption {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+    @media (max-width: 720px) {
+      h1 { font-size: 2.2rem; }
+      .gallery { grid-template-columns: 1fr; }
+      .button { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Cart Parity Checkpoint - June 17, 2026</p>
+    <h1>ตะกร้าสินค้า: Custom Theme เทียบ Production Elementor</h1>
+    <p class="lead">Checkpoint นี้ยืนยันว่า cart page ของ custom theme ผ่านการตรวจเทียบ production ทั้ง desktop และ mobile ในระดับ section, text, button, spacing, dimensions และ screenshot.</p>
+    <div class="actions">
+      <a class="button primary" href="../version-log.html">Version Log</a>
+      <a class="button" href="theme-parity-audit.json">Machine-readable JSON</a>
+      <a class="button" href="README.md">Audit Summary</a>
+      <a class="button" href="../">กลับหน้า Report หลัก</a>
+    </div>
+
+    <section>
+      <h2>Result</h2>
+      <div class="summary">
+        <p><span class="status">PASS</span></p>
+        <ul>
+          <li>Desktop cart: PASS</li>
+          <li>Mobile cart: PASS</li>
+          <li>Cart now renders the stored Elementor/WooLentor page content instead of the generic shortcode shell.</li>
+          <li>Matched title, product rows, coupon area, cart totals title, shipping note, subtotal/total rows, checkout button, footer position, and mobile stacking.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Desktop Screenshots</h2>
+      <div class="gallery">
+        <figure>
+          <a href="desktop-prod-cart.png"><img src="desktop-prod-cart.png" alt="Production desktop cart screenshot"></a>
+          <figcaption>Production Elementor</figcaption>
+        </figure>
+        <figure>
+          <a href="desktop-local-cart.png"><img src="desktop-local-cart.png" alt="Local custom theme desktop cart screenshot"></a>
+          <figcaption>Custom Theme Local</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Mobile Screenshots</h2>
+      <div class="gallery mobile">
+        <figure>
+          <a href="mobile-prod-cart.png"><img src="mobile-prod-cart.png" alt="Production mobile cart screenshot"></a>
+          <figcaption>Production Elementor</figcaption>
+        </figure>
+        <figure>
+          <a href="mobile-local-cart.png"><img src="mobile-local-cart.png" alt="Local custom theme mobile cart screenshot"></a>
+          <figcaption>Custom Theme Local</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
