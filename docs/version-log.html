@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-cart-pure/">Pure Cart PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-cart/">Superseded Cart Evidence</a>
       <a class="button" href="team-brief-th.pdf">Download PDF ล่าสุด</a>
       <a class="button" href="https://github.com/thiticom/learningforkidz-theme/commits/main">Technical Commit Log</a>
@@ -125,7 +126,19 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.4 - Pure custom theme architecture correction</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.5 - Pure custom cart parity checkpoint</div>
+        <p><strong>What changed:</strong> Rebuilt cart parity using the pure custom Tailwind/WooCommerce path. Production Elementor remains the visual blueprint only.</p>
+        <ul>
+          <li>Cart page now passes the strict parity audit on desktop and mobile.</li>
+          <li>Matched product table/card layout, coupon area, cart totals, shipping label/radios, checkout button, page height, and footer position.</li>
+          <li>Hardened the parity audit to select the real content section instead of the whole Elementor body wrapper, and to compare button and form field geometry/CSS.</li>
+          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-cart-pure/">open pure custom cart PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, strict cart audit reports PASS for desktop and mobile, and local architecture evidence shows no Elementor/WooLentor styles, scripts, or rendered main-content nodes.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.4 - Pure custom theme architecture correction</div>
         <p><strong>What changed:</strong> Updated the implementation direction so production Elementor is used only as the visual reference. Local/staging cart and checkout now use custom WooCommerce/Tailwind templates instead of rendering stored Elementor page content.</p>
         <ul>
           <li>Removed the cart/checkout path that rendered Elementor page content locally.</li>

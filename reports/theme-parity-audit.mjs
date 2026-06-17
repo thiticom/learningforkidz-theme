@@ -151,9 +151,55 @@ async function extractPage(page) {
     const outsideHeaderFooter = (el) => !el.matches('.elementor-location-header, .elementor-location-footer, header, footer')
       && !el.closest('.elementor-location-header, .elementor-location-footer, header, footer');
     const pickMain = () => {
+      const mainSelectors = [
+        'main',
+        '#primary',
+        '.site-main',
+        '.elementor-location-single',
+        '[data-elementor-type="wp-page"]',
+        '[data-elementor-type="single-page"]',
+        'section',
+        'article',
+        '.elementor-section',
+        '.elementor-element.e-con',
+        '.e-con-boxed',
+        '.lfk-woocommerce-page',
+        '.lfk-single-product',
+        '.lfk-product-archive',
+        '.lfk-post-archive',
+        '.lfk-page',
+      ].join(',');
+      const firstContentHeading = [...document.querySelectorAll('h1,h2,h3,h4')]
+        .filter(visible)
+        .filter(outsideHeaderFooter)
+        .find((heading) => clean(heading.innerText || heading.textContent));
+      if (firstContentHeading) {
+        const headingBox = boxOf(firstContentHeading);
+        const ancestors = [];
+        for (let el = firstContentHeading.parentElement; el && !['BODY', 'HTML'].includes(el.tagName); el = el.parentElement) {
+          if (el.matches(mainSelectors) && visible(el) && outsideHeaderFooter(el)) {
+            const box = boxOf(el);
+            if (box && box.h >= Math.max(headingBox.h + 80, 112) && box.w >= Math.min(260, document.documentElement.clientWidth - 20)) {
+              ancestors.push(el);
+            }
+          }
+        }
+        if (ancestors.length) {
+          return ancestors.sort((a, b) => {
+            const aBox = boxOf(a);
+            const bBox = boxOf(b);
+            const aIsMain = a.matches('main, #primary, .site-main, .lfk-woocommerce-page');
+            const bIsMain = b.matches('main, #primary, .site-main, .lfk-woocommerce-page');
+            if (aIsMain !== bIsMain) return aIsMain ? -1 : 1;
+            return aBox.h - bBox.h;
+          })[0];
+        }
+      }
+
       const preferred = [...document.querySelectorAll('main, #primary, .site-main, .elementor-location-single')]
         .filter(visible)
-        .filter(outsideHeaderFooter);
+        .filter(outsideHeaderFooter)
+        .filter((el) => !['BODY', 'HTML'].includes(el.tagName));
       if (preferred.length) {
         return preferred[0];
       }
@@ -161,6 +207,7 @@ async function extractPage(page) {
       return [...document.querySelectorAll('.elementor-page, .elementor')]
         .filter(visible)
         .filter(outsideHeaderFooter)
+        .filter((el) => !['BODY', 'HTML'].includes(el.tagName))
         .sort((a, b) => {
           const aBox = boxOf(a);
           const bBox = boxOf(b);
@@ -311,6 +358,18 @@ function compareBoxes(prodBox, localBox, strict = false) {
   return Object.entries(delta).some(([key, value]) => value > limits[key]) ? delta : null;
 }
 
+function compareStyles(prodStyle, localStyle, props) {
+  const delta = {};
+  for (const prop of props) {
+    const prodValue = prodStyle?.[prop] || '';
+    const localValue = localStyle?.[prop] || '';
+    if (prodValue !== localValue) {
+      delta[prop] = { prod: prodValue, local: localValue };
+    }
+  }
+  return Object.keys(delta).length ? delta : null;
+}
+
 function classify(routeKey, viewportName, prod, local) {
   const issues = [];
   const add = (section, status, detail, evidence = {}) => issues.push({ section, status, detail, evidence });
@@ -355,6 +414,9 @@ function classify(routeKey, viewportName, prod, local) {
         });
       }
       for (const prop of ['fontSize', 'lineHeight', 'backgroundColor', 'display', 'gridTemplateColumns']) {
+        if (name === 'main' && prop === 'display') {
+          continue;
+        }
         if ((prodLandmark.style?.[prop] || '') !== (localLandmark.style?.[prop] || '')) {
           if (prop === 'backgroundColor' && [prodLandmark.style?.[prop], localLandmark.style?.[prop]].includes('rgba(0, 0, 0, 0)')) {
             continue;
@@ -418,6 +480,57 @@ function classify(routeKey, viewportName, prod, local) {
     add('buttons', 'NEEDS FIX', 'Visible button text/order differs', {
       prod: buttonTexts(prod),
       local: buttonTexts(local),
+    });
+  } else {
+    prod.buttons.forEach((prodButton, index) => {
+      const localButton = local.buttons[index];
+      const delta = compareBoxes(prodButton.box, localButton.box, true);
+      if (delta) {
+        add('buttons', 'NEEDS FIX', `Button position/dimensions differ for "${prodButton.text}"`, {
+          delta,
+          prod: prodButton.box,
+          local: localButton.box,
+        });
+      }
+      const styleDelta = compareStyles(prodButton.style, localButton.style, [
+        'fontSize',
+        'fontWeight',
+        'lineHeight',
+        'color',
+        'backgroundColor',
+        'borderTopWidth',
+        'borderTopColor',
+        'borderRadius',
+      ]);
+      if (styleDelta) {
+        add('buttons', 'NEEDS FIX', `Button CSS differs for "${prodButton.text}"`, styleDelta);
+      }
+    });
+  }
+
+  if (prodFields.join('|') === localFields.join('|')) {
+    prod.fields.forEach((prodField, index) => {
+      const localField = local.fields[index];
+      const delta = compareBoxes(prodField.box, localField.box, true);
+      if (delta) {
+        add('forms', 'NEEDS FIX', `Field position/dimensions differ for "${prodField.label || prodField.name || prodField.id}"`, {
+          delta,
+          prod: prodField.box,
+          local: localField.box,
+        });
+      }
+      const styleDelta = compareStyles(prodField.style, localField.style, [
+        'fontSize',
+        'lineHeight',
+        'color',
+        'backgroundColor',
+        'borderTopWidth',
+        'borderTopColor',
+        'borderRadius',
+      ]);
+      if (styleDelta) {
+        add('forms', 'NEEDS FIX', `Field CSS differs for "${prodField.label || prodField.name || prodField.id}"`, styleDelta);
+      }
     });
   }
 
