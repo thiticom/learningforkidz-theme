@@ -1,16 +1,9 @@
 <?php
 
 get_header();
-
-$posts_page_id = (int) get_option( 'page_for_posts' );
-$title         = $posts_page_id ? get_the_title( $posts_page_id ) : __( 'บทความ', 'lfk-tailwind' );
 ?>
-<main id="primary" class="lfk-post-index">
+<div class="lfk-post-index" role="main">
 	<div class="lfk-shell">
-		<header class="lfk-post-archive-header">
-			<h1><?php echo esc_html( $title ); ?></h1>
-		</header>
-
 		<?php if ( have_posts() ) : ?>
 			<div class="lfk-article-grid lfk-post-grid">
 				<?php
@@ -27,6 +20,6 @@ $title         = $posts_page_id ? get_the_title( $posts_page_id ) : __( 'บท�
 			</div>
 		<?php endif; ?>
 	</div>
-</main>
+</div>
 <?php
 get_footer();

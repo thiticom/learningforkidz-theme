@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Article Pages Pure Custom Theme Visual PASS Evidence</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #5d6678;
+      --line: #dfe4ec;
+      --panel: #ffffff;
+      --surface: #f7f9fb;
+      --blue: #2f6f9f;
+      --cyan: #42bedd;
+      --green: #1e6a3d;
+      --green-bg: #e6f6ed;
+      --orange: #cc6f47;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { display: block; max-width: 100%; }
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--orange);
+      font-weight: 800;
+    }
+    h1 {
+      margin: 0;
+      font-size: 3rem;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.75rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; }
+    .lead {
+      max-width: 860px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section { margin-top: 32px; }
+    .summary {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+    .status {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-weight: 900;
+      font-size: 0.86rem;
+    }
+    ul { margin: 8px 0 0; padding-left: 22px; }
+    li + li { margin-top: 6px; }
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+    figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    figure img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    figcaption {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 760px) {
+      h1 { font-size: 2.15rem; }
+      .screens { grid-template-columns: 1fr; }
+      .button { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Pure Custom Theme Checkpoint</p>
+    <h1>Article Pages Visual PASS Evidence</h1>
+    <p class="lead">ตรวจเทียบหน้าบทความระหว่าง production Elementor กับ local pure custom Tailwind/WordPress theme ทั้ง desktop และ mobile. รอบนี้ครอบคลุมหน้า archive บทความ และหน้า single post.</p>
+
+    <div class="actions">
+      <a class="button primary" href="../version-log.html">Back to Version Log</a>
+      <a class="button" href="theme-parity-audit.json">Audit JSON</a>
+      <a class="button" href="../">Open Latest Report</a>
+    </div>
+
+    <section>
+      <h2>Checklist</h2>
+      <div class="summary">
+        <p><span class="status">VISUAL PASS</span> Article archive + single post: desktop + mobile</p>
+        <ul>
+          <li>Article archive passes visual parity on desktop and mobile.</li>
+          <li>Single post passes visual parity on desktop and mobile.</li>
+          <li>Matched article card image sizes, author avatars, Thai comment text, grid geometry, single-post body rhythm, image layout, author box, comment form, related posts, page height, and footer position.</li>
+          <li>Architecture gate remains pure custom theme: no Elementor-rendered local main content is required for these article pages.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Article Archive Screenshots</h2>
+      <div class="screens">
+        <figure><img src="desktop-prod-article-archive.png" alt="Production desktop article archive"><figcaption>Prod desktop archive</figcaption></figure>
+        <figure><img src="desktop-local-article-archive.png" alt="Local desktop article archive"><figcaption>Local desktop archive</figcaption></figure>
+        <figure><img src="mobile-prod-article-archive.png" alt="Production mobile article archive"><figcaption>Prod mobile archive</figcaption></figure>
+        <figure><img src="mobile-local-article-archive.png" alt="Local mobile article archive"><figcaption>Local mobile archive</figcaption></figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Single Post Screenshots</h2>
+      <div class="screens">
+        <figure><img src="desktop-prod-single-post.png" alt="Production desktop single post"><figcaption>Prod desktop single post</figcaption></figure>
+        <figure><img src="desktop-local-single-post.png" alt="Local desktop single post"><figcaption>Local desktop single post</figcaption></figure>
+        <figure><img src="mobile-prod-single-post.png" alt="Production mobile single post"><figcaption>Prod mobile single post</figcaption></figure>
+        <figure><img src="mobile-local-single-post.png" alt="Local mobile single post"><figcaption>Local mobile single post</figcaption></figure>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

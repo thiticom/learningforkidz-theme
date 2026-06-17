@@ -591,24 +591,80 @@ function lfk_article_card( $post = null, $index = 0 ) {
 	}
 
 	$image_loading = $index < 8 ? 'eager' : 'lazy';
+	$thumbnail_id  = get_post_thumbnail_id( $post );
+	$image_style   = '';
+
+	if ( $thumbnail_id ) {
+		$image_data = wp_get_attachment_image_src( $thumbnail_id, 'medium' );
+		if ( $image_data && ! empty( $image_data[1] ) && ! empty( $image_data[2] ) ) {
+			$image_ratio = (float) $image_data[2] / (float) $image_data[1];
+			$image_style = sprintf(
+				'--lfk-article-mobile-height:%spx;--lfk-article-desktop-height:%spx;',
+				number_format( 390 * $image_ratio, 3, '.', '' ),
+				number_format( 456 * $image_ratio, 3, '.', '' )
+			);
+		}
+	}
 	?>
 	<article class="lfk-article-card">
 		<a class="lfk-article-image" href="<?php echo esc_url( get_permalink( $post ) ); ?>">
 			<?php if ( has_post_thumbnail( $post ) ) : ?>
-				<?php echo get_the_post_thumbnail( $post, 'medium_large', array( 'loading' => $image_loading ) ); ?>
+				<?php
+				echo get_the_post_thumbnail(
+					$post,
+					'medium',
+					array(
+						'loading' => $image_loading,
+						'style'   => $image_style,
+					)
+				);
+				?>
 			<?php else : ?>
 				<img class="lfk-article-fallback" src="<?php echo esc_url( lfk_logo_url() ); ?>" alt="" loading="<?php echo esc_attr( $image_loading ); ?>">
 			<?php endif; ?>
 		</a>
+		<div class="lfk-article-author">
+			<?php echo get_avatar( (int) $post->post_author, 128, '', get_the_author_meta( 'display_name', (int) $post->post_author ), array( 'class' => 'lfk-article-avatar-image' ) ); ?>
+		</div>
 		<div class="lfk-article-body">
 			<h3><a href="<?php echo esc_url( get_permalink( $post ) ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a></h3>
 			<div class="lfk-article-meta">
 				<span><?php echo lfk_svg_icon( 'calendar' ); ?><?php echo esc_html( get_the_date( '', $post ) ); ?></span>
-				<span><?php echo lfk_svg_icon( 'comment' ); ?><?php echo esc_html( get_comments_number_text( 'No Comments', '1 Comment', '% Comments', $post ) ); ?></span>
+				<span><?php echo lfk_svg_icon( 'comment' ); ?><?php echo esc_html( get_comments_number_text( 'ไม่มีความเห็น', '1 ความเห็น', '% ความเห็น', $post ) ); ?></span>
 			</div>
 		</div>
 	</article>
 	<?php
+}
+
+function lfk_content_with_image_aspect_ratios( $content ) {
+	return preg_replace_callback(
+		'/<img\\b([^>]*)>/i',
+		function ( $matches ) {
+			$attributes = $matches[1];
+			if (
+				! preg_match( "/\\bwidth=[\"'](\\d+)[\"']/i", $attributes, $width_match )
+				|| ! preg_match( "/\\bheight=[\"'](\\d+)[\"']/i", $attributes, $height_match )
+			) {
+				return $matches[0];
+			}
+
+			$ratio_style = sprintf( 'aspect-ratio:%d / %d;', (int) $width_match[1], (int) $height_match[1] );
+			if ( preg_match( "/\\bstyle=[\"']([^\"']*)[\"']/i", $attributes, $style_match ) ) {
+				$attributes = preg_replace(
+					"/\\bstyle=[\"'][^\"']*[\"']/i",
+					'style="' . esc_attr( rtrim( $style_match[1], ';' ) . ';' . $ratio_style ) . '"',
+					$attributes,
+					1
+				);
+			} else {
+				$attributes .= ' style="' . esc_attr( $ratio_style ) . '"';
+			}
+
+			return '<img' . $attributes . '>';
+		},
+		$content
+	);
 }
 
 function lfk_product_card( $product ) {
