@@ -605,8 +605,13 @@ function lfk_article_card( $post = null, $index = 0 ) {
 			);
 		}
 	}
+
+	$classes = 'lfk-article-card';
+	if ( 'product' === get_post_type( $post ) ) {
+		$classes .= ' product';
+	}
 	?>
-	<article class="lfk-article-card">
+	<article class="<?php echo esc_attr( $classes ); ?>">
 		<a class="lfk-article-image" href="<?php echo esc_url( get_permalink( $post ) ); ?>">
 			<?php if ( has_post_thumbnail( $post ) ) : ?>
 				<?php

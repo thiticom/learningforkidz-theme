@@ -3407,6 +3407,334 @@
     }
   }
 
+  .lfk-search-page {
+    background: #ffffff;
+    padding-top: 19px;
+    padding-bottom: 0;
+  }
+
+  .lfk-search-page .lfk-shell {
+    max-width: none;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .lfk-search-header h4 {
+    width: 100%;
+    margin: 0;
+    color: #222222;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .lfk-search-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding-bottom: 45px;
+  }
+
+  .lfk-search-grid .lfk-article-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .lfk-search-grid .lfk-article-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .lfk-search-grid .lfk-article-image img {
+    width: 100%;
+    height: var(--lfk-article-desktop-height, 456px);
+    object-fit: cover;
+  }
+
+  .lfk-search-grid .lfk-article-author {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 30px;
+  }
+
+  .lfk-search-grid .lfk-article-avatar-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 9999px;
+  }
+
+  .lfk-search-grid .lfk-article-body {
+    display: block;
+    min-height: 0;
+    padding: 15px 30px 29px;
+  }
+
+  .lfk-search-grid .lfk-article-body h3 {
+    width: 100%;
+    margin: 0 0 25px;
+    color: #333333;
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 25.2px;
+  }
+
+  .lfk-search-grid .lfk-article-body h3 a:hover {
+    color: #333333;
+  }
+
+  .lfk-search-grid .lfk-article-meta {
+    display: flex;
+    margin: 0;
+    gap: 8px;
+    color: #adadad;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .lfk-search-grid .lfk-article-meta span {
+    display: inline-flex;
+    gap: 0;
+  }
+
+  .lfk-search-grid .lfk-article-meta svg {
+    display: none;
+  }
+
+  body.search .lfk-site-footer {
+    min-height: 471px;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-search-page {
+      padding-top: 17px;
+    }
+
+    .lfk-search-grid {
+      grid-template-columns: 1fr;
+      padding-bottom: 52px;
+    }
+
+    .lfk-search-grid .lfk-article-image img {
+      height: var(--lfk-article-mobile-height, 390px);
+    }
+
+    body.search .lfk-site-footer {
+      min-height: 534px;
+    }
+  }
+
+  .lfk-account-page {
+    margin-top: 45px;
+    margin-bottom: 50px;
+    background: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .lfk-account-page .lfk-shell {
+    max-width: 1170px;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .lfk-account-header h2 {
+    width: 100%;
+    margin: 0;
+    color: #dd9933;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .lfk-account-page .lfk-woocommerce-content {
+    margin-top: 20px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .lfk-account-page .woocommerce {
+    color: #69727d;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lfk-account-page #customer_login {
+    margin-top: 20px;
+  }
+
+  .lfk-account-page #customer_login .u-column1,
+  .lfk-account-page #customer_login .u-column2 {
+    width: 48%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .lfk-account-page #customer_login h2 {
+    margin: 0 0 45px;
+    color: #000000;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 38.4px;
+  }
+
+  .lfk-account-page .woocommerce form.login,
+  .lfk-account-page .woocommerce form.register {
+    border: 1px solid #d5d8dc;
+    border-radius: 3px;
+    background: #ffffff;
+    margin: 28px 0;
+    padding: 16px 30px;
+    color: #69727d;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .lfk-account-page .woocommerce form .form-row {
+    margin: 0 0 6px;
+    padding: 3px 0;
+    color: #69727d;
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .lfk-account-page .woocommerce form label {
+    display: block;
+    margin: 0;
+    color: #69727d;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 28px;
+  }
+
+  .lfk-account-page .woocommerce form .woocommerce-form__label-for-checkbox {
+    display: inline-block;
+  }
+
+  .lfk-account-page .woocommerce form input.input-text {
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 0;
+    border-radius: 0;
+    background: #f9fafa;
+    padding: 16px;
+    color: #69727d;
+    font-size: 14px;
+    line-height: normal;
+  }
+
+  .lfk-account-page .woocommerce form .password-input {
+    display: block;
+    position: relative;
+  }
+
+  .lfk-account-page .woocommerce form .password-input input.input-text {
+    padding-right: 40px;
+  }
+
+  .lfk-account-page .woocommerce form .show-password-input {
+    position: absolute;
+    top: 23px;
+    right: 11px;
+    display: block;
+    width: 22px;
+    height: 22px;
+    min-height: 0;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+  }
+
+  .lfk-account-page .woocommerce form input[type="checkbox"] {
+    width: 13px;
+    height: 13px;
+    margin: 0;
+    border-color: #000000;
+    color: #000000;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .lfk-account-page .woocommerce form .form-row:not(.form-row-wide) {
+    position: relative;
+    top: 13px;
+  }
+
+  .lfk-account-page .woocommerce .button {
+    display: inline-block;
+    min-height: 0;
+    border: 1px solid #dd9933;
+    border-radius: 3px;
+    background: #dd9933;
+    padding: 12px 32px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
+  }
+
+  .lfk-account-page .woocommerce-form-login__submit {
+    margin-right: 14px;
+  }
+
+  body.woocommerce-account .lfk-site-footer {
+    min-height: 471px;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-account-page {
+      margin-top: 43px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .lfk-account-page .lfk-shell {
+      max-width: none;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+    .lfk-account-page #customer_login .u-column1,
+    .lfk-account-page #customer_login .u-column2 {
+      float: none;
+      width: 100%;
+    }
+
+    .lfk-account-page #customer_login .u-column2 {
+      margin-top: 163px;
+    }
+
+    .lfk-account-page .woocommerce form .show-password-input {
+      top: 25px;
+    }
+
+    .lfk-account-page .woocommerce form .form-row:not(.form-row-wide) {
+      top: 16px;
+    }
+
+    body.woocommerce-account .lfk-site-footer {
+      min-height: 540px;
+    }
+  }
+
   .lfk-post-single {
     background: #ffffff;
     padding-top: 19px;

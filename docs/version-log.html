@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-final-pages-pure/">Search + My Account PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-posts-pure/">Article Pages PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-single-product-pure/">Single Product Visual PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-taxonomies-pure/">Taxonomy Archives PASS Evidence</a>
@@ -137,7 +138,19 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.16 - Pure custom article pages parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.17 - Pure custom search and account parity checkpoint</div>
+        <p><strong>What changed:</strong> Tuned the pure custom Search results and My Account login/register pages so the final required custom pages visually match production Elementor/WooCommerce on desktop and mobile.</p>
+        <ul>
+          <li>Search results now pass parity on desktop and mobile.</li>
+          <li>My Account login/register now passes parity on desktop and mobile.</li>
+          <li>Matched unified search result card order, image sizes, author avatars, headings, page height, footer position, WooCommerce account form columns, field styling, password toggles, buttons, and mobile stacking.</li>
+          <li>Published the checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-final-pages-pure/">open pure custom Search + My Account PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for touched templates/helpers, combined Search + My Account parity audit reports PASS on desktop and mobile, and local pages remain pure custom theme output rather than Elementor-rendered content.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.16 - Pure custom article pages parity checkpoint</div>
         <p><strong>What changed:</strong> Tuned the pure custom Tailwind/WordPress article archive and single-post templates so the article pages visually match production Elementor on desktop and mobile.</p>
         <ul>
           <li>Article archive now passes parity on desktop and mobile.</li>

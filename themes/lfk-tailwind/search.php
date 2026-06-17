@@ -16,51 +16,35 @@ if ( have_posts() ) {
 		}
 	}
 }
+
+$ordered_results = array_merge(
+	array_slice( $product_results, 0, 3 ),
+	$content_results,
+	array_slice( $product_results, 3 )
+);
 ?>
 <main id="primary" class="lfk-search-page">
 	<div class="lfk-shell">
-		<header class="lfk-post-archive-header">
-			<h1><?php echo esc_html( sprintf( __( 'Search: %s', 'lfk-tailwind' ), $query ) ); ?></h1>
-			<form class="lfk-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get">
-				<input class="lfk-search-input" type="search" name="s" value="<?php echo esc_attr( $query ); ?>" placeholder="<?php esc_attr_e( 'Search products and articles', 'lfk-tailwind' ); ?>">
-				<button class="lfk-search-submit" type="submit"><?php esc_html_e( 'Search', 'lfk-tailwind' ); ?></button>
-			</form>
+		<header class="lfk-search-header">
+			<h4><?php echo esc_html( sprintf( __( 'Search Results for: %s', 'lfk-tailwind' ), $query ) ); ?></h4>
 		</header>
 
-		<?php if ( $product_results ) : ?>
-			<section class="lfk-search-section">
-				<h2><?php esc_html_e( 'Products', 'lfk-tailwind' ); ?></h2>
-				<div class="lfk-product-grid lfk-archive-grid">
-					<?php
-					foreach ( $product_results as $product_id ) {
-						lfk_product_card( wc_get_product( $product_id ) );
-					}
-					?>
-				</div>
-			</section>
+		<?php if ( $ordered_results ) : ?>
+			<div class="lfk-article-grid lfk-search-grid">
+				<?php
+				foreach ( $ordered_results as $index => $result ) {
+					lfk_article_card( $result, $index );
+				}
+				?>
+			</div>
 		<?php endif; ?>
 
-		<?php if ( $content_results ) : ?>
-			<section class="lfk-search-section">
-				<h2><?php esc_html_e( 'Articles and Pages', 'lfk-tailwind' ); ?></h2>
-				<div class="lfk-article-grid lfk-post-grid">
-					<?php foreach ( $content_results as $index => $post ) : ?>
-						<?php lfk_article_card( $post, $index ); ?>
-					<?php endforeach; ?>
-				</div>
-			</section>
-		<?php endif; ?>
-
-		<?php if ( ! $product_results && ! $content_results ) : ?>
+		<?php if ( ! $ordered_results ) : ?>
 			<div class="lfk-empty-state">
 				<p><?php esc_html_e( 'No results found. Try another keyword or browse the shop.', 'lfk-tailwind' ); ?></p>
 				<a class="lfk-search-submit" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'Go to shop', 'lfk-tailwind' ); ?></a>
 			</div>
 		<?php endif; ?>
-
-		<div class="lfk-pagination">
-			<?php the_posts_pagination(); ?>
-		</div>
 	</div>
 </main>
 <?php
