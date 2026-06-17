@@ -917,6 +917,77 @@
     @apply inline-flex rounded-full bg-lfk-blue px-6 py-3 text-[22px] font-bold leading-7 text-white;
   }
 
+  .lfk-ages-page {
+    min-height: 981px;
+    padding-top: 55px;
+    background: transparent;
+  }
+
+  .lfk-ages-page .lfk-shell {
+    max-width: 1170px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .lfk-age-visual-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 370px);
+    gap: 30px;
+  }
+
+  .lfk-age-visual-card {
+    width: 370px;
+    height: 418px;
+    background: transparent;
+  }
+
+  .lfk-age-visual-card a {
+    display: block;
+    width: 370px;
+    height: 418px;
+    padding: 10px 10px 15px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.32);
+  }
+
+  .lfk-age-visual-card img {
+    display: block;
+    width: 350px;
+    height: 350px;
+    margin-bottom: 25px;
+    object-fit: cover;
+  }
+
+  .lfk-age-visual-card h2 {
+    width: 350px;
+    margin: 0;
+    color: #222222;
+    font-family: Roboto, Anuphan, Tahoma, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .lfk-ages-page {
+      min-height: 2323px;
+      padding-top: 53px;
+    }
+
+    .lfk-ages-page .lfk-shell {
+      max-width: 370px;
+    }
+
+    .lfk-age-visual-grid {
+      grid-template-columns: 370px;
+    }
+
+    .lfk-ages-page + .lfk-site-footer {
+      min-height: 568px;
+    }
+  }
+
   .lfk-search-form {
     @apply mt-5 flex max-w-[620px] flex-col gap-3 sm:flex-row;
   }

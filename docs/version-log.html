@@ -117,6 +117,7 @@
     <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
+      <a class="button" href="theme-parity-audit-2026-06-17-ages-pure/">Ages PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-wishlist-pure/">Wishlist PASS Evidence</a>
       <a class="button" href="theme-parity-audit-2026-06-17-static-pages-pure/">Static Pages PASS Evidence</a>
       <a class="button" href="strict-checkout-audit-2026-06-17-pure/">Pure Checkout PASS Evidence</a>
@@ -129,7 +130,19 @@
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.8 - Pure custom wishlist parity checkpoint</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.9 - Pure custom ages page parity checkpoint</div>
+        <p><strong>What changed:</strong> Rebuilt the Ages directory page as a pure custom Tailwind template while keeping production Elementor as the visual reference.</p>
+        <ul>
+          <li>Ages page now passes parity on desktop and mobile.</li>
+          <li>Matched the five curated age image cards, Thai labels, 3-column desktop layout, single-column mobile layout, page height, and footer position.</li>
+          <li>Kept real taxonomy names/links while removing the generic local Age heading, count cards, and badge layout that differed from production.</li>
+          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-ages-pure/">open pure custom ages page PASS evidence</a>.</li>
+        </ul>
+        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused ages parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.8 - Pure custom wishlist parity checkpoint</div>
         <p><strong>What changed:</strong> Rebuilt the wishlist page as a pure custom theme path while keeping production Elementor as the visual reference.</p>
         <ul>
           <li>Wishlist now passes parity on desktop and mobile.</li>
