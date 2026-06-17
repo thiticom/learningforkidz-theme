@@ -195,7 +195,19 @@ def version_log_html() -> str:
     <section>
       <h2>Current Version</h2>
       <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.17.1 - Public team sharing release</div>
+        <div class="meta"><span class="status">Current</span> Version v2026.06.17.2 - Checkout and footer parity checkpoint</div>
+        <p><strong>What changed:</strong> Tightened the custom theme checkout page against production Elementor/WooLentor output and added a repeatable strict checkout audit script.</p>
+        <ul>
+          <li>Checkout now renders the stored Elementor checkout content instead of the generic shortcode shell.</li>
+          <li>Matched checkout title, order summary, shipping note, payment/terms spacing, button color, and desktop/mobile page height.</li>
+          <li>Matched the custom footer desktop/mobile height and added the compact mobile footer/copyright behavior for team-visible pages.</li>
+          <li>Added `reports/strict-checkout-audit.mjs` so future checkout checks compare prod/local screenshots, DOM sections, fields, rows, headings, CSS, and dimensions.</li>
+        </ul>
+        <p><strong>Verification:</strong> PHP lint and CSS build passed. Strict checkout audit passed on the last successful live-prod run; final footer dimensions were rechecked locally against cached prod metrics because production timed out during the final rerun.</p>
+      </article>
+
+      <article class="entry">
+        <div class="meta">Version v2026.06.17.1 - Public team sharing release</div>
         <p><strong>What changed:</strong> Published the Thai AI Marketing Foundation report to public GitHub Pages, with PDF download and full section audit.</p>
         <ul>
           <li>Added public report URL for non-Tailscale sharing.</li>
