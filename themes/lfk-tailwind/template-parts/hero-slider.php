@@ -23,27 +23,25 @@ if ( empty( $slides ) || ! is_array( $slides ) ) {
 			if ( -1 === $offset ) {
 				$classes[] = 'is-lfk-near-active';
 			}
+			$desktop_id = ! empty( $desktop_img['ID'] ) ? (int) $desktop_img['ID'] : ( ! empty( $desktop_img['id'] ) ? (int) $desktop_img['id'] : 0 );
+			$mobile_id  = ! empty( $mobile_img['ID'] ) ? (int) $mobile_img['ID'] : ( ! empty( $mobile_img['id'] ) ? (int) $mobile_img['id'] : 0 );
+			$desktop_srcset = $desktop_id ? wp_get_attachment_image_srcset( $desktop_id, 'full' ) : '';
+			$mobile_srcset  = $mobile_id ? wp_get_attachment_image_srcset( $mobile_id, 'full' ) : '';
+			$priority_attrs = $is_real && 0 === $index ? 'fetchpriority="high" data-no-lazy="1"' : 'loading="lazy"';
 			?>
 			<a class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" href="<?php echo esc_url( $link ); ?>" style="--lfk-slide-offset: <?php echo esc_attr( $offset ); ?>;" <?php echo $is_real ? 'data-lfk-slide' : ''; ?>>
-				<?php if ( $desktop_img ) : ?>
-					<img class="lfk-hero-desktop<?php echo $is_real && 0 === $index ? ' skip-lazy' : ''; ?>" src="<?php echo esc_url( $desktop_img['url'] ); ?>" alt="<?php echo esc_attr( $desktop_img['alt'] ); ?>" width="<?php echo esc_attr( $desktop_img['width'] ); ?>" height="<?php echo esc_attr( $desktop_img['height'] ); ?>" <?php echo $is_real && 0 === $index ? 'fetchpriority="high" data-no-lazy="1"' : 'loading="lazy"'; ?>>
-				<?php endif; ?>
-				<?php if ( $mobile_img ) : ?>
-					<img class="lfk-hero-mobile<?php echo $is_real && 0 === $index ? ' skip-lazy' : ''; ?>" src="<?php echo esc_url( $mobile_img['url'] ); ?>" alt="<?php echo esc_attr( $mobile_img['alt'] ); ?>" width="<?php echo esc_attr( $mobile_img['width'] ); ?>" height="<?php echo esc_attr( $mobile_img['height'] ); ?>" <?php echo $is_real && 0 === $index ? 'fetchpriority="high" data-no-lazy="1"' : 'loading="lazy"'; ?>>
-				<?php endif; ?>
+				<picture class="lfk-hero-picture">
+					<?php if ( $mobile_img ) : ?>
+						<source media="(max-width: 767px)" srcset="<?php echo esc_attr( $mobile_srcset ?: $mobile_img['url'] ); ?>" sizes="100vw">
+					<?php endif; ?>
+					<img class="lfk-hero-image<?php echo $is_real && 0 === $index ? ' skip-lazy' : ''; ?>" src="<?php echo esc_url( $desktop_img ? $desktop_img['url'] : $mobile_img['url'] ); ?>" <?php if ( $desktop_srcset ) : ?>srcset="<?php echo esc_attr( $desktop_srcset ); ?>" sizes="100vw"<?php endif; ?> alt="<?php echo esc_attr( $desktop_img['alt'] ?? $mobile_img['alt'] ?? '' ); ?>" width="<?php echo esc_attr( $desktop_img['width'] ?? $mobile_img['width'] ?? 1920 ); ?>" height="<?php echo esc_attr( $desktop_img['height'] ?? $mobile_img['height'] ?? 495 ); ?>" <?php echo $priority_attrs; ?>>
+				</picture>
 			</a>
 			<?php
 		};
 
-		if ( is_front_page() && count( $slides ) >= 7 ) {
-			$clone_order = array( 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 0, 1, 2 );
-			foreach ( $clone_order as $clone_index => $slide_index ) {
-				$render_slide( $slides[ $slide_index ], $slide_index, $clone_index - 5, 5 === $clone_index );
-			}
-		} else {
-			foreach ( $slides as $index => $slide ) {
-				$render_slide( $slide, $index, $index, true );
-			}
+		foreach ( $slides as $index => $slide ) {
+			$render_slide( $slide, $index, 0, true );
 		}
 		?>
 		<button class="lfk-hero-nav lfk-hero-prev" type="button" aria-label="‹" data-lfk-prev>‹</button>

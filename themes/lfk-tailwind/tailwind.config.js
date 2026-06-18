@@ -14,8 +14,8 @@ module.exports = {
     extend: {
       colors: {
         lfk: {
-          blue: '#2f78b8',
-          blueDark: '#0f5fa9',
+          blue: '#0076be',
+          blueDark: '#005c99',
           yellow: '#fac735',
           gold: '#d99a35',
           sky: '#a9d9f6',

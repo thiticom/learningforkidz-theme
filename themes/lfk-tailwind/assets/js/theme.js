@@ -205,6 +205,68 @@
     });
   }
 
+  function initCommerceFeedback() {
+    var cartLink = document.querySelector('.lfk-cart-link');
+    var toastTimer = null;
+
+    function showToast(message) {
+      var toast = document.querySelector('[data-lfk-cart-toast]');
+
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'lfk-cart-toast';
+        toast.setAttribute('data-lfk-cart-toast', '');
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.innerHTML = '<span></span><a href="/cart/">ดูตะกร้า</a>';
+        document.body.appendChild(toast);
+      }
+
+      toast.querySelector('span').textContent = message;
+      toast.classList.add('is-visible');
+
+      if (toastTimer) window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 2600);
+    }
+
+    function pulseCart() {
+      if (!cartLink) return;
+      cartLink.classList.remove('is-updated');
+      window.requestAnimationFrame(function () {
+        cartLink.classList.add('is-updated');
+      });
+    }
+
+    if (window.jQuery) {
+      window.jQuery(document.body).on('adding_to_cart', function (event, button) {
+        if (button && button.addClass) button.addClass('loading');
+      });
+
+      window.jQuery(document.body).on('added_to_cart', function (event, fragments, cartHash, button) {
+        if (button && button.removeClass) button.removeClass('loading').addClass('added');
+        pulseCart();
+        showToast('เพิ่มสินค้าในตะกร้าแล้ว');
+      });
+    }
+
+    Array.prototype.slice.call(document.querySelectorAll('.lfk-single-cart form.cart')).forEach(function (form) {
+      form.addEventListener('submit', function () {
+        var button = form.querySelector('.single_add_to_cart_button');
+        if (button) button.classList.add('loading');
+      });
+    });
+
+    var checkout = document.querySelector('form.checkout');
+    if (checkout) {
+      checkout.addEventListener('submit', function () {
+        var placeOrder = checkout.querySelector('#place_order');
+        if (placeOrder) placeOrder.classList.add('loading');
+      });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initMobileMenu();
     initHeroSlider();
@@ -212,5 +274,6 @@
     initBackToTop();
     initCatalogOrdering();
     initProductGallery();
+    initCommerceFeedback();
   });
 })();

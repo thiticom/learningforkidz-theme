@@ -17,6 +17,23 @@ if ( function_exists( 'wc_setup_loop' ) ) {
 $archive_title = function_exists( 'woocommerce_page_title' ) ? woocommerce_page_title( false ) : get_the_archive_title();
 $description   = is_tax() ? term_description() : '';
 $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_product_archive_hero_image_id() : 0;
+$child_terms   = array();
+
+if ( is_tax( 'product_cat' ) ) {
+	$queried_term = get_queried_object();
+	if ( $queried_term instanceof WP_Term ) {
+		$child_terms = get_terms( array(
+			'taxonomy'   => 'product_cat',
+			'parent'     => $queried_term->term_id,
+			'hide_empty' => true,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		) );
+		if ( is_wp_error( $child_terms ) ) {
+			$child_terms = array();
+		}
+	}
+}
 ?>
 <div class="lfk-product-archive<?php echo $hero_image_id ? ' lfk-product-archive--has-hero' : ''; ?>" role="main">
 	<div class="lfk-shell">
@@ -48,7 +65,28 @@ $hero_image_id = function_exists( 'lfk_product_archive_hero_image_id' ) ? lfk_pr
 			<?php woocommerce_output_all_notices(); ?>
 		<?php endif; ?>
 
-		<?php if ( have_posts() ) : ?>
+		<?php if ( $child_terms ) : ?>
+			<section class="lfk-category-archive-grid" aria-label="<?php echo esc_attr( $archive_title ); ?>">
+				<?php foreach ( $child_terms as $index => $term ) : ?>
+					<?php
+					$thumbnail_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
+					$term_link    = get_term_link( $term );
+					if ( is_wp_error( $term_link ) ) {
+						continue;
+					}
+					?>
+					<a class="lfk-category-card" href="<?php echo esc_url( $term_link ); ?>">
+						<?php if ( $thumbnail_id ) : ?>
+							<?php echo wp_get_attachment_image( $thumbnail_id, 'large', false, array( 'loading' => $index < 3 ? 'eager' : 'lazy' ) ); ?>
+						<?php else : ?>
+							<span class="lfk-category-card-fallback"><?php echo esc_html( $term->name ); ?></span>
+						<?php endif; ?>
+						<h2><?php echo esc_html( $term->name ); ?></h2>
+					</a>
+				<?php endforeach; ?>
+			</section>
+
+		<?php elseif ( have_posts() ) : ?>
 			<div class="lfk-archive-layout">
 				<aside class="lfk-archive-sidebar" aria-label="<?php esc_attr_e( 'Product filters', 'lfk-tailwind' ); ?>">
 					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></div>
