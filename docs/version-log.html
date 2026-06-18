@@ -6,60 +6,71 @@
   <title>Learning For Kidz Version Log</title>
   <style>
     :root {
-      --ink: #18202f;
-      --muted: #5d6678;
-      --line: #dfe4ec;
-      --panel: #ffffff;
+      --ink: #172033;
+      --muted: #5e687a;
+      --line: #dde4ec;
+      --panel: #fff;
       --surface: #f7f9fb;
       --cyan: #42bedd;
       --blue: #2f6f9f;
-      --orange: #cc6f47;
+      --orange: #c96f45;
+      --green: #1e6a3d;
+      --gold: #87521c;
+      --red: #b54747;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       color: var(--ink);
       background: var(--surface);
-      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      font-family: "Noto Sans Thai", Tahoma, "Segoe UI", Arial, sans-serif;
       line-height: 1.65;
     }
     a { color: var(--blue); }
+    img { display: block; max-width: 100%; }
     .page {
-      width: min(980px, calc(100% - 32px));
+      width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 36px 0 64px;
+      padding: 34px 0 68px;
     }
     .eyebrow {
       margin: 0 0 8px;
       color: var(--orange);
-      font-size: 0.92rem;
-      font-weight: 700;
+      font-size: .92rem;
+      font-weight: 800;
     }
     h1 {
       margin: 0;
-      font-size: 3rem;
+      max-width: 1040px;
+      font-size: clamp(2.15rem, 5vw, 4rem);
       line-height: 1.08;
       letter-spacing: 0;
     }
     h2 {
-      margin: 0 0 10px;
-      font-size: 1.7rem;
+      margin: 0 0 12px;
+      font-size: clamp(1.45rem, 3vw, 2rem);
       line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      line-height: 1.35;
       letter-spacing: 0;
     }
     p { margin: 0 0 12px; }
     .lead {
       margin-top: 16px;
+      max-width: 920px;
       color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 760px;
+      font-size: 1.08rem;
     }
     .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 22px;
-      padding-bottom: 22px;
+      padding-bottom: 24px;
       border-bottom: 1px solid var(--line);
     }
     .button {
@@ -72,315 +83,146 @@
       background: var(--panel);
       color: var(--ink);
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
     }
     .button.primary {
       border-color: var(--cyan);
       background: var(--cyan);
       color: #082330;
     }
-    section { margin-top: 30px; }
-    .entry, .process {
-      background: var(--panel);
+    section { margin-top: 34px; }
+    .summary, .callout, .card, details {
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 18px;
+      background: var(--panel);
     }
-    .entry + .entry { margin-top: 14px; }
-    .meta {
-      color: var(--muted);
-      font-size: 0.94rem;
-      margin-bottom: 10px;
+    .summary, .callout { padding: 18px; }
+    .summary ul, .callout ul { margin: 0; padding-left: 22px; }
+    li + li { margin-top: 7px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
     }
-    ul { margin: 8px 0 0; padding-left: 22px; }
-    li + li { margin-top: 6px; }
-    .status {
+    .metric {
+      min-height: 142px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .metric-value {
+      color: var(--blue);
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+    .metric-label {
+      margin-top: 8px;
+      font-weight: 900;
+    }
+    .metric p, .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card { padding: 16px; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th { font-weight: 900; }
+    .badge {
       display: inline-flex;
+      align-items: center;
+      min-height: 29px;
+      white-space: nowrap;
       border-radius: 999px;
       padding: 4px 10px;
-      background: #e6f6ed;
-      color: #1e6a3d;
-      font-weight: 800;
-      font-size: 0.86rem;
+      font-size: .82rem;
+      font-weight: 900;
     }
-    @media (max-width: 520px) {
-      h1 { font-size: 2.2rem; }
-      h2 { font-size: 1.45rem; }
+    .badge.pass { background: #e6f6ed; color: var(--green); }
+    .badge.note { background: #fff2dc; color: var(--gold); }
+    .badge.fix { background: #fdeaea; color: var(--red); }
+    details { padding: 14px; }
+    details + details { margin-top: 12px; }
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    figure img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    figcaption {
+      padding: 9px 11px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    @media (max-width: 900px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr; }
       .button { width: 100%; justify-content: center; }
+      figure img { height: 240px; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <p class="eyebrow">Public Report Version Log</p>
-    <h1>Learning For Kidz: Version / Update Log</h1>
-    <p class="lead">หน้านี้เป็น log สำหรับทีม ไม่ใช่ technical Git log. ใช้ดูว่า report เวอร์ชันล่าสุดเปลี่ยนอะไร และควรแชร์ลิงก์ไหน.</p>
+    <p class="eyebrow">Version Log - 2026-06-18</p>
+    <h1>Learning For Kidz Version Log</h1>
+    <p class="lead">หน้านี้เป็น log แบบทีมอ่านได้ง่าย ไม่ใช่ technical Git log.</p>
     <div class="actions">
       <a class="button primary" href="./">เปิด Report ล่าสุด</a>
-      <a class="button" href="theme-parity-audit-2026-06-18-full/">2026-06-18 Full PASS Evidence</a>
-      <a class="button" href="product-interaction-audit-2026-06-18/">2026-06-18 Product Interaction</a>
-      <a class="button" href="performance-audit-2026-06-18/">2026-06-18 Performance</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-full-pure/">Full Theme PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-final-pages-pure/">Search + My Account PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-posts-pure/">Article Pages PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-single-product-pure/">Single Product Visual PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-taxonomies-pure/">Taxonomy Archives PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-shop-pure/">Shop Archive PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-contact-pure/">Contact PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-promotion-pure/">Promotion PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-brands-pure/">Brands PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-ages-pure/">Ages PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-wishlist-pure/">Wishlist PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-static-pages-pure/">Static Pages PASS Evidence</a>
-      <a class="button" href="strict-checkout-audit-2026-06-17-pure/">Pure Checkout PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-cart-pure/">Pure Cart PASS Evidence</a>
-      <a class="button" href="theme-parity-audit-2026-06-17-cart/">Superseded Cart Evidence</a>
-      <a class="button" href="team-brief-th.pdf">Download PDF ล่าสุด</a>
       <a class="button" href="https://github.com/thiticom/learningforkidz-theme/commits/main">Technical Commit Log</a>
     </div>
-
     <section>
       <h2>Current Version</h2>
-      <article class="entry">
-        <div class="meta"><span class="status">Current</span> Version v2026.06.18.1 - Product interaction, full parity, and speed checkpoint</div>
-        <p><strong>What changed:</strong> Re-ran the loop with stricter single-product gallery interaction checks, full all-route visual parity, strict checkout, and expanded performance metrics.</p>
+      <article class="card">
+        <h3>v2026.06.18.2 - Staging custom theme checkpoint</h3>
+        <p><strong>What changed:</strong> Deployed the pure custom theme to staging, reran visual/interaction/checkout/performance audits against production, and published browser-openable evidence pages.</p>
         <ul>
-          <li>Full visual audit reports 0 NEEDS FIX across 21 pages x desktop/mobile, with 6 remaining CONTENT/DATA notes only.</li>
-          <li>Product interaction audit clicked every gallery thumbnail state across 4 Kanoodle products on desktop/mobile with 0 local JS errors.</li>
-          <li>Performance audit now reports request, encoded KB, DCL, load, LCP, CLS, TBT proxy, and JS/CSS/image KB reductions.</li>
-          <li>Median improvements: requests reduced 82%, load event reduced 86.95%, LCP reduced 85.7%, TBT proxy reduced 85.55%, JS KB reduced 95.9%.</li>
-          <li>Published screenshots and raw audit JSON: <a href="theme-parity-audit-2026-06-18-full/">full visual evidence</a>, <a href="product-interaction-audit-2026-06-18/">product interaction evidence</a>, and <a href="performance-audit-2026-06-18/">performance evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for touched PHP files, product interaction audit reports 0 issues, full route visual audit reports 0 NEEDS FIX, strict checkout audit reports PASS on desktop/mobile, and performance report documents percent reduced from production.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.18 - Full pure custom theme parity checkpoint</div>
-        <p><strong>What changed:</strong> Completed the full pure custom Tailwind/WooCommerce theme parity loop, including Home, all WooCommerce pages, all custom pages, article pages, and static pages.</p>
-        <ul>
-          <li>Full audit now reports 0 NEEDS FIX across all desktop and mobile routes.</li>
-          <li>Home now passes parity after matching hero carousel clones, age band, intro copy, brand carousel, product sections, media overlap, Kanoodle strip, article carousel, footer, and mobile-specific spacing.</li>
-          <li>Checkout and cart remain strict PASS on desktop and mobile.</li>
-          <li>Single-product related products remain documented as CONTENT/DATA DIFFERENCE because production randomizes recommendations; layout/boxes pass.</li>
-          <li>Published the full checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-full-pure/">open full pure custom theme PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for touched templates, focused Home parity audit reports PASS on desktop and mobile, and full all-routes parity audit reports 0 NEEDS FIX with no Elementor/WooLentor runtime dependency in the local custom theme path.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.17 - Pure custom search and account parity checkpoint</div>
-        <p><strong>What changed:</strong> Tuned the pure custom Search results and My Account login/register pages so the final required custom pages visually match production Elementor/WooCommerce on desktop and mobile.</p>
-        <ul>
-          <li>Search results now pass parity on desktop and mobile.</li>
-          <li>My Account login/register now passes parity on desktop and mobile.</li>
-          <li>Matched unified search result card order, image sizes, author avatars, headings, page height, footer position, WooCommerce account form columns, field styling, password toggles, buttons, and mobile stacking.</li>
-          <li>Published the checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-final-pages-pure/">open pure custom Search + My Account PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for touched templates/helpers, combined Search + My Account parity audit reports PASS on desktop and mobile, and local pages remain pure custom theme output rather than Elementor-rendered content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.16 - Pure custom article pages parity checkpoint</div>
-        <p><strong>What changed:</strong> Tuned the pure custom Tailwind/WordPress article archive and single-post templates so the article pages visually match production Elementor on desktop and mobile.</p>
-        <ul>
-          <li>Article archive now passes parity on desktop and mobile.</li>
-          <li>Single post now passes parity on desktop and mobile.</li>
-          <li>Matched article card image sizes, author avatars, Thai comment labels, grid geometry, single-post body rhythm, image layout, author box, comment form, related posts, page height, and footer position.</li>
-          <li>Published the checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-posts-pure/">open pure custom article pages PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for touched templates/helpers, combined article archive + single post parity audit reports PASS on desktop and mobile, and local pages remain pure custom theme output rather than Elementor-rendered content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.15 - Pure custom single product visual parity checkpoint</div>
-        <p><strong>What changed:</strong> Tuned the pure custom Tailwind/WooCommerce single-product template so the Kanoodle product detail page visually matches production Elementor/WooCommerce on desktop and mobile.</p>
-        <ul>
-          <li>Matched gallery stage, thumbnail grid, non-square lifestyle image ratio, product title, price, stock timing text, add-to-cart button, description section, related-products grid geometry, page height, and footer position.</li>
-          <li>Removed the duplicate local stock display inside the add-to-cart area so stock appears once like production.</li>
-          <li>Recorded related-product names as CONTENT/DATA DIFFERENCE because production randomizes those recommendations between audit requests; layout/boxes remain checked strictly.</li>
-          <li>Published the checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-single-product-pure/">open pure custom single product visual PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused single-product parity audit reports 0 NEEDS FIX on desktop and mobile, with only the documented related-products content/data note; architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.14 - Pure custom product taxonomy archive parity checkpoint</div>
-        <p><strong>What changed:</strong> Tuned the shared pure custom Tailwind/WooCommerce archive so product category, product brand, and age taxonomy pages match production Elementor/WooCommerce archives.</p>
-        <ul>
-          <li>Product category, Learning Resources brand archive, and 3-4 years age archive now pass parity on desktop and mobile.</li>
-          <li>Matched taxonomy hero/banner spacing, product grid geometry, ordering select position, card/button count and placement, page height, and footer position.</li>
-          <li>Kept real taxonomy/product data while normalizing small local product-title punctuation differences that did not match production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-taxonomies-pure/">open pure custom taxonomy archive PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused taxonomy parity audit reports PASS for product category, product brand, and age taxonomy on desktop and mobile; architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.13 - Pure custom shop/product archive parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the Shop/product archive page as a pure custom Tailwind/WooCommerce archive while keeping production Elementor/WooCommerce as the visual reference.</p>
-        <ul>
-          <li>Shop/product archive now passes parity on desktop and mobile.</li>
-          <li>Matched the production product grid geometry, ordering select, product card sizes, product image sizes, title typography/order, add-to-cart button dimensions, page height, and footer position.</li>
-          <li>Kept real WooCommerce product data, prices, wishlist links, and add-to-cart URLs while replacing the generic local archive heading/filter/grid layout that differed from production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-shop-pure/">open pure custom shop/product archive PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused shop parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.12 - Pure custom contact page parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the Contact page as a pure custom Tailwind/Contact Form 7 layout while keeping production Elementor as the visual reference.</p>
-        <ul>
-          <li>Contact page now passes parity on desktop and mobile.</li>
-          <li>Matched the gold page title, black contact panel, white form/map panel, field sizes, submit button styling, responsive stack, page height, and footer position.</li>
-          <li>Kept the existing Contact Form 7 shortcode and map embed while replacing the generic local card/map layout that differed from production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-contact-pure/">open pure custom contact page PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused contact parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.11 - Pure custom promotion page parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the Promotion page as a pure custom Tailwind/WooCommerce product grid while keeping production Elementor as the visual reference.</p>
-        <ul>
-          <li>Promotion page now passes parity on desktop and mobile.</li>
-          <li>Matched the six promotion product order, title display, image grid, responsive card layout, add-to-cart button style/position, page height, and footer position.</li>
-          <li>Kept real WooCommerce prices and add-to-cart URLs while replacing the generic local archive heading/order/card styling that differed from production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-promotion-pure/">open pure custom promotion page PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused promotion parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.10 - Pure custom brands page parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the Brands directory page as a pure custom Tailwind template while keeping production Elementor as the visual reference.</p>
-        <ul>
-          <li>Brands page now passes parity on desktop and mobile.</li>
-          <li>Matched the curated 14-brand logo card order, card dimensions, logo sizes, special Tacco placeholder size, heading typography, page height, and footer position.</li>
-          <li>Kept real product brand taxonomy names/links while removing the generic local Brands heading, counts, small logos, and count-based order that differed from production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-brands-pure/">open pure custom brands page PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused brands parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.9 - Pure custom ages page parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the Ages directory page as a pure custom Tailwind template while keeping production Elementor as the visual reference.</p>
-        <ul>
-          <li>Ages page now passes parity on desktop and mobile.</li>
-          <li>Matched the five curated age image cards, Thai labels, 3-column desktop layout, single-column mobile layout, page height, and footer position.</li>
-          <li>Kept real taxonomy names/links while removing the generic local Age heading, count cards, and badge layout that differed from production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-ages-pure/">open pure custom ages page PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused ages parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.8 - Pure custom wishlist parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the wishlist page as a pure custom theme path while keeping production Elementor as the visual reference.</p>
-        <ul>
-          <li>Wishlist now passes parity on desktop and mobile.</li>
-          <li>Matched heading order/style, empty wishlist message, main content height, and footer position.</li>
-          <li>Kept wishlist plugin functionality but removed the local card-like styling that differed from production.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-wishlist-pure/">open pure custom wishlist PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused wishlist parity audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.7 - Pure custom static pages parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt the remaining Elementor-rendered static pages as pure custom theme templates while keeping production Elementor as the visual blueprint.</p>
-        <ul>
-          <li>About, refund, how-to-order, and privacy pages now pass parity on desktop and mobile.</li>
-          <li>Removed Elementor-rendered main content from these static page paths by routing them through `page-static.php`.</li>
-          <li>Matched heading sizes/positions, body content height, how-to-order image/caption layout, footer position, and mobile stacking.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-static-pages-pure/">open pure custom static pages PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, focused static-page parity audit reports PASS for all four pages on desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in local main content.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.6 - Pure custom checkout parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt checkout as a pure custom WooCommerce/Tailwind template while using production Elementor only as the visual reference.</p>
-        <ul>
-          <li>Checkout now passes strict parity on desktop and mobile.</li>
-          <li>Matched billing/shipping fields, coupon box, order summary rows, shipping note, payment methods, terms/privacy area, place order button, mobile stacking, and footer position.</li>
-          <li>Broader checkout route audit also passes with zero Elementor/WooLentor dependency styles, scripts, or rendered main-content nodes.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="strict-checkout-audit-2026-06-17-pure/">open pure custom checkout PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, strict checkout audit reports PASS for desktop and mobile, broader checkout route audit reports PASS for desktop and mobile, and architecture evidence shows no Elementor/WooLentor runtime dependency in the custom checkout path.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.5 - Pure custom cart parity checkpoint</div>
-        <p><strong>What changed:</strong> Rebuilt cart parity using the pure custom Tailwind/WooCommerce path. Production Elementor remains the visual blueprint only.</p>
-        <ul>
-          <li>Cart page now passes the strict parity audit on desktop and mobile.</li>
-          <li>Matched product table/card layout, coupon area, cart totals, shipping label/radios, checkout button, page height, and footer position.</li>
-          <li>Hardened the parity audit to select the real content section instead of the whole Elementor body wrapper, and to compare button and form field geometry/CSS.</li>
-          <li>Published the valid checkpoint with screenshots: <a href="theme-parity-audit-2026-06-17-cart-pure/">open pure custom cart PASS evidence</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed, strict cart audit reports PASS for desktop and mobile, and local architecture evidence shows no Elementor/WooLentor styles, scripts, or rendered main-content nodes.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.4 - Pure custom theme architecture correction</div>
-        <p><strong>What changed:</strong> Updated the implementation direction so production Elementor is used only as the visual reference. Local/staging cart and checkout now use custom WooCommerce/Tailwind templates instead of rendering stored Elementor page content.</p>
-        <ul>
-          <li>Removed the cart/checkout path that rendered Elementor page content locally.</li>
-          <li>Removed cloned Elementor upload CSS rewriting and trimmed Elementor/WooLentor assets from cart/checkout while preserving WooCommerce checkout/payment scripts.</li>
-          <li>Updated the parity audit harness with an architecture gate: local pages fail if they require Elementor/WooLentor assets or rendered main-content nodes.</li>
-          <li>Cart visual parity is being rebuilt in pure custom CSS; the previous cart checkpoint remains available only as superseded evidence, not final sign-off.</li>
-        </ul>
-        <p><strong>Verification:</strong> CSS build passed, PHP lint passed for functions/cart/checkout/single product, and local cart/checkout architecture checks found no Elementor/WooLentor styles, scripts, or main-content nodes.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.3 - Cart parity and audit harness checkpoint</div>
-        <p><strong>What changed:</strong> Cart now matches production Elementor/WooLentor output in the focused parity audit, and the broader theme parity checker is available for the remaining page loop.</p>
-        <ul>
-          <li>Cart now renders the stored Elementor cart content when available, with a fallback shortcode shell only when page content is absent.</li>
-          <li>Matched cart title, product rows, coupon area, cart totals title, shipping note, subtotal/total rows, checkout button, footer position, and mobile stacking.</li>
-          <li>Added `reports/theme-parity-audit.mjs` to compare prod/local desktop and mobile screenshots, landmarks, headings, buttons, forms, images, sections, dimensions, CSS, and duplicate text.</li>
-          <li>Published a reader-facing cart checkpoint with desktop/mobile screenshots: <a href="theme-parity-audit-2026-06-17-cart/">open superseded cart checkpoint</a>.</li>
-        </ul>
-        <p><strong>Verification:</strong> Superseded by v2026.06.17.4 because the checkpoint relied on rendering Elementor cart content locally, which is no longer allowed by the final architecture rule.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.2 - Checkout and footer parity checkpoint</div>
-        <p><strong>What changed:</strong> Tightened the custom theme checkout page against production Elementor/WooLentor output and added a repeatable strict checkout audit script.</p>
-        <ul>
-          <li>Checkout now renders the stored Elementor checkout content instead of the generic shortcode shell.</li>
-          <li>Matched checkout title, order summary, shipping note, payment/terms spacing, button color, and desktop/mobile page height.</li>
-          <li>Matched the custom footer desktop/mobile height and added the compact mobile footer/copyright behavior for team-visible pages.</li>
-          <li>Added `reports/strict-checkout-audit.mjs` so future checkout checks compare prod/local screenshots, DOM sections, fields, rows, headings, CSS, and dimensions.</li>
-        </ul>
-        <p><strong>Verification:</strong> PHP lint and CSS build passed. Strict checkout audit passed on the last successful live-prod run; final footer dimensions were rechecked locally against cached prod metrics because production timed out during the final rerun.</p>
-      </article>
-
-      <article class="entry">
-        <div class="meta">Version v2026.06.17.1 - Public team sharing release</div>
-        <p><strong>What changed:</strong> Published the Thai AI Marketing Foundation report to public GitHub Pages, with PDF download and full section audit.</p>
-        <ul>
-          <li>Added public report URL for non-Tailscale sharing.</li>
-          <li>Added full screenshot audit and PDF download.</li>
-          <li>Clarified that performance percentages mean “percent reduced from production.”</li>
-          <li>Committed the custom WordPress theme source and GitHub Pages report package.</li>
-        </ul>
-        <p><strong>Verification:</strong> Public report, PDF, and full audit returned 200; browser check found no broken images and no horizontal overflow.</p>
-      </article>
-    </section>
-
-    <section>
-      <h2>How Future Versions Should Work</h2>
-      <article class="process">
-        <ul>
-          <li>Create or update the theme/report locally.</li>
-          <li>Run the audit and regenerate the public report assets.</li>
-          <li>Add a new entry to this version log with date, purpose, main changes, and verification result.</li>
-          <li>Commit and push to GitHub. GitHub Pages will automatically publish the latest `docs/` version.</li>
-          <li>For important milestones, keep the old PDF or make a dated folder if the team needs to compare versions.</li>
+          <li>Staging URL: <a href="https://staging.learningforkidz.com">https://staging.learningforkidz.com</a></li>
+          <li>Critical custom/WooCommerce pages have 0 remaining theme fixes.</li>
+          <li>Cart/checkout visual audit and strict checkout audit pass on desktop/mobile.</li>
+          <li>Product gallery interactions pass with 80 thumbnail states checked and 0 staging JS errors.</li>
+          <li>Performance improved significantly: requests reduced 78.85%, encoded KB reduced 67.2%, JS KB reduced 94.5%, CSS KB reduced 79.8%, load event reduced 25.35%.</li>
+          <li>Known next lane: sync staging product/search data so home/shop/product-brand/search ordering matches production exactly.</li>
         </ul>
       </article>
     </section>

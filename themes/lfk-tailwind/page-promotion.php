@@ -29,7 +29,7 @@ $promotion_cards = array(
 	),
 );
 ?>
-<div class="lfk-promotion-page" role="main">
+<main id="primary" class="lfk-promotion-page">
 	<section class="lfk-promotion-stage">
 		<ul class="lfk-promotion-grid">
 			<?php foreach ( $promotion_cards as $card ) : ?>
@@ -64,6 +64,6 @@ $promotion_cards = array(
 			<?php endforeach; ?>
 		</ul>
 	</section>
-</div>
+</main>
 <?php
 get_footer();

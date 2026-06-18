@@ -128,6 +128,10 @@ function lfk_custom_template_include( $template ) {
 		return lfk_theme_template_path( 'archive-product.php' ) ?: $template;
 	}
 
+	if ( is_front_page() ) {
+		return lfk_theme_template_path( 'front-page.php' ) ?: $template;
+	}
+
 	if ( is_home() ) {
 		return lfk_theme_template_path( 'home.php' ) ?: $template;
 	}
@@ -234,7 +238,7 @@ add_filter( 'woocommerce_form_field_args', function ( $args, $key ) {
 
 add_filter( 'woocommerce_enable_order_notes_field', function ( $enabled ) {
 	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
-		return false;
+		return true;
 	}
 
 	return $enabled;

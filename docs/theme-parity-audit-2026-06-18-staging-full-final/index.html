@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Full Route Snapshot</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5e687a;
+      --line: #dde4ec;
+      --panel: #fff;
+      --surface: #f7f9fb;
+      --cyan: #42bedd;
+      --blue: #2f6f9f;
+      --orange: #c96f45;
+      --green: #1e6a3d;
+      --gold: #87521c;
+      --red: #b54747;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", Tahoma, "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { display: block; max-width: 100%; }
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 68px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--orange);
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 0;
+      max-width: 1040px;
+      font-size: clamp(2.15rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; }
+    .lead {
+      margin-top: 16px;
+      max-width: 920px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section { margin-top: 34px; }
+    .summary, .callout, .card, details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .summary, .callout { padding: 18px; }
+    .summary ul, .callout ul { margin: 0; padding-left: 22px; }
+    li + li { margin-top: 7px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .metric {
+      min-height: 142px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .metric-value {
+      color: var(--blue);
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+    .metric-label {
+      margin-top: 8px;
+      font-weight: 900;
+    }
+    .metric p, .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card { padding: 16px; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th { font-weight: 900; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 29px;
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+    .badge.pass { background: #e6f6ed; color: var(--green); }
+    .badge.note { background: #fff2dc; color: var(--gold); }
+    .badge.fix { background: #fdeaea; color: var(--red); }
+    details { padding: 14px; }
+    details + details { margin-top: 12px; }
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    figure img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    figcaption {
+      padding: 9px 11px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    @media (max-width: 900px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr; }
+      .button { width: 100%; justify-content: center; }
+      figure img { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Visual Audit - 2026-06-18</p>
+    <h1>Full Route Snapshot</h1>
+    <p class="lead">All audited routes captured for transparency. DATA SYNC means staging product/search order differs from production content; it is not a theme layout bug.</p>
+    <div class="actions">
+      <a class="button primary" href="../">เปิด Team Overview</a>
+      <a class="button" href="theme-parity-audit.json">Raw JSON</a>
+      <a class="button" href="https://www.learningforkidz.com">Production</a>
+      <a class="button" href="https://staging.learningforkidz.com">Staging</a>
+    </div>
+    <section>
+      <h2>Summary</h2>
+      <div class="callout"><p>The full run had one transient blank about-page mobile capture; this folder has been patched with the clean about-page recheck screenshots and JSON.</p></div>
+      <div class="metrics">
+        <article class="metric"><div class="metric-value">42</div><div class="metric-label">route + viewport checks</div><p>Desktop and mobile screenshots.</p></article>
+        <article class="metric"><div class="metric-value">26</div><div class="metric-label">PASS</div><p>No detected issue in this route/viewport.</p></article>
+        <article class="metric"><div class="metric-value">8</div><div class="metric-label">Data sync notes</div><p>Product/search order differs from production content.</p></article>
+        <article class="metric"><div class="metric-value">0</div><div class="metric-label">Theme fixes</div><p>Remaining non-data layout issues.</p></article>
+      </div>
+    </section>
+    <section>
+      <h2>Checklist</h2>
+      <div class="table-wrap"><table><thead><tr><th>Page</th><th>Desktop</th><th>Mobile</th><th>Feedback</th></tr></thead><tbody><tr><th>Home</th><td><span class="badge note">DATA SYNC</span></td><td><span class="badge note">DATA SYNC</span></td><td>desktop: headings - Visible heading sequence/text differs mobile: headings - Visible heading sequence/text differs</td></tr><tr><th>Shop archive</th><td><span class="badge note">DATA SYNC</span></td><td><span class="badge note">DATA SYNC</span></td><td>desktop: headings - Visible heading sequence/text differs mobile: headings - Visible heading sequence/text differs</td></tr><tr><th>Product category archive</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Product brand archive</th><td><span class="badge note">DATA SYNC</span></td><td><span class="badge note">DATA SYNC</span></td><td>desktop: buttons - Visible button text/order differs mobile: buttons - Visible button text/order differs</td></tr><tr><th>Age taxonomy archive</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Single product</th><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td>desktop: related products - Production randomizes related product selections; compare card layout/boxes instead of exact product-title text mobile: related products - Production randomizes related product selections; compare card layout/boxes instead of exact product-title text</td></tr><tr><th>Post archive</th><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td>desktop: images - Image 3 dimensions/position differ mobile: images - Image 3 dimensions/position differ</td></tr><tr><th>Single post</th><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td>desktop: images - Image 7 dimensions/position differ mobile: images - Image 4 dimensions/position differ</td></tr><tr><th>Search results</th><td><span class="badge note">DATA SYNC</span></td><td><span class="badge note">DATA SYNC</span></td><td>desktop: headings - Visible heading sequence/text differs desktop: images - Image 1 dimensions/position differ mobile: headings - Visible heading sequence/text differs mobile: images - Image 1 dimensions/position differ</td></tr><tr><th>Cart</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Checkout</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>My Account</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Wishlist</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Contact page</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Promotion page</th><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td><span class="badge note">CONTENT/DATA DIFFERENCE</span></td><td>desktop: images - Image 10 dimensions/position differ mobile: images - Image 2 dimensions/position differ</td></tr><tr><th>Ages page</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Brands page</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>About page</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Refund policy</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>How to order</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr><tr><th>Privacy policy</th><td><span class="badge pass">PASS</span></td><td><span class="badge pass">PASS</span></td><td>No detected parity issues.</td></tr></tbody></table></div>
+    </section>
+    <section>
+      <h2>Screenshots</h2>
+      <p class="muted">เปิดแต่ละ section เพื่อดู production เทียบ staging ทั้ง desktop และ mobile.</p>
+      <details>
+      <summary>Home - desktop DATA SYNC, mobile DATA SYNC</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-home.png"><img src="desktop-prod-home.png" alt="Home desktop production"></a><figcaption>Home desktop production</figcaption></figure>
+        <figure><a href="desktop-local-home.png"><img src="desktop-local-home.png" alt="Home desktop staging"></a><figcaption>Home desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-home.png"><img src="mobile-prod-home.png" alt="Home mobile production"></a><figcaption>Home mobile production</figcaption></figure>
+        <figure><a href="mobile-local-home.png"><img src="mobile-local-home.png" alt="Home mobile staging"></a><figcaption>Home mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Shop archive - desktop DATA SYNC, mobile DATA SYNC</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-shop.png"><img src="desktop-prod-shop.png" alt="Shop archive desktop production"></a><figcaption>Shop archive desktop production</figcaption></figure>
+        <figure><a href="desktop-local-shop.png"><img src="desktop-local-shop.png" alt="Shop archive desktop staging"></a><figcaption>Shop archive desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-shop.png"><img src="mobile-prod-shop.png" alt="Shop archive mobile production"></a><figcaption>Shop archive mobile production</figcaption></figure>
+        <figure><a href="mobile-local-shop.png"><img src="mobile-local-shop.png" alt="Shop archive mobile staging"></a><figcaption>Shop archive mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Product category archive - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-product-category.png"><img src="desktop-prod-product-category.png" alt="Product category archive desktop production"></a><figcaption>Product category archive desktop production</figcaption></figure>
+        <figure><a href="desktop-local-product-category.png"><img src="desktop-local-product-category.png" alt="Product category archive desktop staging"></a><figcaption>Product category archive desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-product-category.png"><img src="mobile-prod-product-category.png" alt="Product category archive mobile production"></a><figcaption>Product category archive mobile production</figcaption></figure>
+        <figure><a href="mobile-local-product-category.png"><img src="mobile-local-product-category.png" alt="Product category archive mobile staging"></a><figcaption>Product category archive mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Product brand archive - desktop DATA SYNC, mobile DATA SYNC</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-product-brand.png"><img src="desktop-prod-product-brand.png" alt="Product brand archive desktop production"></a><figcaption>Product brand archive desktop production</figcaption></figure>
+        <figure><a href="desktop-local-product-brand.png"><img src="desktop-local-product-brand.png" alt="Product brand archive desktop staging"></a><figcaption>Product brand archive desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-product-brand.png"><img src="mobile-prod-product-brand.png" alt="Product brand archive mobile production"></a><figcaption>Product brand archive mobile production</figcaption></figure>
+        <figure><a href="mobile-local-product-brand.png"><img src="mobile-local-product-brand.png" alt="Product brand archive mobile staging"></a><figcaption>Product brand archive mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Age taxonomy archive - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-age-taxonomy.png"><img src="desktop-prod-age-taxonomy.png" alt="Age taxonomy archive desktop production"></a><figcaption>Age taxonomy archive desktop production</figcaption></figure>
+        <figure><a href="desktop-local-age-taxonomy.png"><img src="desktop-local-age-taxonomy.png" alt="Age taxonomy archive desktop staging"></a><figcaption>Age taxonomy archive desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-age-taxonomy.png"><img src="mobile-prod-age-taxonomy.png" alt="Age taxonomy archive mobile production"></a><figcaption>Age taxonomy archive mobile production</figcaption></figure>
+        <figure><a href="mobile-local-age-taxonomy.png"><img src="mobile-local-age-taxonomy.png" alt="Age taxonomy archive mobile staging"></a><figcaption>Age taxonomy archive mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Single product - desktop CONTENT/DATA DIFFERENCE, mobile CONTENT/DATA DIFFERENCE</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-single-product.png"><img src="desktop-prod-single-product.png" alt="Single product desktop production"></a><figcaption>Single product desktop production</figcaption></figure>
+        <figure><a href="desktop-local-single-product.png"><img src="desktop-local-single-product.png" alt="Single product desktop staging"></a><figcaption>Single product desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-single-product.png"><img src="mobile-prod-single-product.png" alt="Single product mobile production"></a><figcaption>Single product mobile production</figcaption></figure>
+        <figure><a href="mobile-local-single-product.png"><img src="mobile-local-single-product.png" alt="Single product mobile staging"></a><figcaption>Single product mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Post archive - desktop CONTENT/DATA DIFFERENCE, mobile CONTENT/DATA DIFFERENCE</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-article-archive.png"><img src="desktop-prod-article-archive.png" alt="Post archive desktop production"></a><figcaption>Post archive desktop production</figcaption></figure>
+        <figure><a href="desktop-local-article-archive.png"><img src="desktop-local-article-archive.png" alt="Post archive desktop staging"></a><figcaption>Post archive desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-article-archive.png"><img src="mobile-prod-article-archive.png" alt="Post archive mobile production"></a><figcaption>Post archive mobile production</figcaption></figure>
+        <figure><a href="mobile-local-article-archive.png"><img src="mobile-local-article-archive.png" alt="Post archive mobile staging"></a><figcaption>Post archive mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Single post - desktop CONTENT/DATA DIFFERENCE, mobile CONTENT/DATA DIFFERENCE</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-single-post.png"><img src="desktop-prod-single-post.png" alt="Single post desktop production"></a><figcaption>Single post desktop production</figcaption></figure>
+        <figure><a href="desktop-local-single-post.png"><img src="desktop-local-single-post.png" alt="Single post desktop staging"></a><figcaption>Single post desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-single-post.png"><img src="mobile-prod-single-post.png" alt="Single post mobile production"></a><figcaption>Single post mobile production</figcaption></figure>
+        <figure><a href="mobile-local-single-post.png"><img src="mobile-local-single-post.png" alt="Single post mobile staging"></a><figcaption>Single post mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Search results - desktop DATA SYNC, mobile DATA SYNC</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-search.png"><img src="desktop-prod-search.png" alt="Search results desktop production"></a><figcaption>Search results desktop production</figcaption></figure>
+        <figure><a href="desktop-local-search.png"><img src="desktop-local-search.png" alt="Search results desktop staging"></a><figcaption>Search results desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-search.png"><img src="mobile-prod-search.png" alt="Search results mobile production"></a><figcaption>Search results mobile production</figcaption></figure>
+        <figure><a href="mobile-local-search.png"><img src="mobile-local-search.png" alt="Search results mobile staging"></a><figcaption>Search results mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Cart - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-cart.png"><img src="desktop-prod-cart.png" alt="Cart desktop production"></a><figcaption>Cart desktop production</figcaption></figure>
+        <figure><a href="desktop-local-cart.png"><img src="desktop-local-cart.png" alt="Cart desktop staging"></a><figcaption>Cart desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-cart.png"><img src="mobile-prod-cart.png" alt="Cart mobile production"></a><figcaption>Cart mobile production</figcaption></figure>
+        <figure><a href="mobile-local-cart.png"><img src="mobile-local-cart.png" alt="Cart mobile staging"></a><figcaption>Cart mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Checkout - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-checkout.png"><img src="desktop-prod-checkout.png" alt="Checkout desktop production"></a><figcaption>Checkout desktop production</figcaption></figure>
+        <figure><a href="desktop-local-checkout.png"><img src="desktop-local-checkout.png" alt="Checkout desktop staging"></a><figcaption>Checkout desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-checkout.png"><img src="mobile-prod-checkout.png" alt="Checkout mobile production"></a><figcaption>Checkout mobile production</figcaption></figure>
+        <figure><a href="mobile-local-checkout.png"><img src="mobile-local-checkout.png" alt="Checkout mobile staging"></a><figcaption>Checkout mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>My Account - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-my-account.png"><img src="desktop-prod-my-account.png" alt="My Account desktop production"></a><figcaption>My Account desktop production</figcaption></figure>
+        <figure><a href="desktop-local-my-account.png"><img src="desktop-local-my-account.png" alt="My Account desktop staging"></a><figcaption>My Account desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-my-account.png"><img src="mobile-prod-my-account.png" alt="My Account mobile production"></a><figcaption>My Account mobile production</figcaption></figure>
+        <figure><a href="mobile-local-my-account.png"><img src="mobile-local-my-account.png" alt="My Account mobile staging"></a><figcaption>My Account mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Wishlist - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-wishlist.png"><img src="desktop-prod-wishlist.png" alt="Wishlist desktop production"></a><figcaption>Wishlist desktop production</figcaption></figure>
+        <figure><a href="desktop-local-wishlist.png"><img src="desktop-local-wishlist.png" alt="Wishlist desktop staging"></a><figcaption>Wishlist desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-wishlist.png"><img src="mobile-prod-wishlist.png" alt="Wishlist mobile production"></a><figcaption>Wishlist mobile production</figcaption></figure>
+        <figure><a href="mobile-local-wishlist.png"><img src="mobile-local-wishlist.png" alt="Wishlist mobile staging"></a><figcaption>Wishlist mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Contact page - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-contact.png"><img src="desktop-prod-contact.png" alt="Contact page desktop production"></a><figcaption>Contact page desktop production</figcaption></figure>
+        <figure><a href="desktop-local-contact.png"><img src="desktop-local-contact.png" alt="Contact page desktop staging"></a><figcaption>Contact page desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-contact.png"><img src="mobile-prod-contact.png" alt="Contact page mobile production"></a><figcaption>Contact page mobile production</figcaption></figure>
+        <figure><a href="mobile-local-contact.png"><img src="mobile-local-contact.png" alt="Contact page mobile staging"></a><figcaption>Contact page mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Promotion page - desktop CONTENT/DATA DIFFERENCE, mobile CONTENT/DATA DIFFERENCE</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-promotion.png"><img src="desktop-prod-promotion.png" alt="Promotion page desktop production"></a><figcaption>Promotion page desktop production</figcaption></figure>
+        <figure><a href="desktop-local-promotion.png"><img src="desktop-local-promotion.png" alt="Promotion page desktop staging"></a><figcaption>Promotion page desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-promotion.png"><img src="mobile-prod-promotion.png" alt="Promotion page mobile production"></a><figcaption>Promotion page mobile production</figcaption></figure>
+        <figure><a href="mobile-local-promotion.png"><img src="mobile-local-promotion.png" alt="Promotion page mobile staging"></a><figcaption>Promotion page mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Ages page - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-ages-page.png"><img src="desktop-prod-ages-page.png" alt="Ages page desktop production"></a><figcaption>Ages page desktop production</figcaption></figure>
+        <figure><a href="desktop-local-ages-page.png"><img src="desktop-local-ages-page.png" alt="Ages page desktop staging"></a><figcaption>Ages page desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-ages-page.png"><img src="mobile-prod-ages-page.png" alt="Ages page mobile production"></a><figcaption>Ages page mobile production</figcaption></figure>
+        <figure><a href="mobile-local-ages-page.png"><img src="mobile-local-ages-page.png" alt="Ages page mobile staging"></a><figcaption>Ages page mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Brands page - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-brands-page.png"><img src="desktop-prod-brands-page.png" alt="Brands page desktop production"></a><figcaption>Brands page desktop production</figcaption></figure>
+        <figure><a href="desktop-local-brands-page.png"><img src="desktop-local-brands-page.png" alt="Brands page desktop staging"></a><figcaption>Brands page desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-brands-page.png"><img src="mobile-prod-brands-page.png" alt="Brands page mobile production"></a><figcaption>Brands page mobile production</figcaption></figure>
+        <figure><a href="mobile-local-brands-page.png"><img src="mobile-local-brands-page.png" alt="Brands page mobile staging"></a><figcaption>Brands page mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>About page - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-about-page.png"><img src="desktop-prod-about-page.png" alt="About page desktop production"></a><figcaption>About page desktop production</figcaption></figure>
+        <figure><a href="desktop-local-about-page.png"><img src="desktop-local-about-page.png" alt="About page desktop staging"></a><figcaption>About page desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-about-page.png"><img src="mobile-prod-about-page.png" alt="About page mobile production"></a><figcaption>About page mobile production</figcaption></figure>
+        <figure><a href="mobile-local-about-page.png"><img src="mobile-local-about-page.png" alt="About page mobile staging"></a><figcaption>About page mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Refund policy - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-refund-page.png"><img src="desktop-prod-refund-page.png" alt="Refund policy desktop production"></a><figcaption>Refund policy desktop production</figcaption></figure>
+        <figure><a href="desktop-local-refund-page.png"><img src="desktop-local-refund-page.png" alt="Refund policy desktop staging"></a><figcaption>Refund policy desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-refund-page.png"><img src="mobile-prod-refund-page.png" alt="Refund policy mobile production"></a><figcaption>Refund policy mobile production</figcaption></figure>
+        <figure><a href="mobile-local-refund-page.png"><img src="mobile-local-refund-page.png" alt="Refund policy mobile staging"></a><figcaption>Refund policy mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>How to order - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-how-to-orders.png"><img src="desktop-prod-how-to-orders.png" alt="How to order desktop production"></a><figcaption>How to order desktop production</figcaption></figure>
+        <figure><a href="desktop-local-how-to-orders.png"><img src="desktop-local-how-to-orders.png" alt="How to order desktop staging"></a><figcaption>How to order desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-how-to-orders.png"><img src="mobile-prod-how-to-orders.png" alt="How to order mobile production"></a><figcaption>How to order mobile production</figcaption></figure>
+        <figure><a href="mobile-local-how-to-orders.png"><img src="mobile-local-how-to-orders.png" alt="How to order mobile staging"></a><figcaption>How to order mobile staging</figcaption></figure>
+      </div>
+    </details><details>
+      <summary>Privacy policy - desktop PASS, mobile PASS</summary>
+      <div class="shots">
+        <figure><a href="desktop-prod-privacy-page.png"><img src="desktop-prod-privacy-page.png" alt="Privacy policy desktop production"></a><figcaption>Privacy policy desktop production</figcaption></figure>
+        <figure><a href="desktop-local-privacy-page.png"><img src="desktop-local-privacy-page.png" alt="Privacy policy desktop staging"></a><figcaption>Privacy policy desktop staging</figcaption></figure>
+        <figure><a href="mobile-prod-privacy-page.png"><img src="mobile-prod-privacy-page.png" alt="Privacy policy mobile production"></a><figcaption>Privacy policy mobile production</figcaption></figure>
+        <figure><a href="mobile-local-privacy-page.png"><img src="mobile-local-privacy-page.png" alt="Privacy policy mobile staging"></a><figcaption>Privacy policy mobile staging</figcaption></figure>
+      </div>
+    </details>
+    </section>
+  </main>
+</body>
+</html>

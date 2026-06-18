@@ -2,6 +2,10 @@
 
 get_header();
 ?>
+<section class="lfk-article-archive-hero" aria-label="<?php esc_attr_e( 'Article', 'lfk-tailwind' ); ?>">
+	<div class="lfk-article-archive-hero-bg"></div>
+	<div class="lfk-article-archive-title"><?php esc_html_e( 'Article', 'lfk-tailwind' ); ?></div>
+</section>
 <div class="lfk-post-index" role="main">
 	<div class="lfk-shell">
 		<?php if ( have_posts() ) : ?>
