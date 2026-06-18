@@ -239,7 +239,24 @@
       });
     }
 
-    if (window.jQuery) {
+    document.body.addEventListener('click', function (event) {
+      var button = event.target.closest ? event.target.closest('.lfk-add-to-cart.ajax_add_to_cart') : null;
+      if (button) button.classList.add('loading');
+    });
+
+    function bindWooEvents(attempt) {
+      if (!window.jQuery) {
+        if (attempt < 20) {
+          window.setTimeout(function () {
+            bindWooEvents(attempt + 1);
+          }, 250);
+        }
+        return;
+      }
+
+      if (document.body.getAttribute('data-lfk-commerce-bound') === '1') return;
+      document.body.setAttribute('data-lfk-commerce-bound', '1');
+
       window.jQuery(document.body).on('adding_to_cart', function (event, button) {
         if (button && button.addClass) button.addClass('loading');
       });
@@ -250,6 +267,8 @@
         showToast('เพิ่มสินค้าในตะกร้าแล้ว');
       });
     }
+
+    bindWooEvents(0);
 
     Array.prototype.slice.call(document.querySelectorAll('.lfk-single-cart form.cart')).forEach(function (form) {
       form.addEventListener('submit', function () {
