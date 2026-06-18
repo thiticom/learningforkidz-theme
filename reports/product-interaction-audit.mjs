@@ -4,12 +4,13 @@ import { chromium } from 'playwright';
 
 const ROOT = process.cwd();
 const DATE = new Date().toISOString().slice(0, 10);
-const OUT_DIR = path.join(ROOT, 'reports', `product-interaction-audit-${DATE}`);
+const RUN_LABEL = process.env.LFK_AUDIT_RUN_LABEL || DATE;
+const OUT_DIR = path.join(ROOT, 'reports', `product-interaction-audit-${RUN_LABEL}`);
 const NAVIGATION_TIMEOUT_MS = Number(process.env.LFK_AUDIT_NAV_TIMEOUT_MS || 120000);
 
 const BASES = {
-  prod: 'https://www.learningforkidz.com',
-  local: 'http://100.109.57.34:8085',
+  prod: process.env.LFK_AUDIT_PROD_BASE || 'https://www.learningforkidz.com',
+  local: process.env.LFK_AUDIT_LOCAL_BASE || 'http://100.109.57.34:8085',
 };
 
 const VIEWPORTS = {

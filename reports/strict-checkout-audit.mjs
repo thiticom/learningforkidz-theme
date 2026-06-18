@@ -3,13 +3,15 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 const ROOT = process.cwd();
-const OUT_DIR = path.join(ROOT, 'reports', `strict-checkout-audit-${new Date().toISOString().slice(0, 10)}`);
+const DATE = new Date().toISOString().slice(0, 10);
+const RUN_LABEL = process.env.LFK_AUDIT_RUN_LABEL || DATE;
+const OUT_DIR = path.join(ROOT, 'reports', `strict-checkout-audit-${RUN_LABEL}`);
 const PRODUCT_ID = process.env.LFK_AUDIT_PRODUCT_ID || '32848';
 const NAVIGATION_TIMEOUT_MS = Number(process.env.LFK_AUDIT_NAV_TIMEOUT_MS || 120000);
 
 const ENVS = {
-  prod: 'https://www.learningforkidz.com',
-  local: 'http://100.109.57.34:8085',
+  prod: process.env.LFK_AUDIT_PROD_BASE || 'https://www.learningforkidz.com',
+  local: process.env.LFK_AUDIT_LOCAL_BASE || 'http://100.109.57.34:8085',
 };
 
 const VIEWPORTS = {

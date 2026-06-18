@@ -17,6 +17,7 @@ settings, and private credentials are not included.
 - `AGENTS.md` contains agent operating rules.
 - `docs/application-context.md` explains the theme, runtime assumptions, and external dependencies.
 - `docs/remote-development.md` covers the Hetzner Codex development folder and Docker workflow.
+- `docs/staging-deployment.md` lists the staging inputs and audit commands needed before a real staging deploy.
 - `docs/verification.md` lists build and runtime checks.
 
 ## Local Theme Build
