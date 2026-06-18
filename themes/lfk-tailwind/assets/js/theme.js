@@ -153,18 +153,55 @@
 
     galleries.forEach(function (gallery) {
       var main = gallery.querySelector('[data-lfk-product-main]');
+      var mainArea = gallery.querySelector('.lfk-product-gallery-main');
+      var track = gallery.querySelector('.lfk-product-gallery-track');
+      var slides = track ? Array.prototype.slice.call(track.querySelectorAll('img:not(.lfk-product-gallery-zoom-clone):not(.lfk-product-zoom-marker)')) : [];
       var thumbs = Array.prototype.slice.call(gallery.querySelectorAll('[data-lfk-product-thumb]'));
-      if (!main || !thumbs.length) return;
+      var index = 0;
 
-      thumbs.forEach(function (thumb) {
+      if (!thumbs.length || (!main && !track)) return;
+
+      function slideWidth() {
+        var firstSlide = slides[0];
+        var slideBox = firstSlide ? firstSlide.getBoundingClientRect() : null;
+        var mainBox = mainArea ? mainArea.getBoundingClientRect() : null;
+        return (slideBox && slideBox.width) || (mainBox && mainBox.width) || 0;
+      }
+
+      function show(nextIndex) {
+        index = Math.max(0, Math.min(nextIndex, thumbs.length - 1));
+
+        if (main) {
+          main.src = thumbs[index].getAttribute('data-image');
+          main.srcset = thumbs[index].getAttribute('data-srcset') || '';
+        }
+
+        if (mainArea) {
+          mainArea.style.setProperty('--lfk-gallery-current-mobile-height', (thumbs[index].getAttribute('data-mobile-height') || '370') + 'px');
+          mainArea.style.setProperty('--lfk-gallery-current-desktop-height', (thumbs[index].getAttribute('data-desktop-height') || '575') + 'px');
+        }
+
+        if (track && slides.length) {
+          track.style.transform = 'translateX(' + (-index * slideWidth()) + 'px)';
+        }
+
+        thumbs.forEach(function (item, thumbIndex) {
+          item.classList.toggle('is-active', thumbIndex === index);
+          item.setAttribute('aria-current', thumbIndex === index ? 'true' : 'false');
+        });
+      }
+
+      thumbs.forEach(function (thumb, thumbIndex) {
         thumb.addEventListener('click', function () {
-          main.src = thumb.getAttribute('data-image');
-          main.srcset = thumb.getAttribute('data-srcset') || '';
-          thumbs.forEach(function (item) {
-            item.classList.toggle('is-active', item === thumb);
-          });
+          show(thumbIndex);
         });
       });
+
+      window.addEventListener('resize', function () {
+        show(index);
+      });
+
+      show(0);
     });
   }
 

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning For Kidz Strict Checkout Evidence</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #5f6a7d;
+      --line: #dfe4ec;
+      --panel: #fff;
+      --surface: #f7f9fb;
+      --cyan: #42bedd;
+      --blue: #2f6f9f;
+      --orange: #cc6f47;
+      --olive: #6d9444;
+      --gold: #a8871f;
+      --red: #b54747;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { display: block; max-width: 100%; }
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 68px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--orange);
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 0;
+      max-width: 1020px;
+      font-size: clamp(2.25rem, 5vw, 4.15rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; }
+    .lead {
+      margin-top: 16px;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section { margin-top: 34px; }
+    .summary, .callout, .card, details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .summary, .callout { padding: 18px; }
+    .summary ul, .callout ul { margin: 0; padding-left: 22px; }
+    li + li { margin-top: 7px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .metric {
+      min-height: 145px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .metric-value {
+      color: var(--blue);
+      font-size: clamp(2.1rem, 5vw, 3.3rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+    .metric:nth-child(2) .metric-value { color: var(--olive); }
+    .metric:nth-child(3) .metric-value { color: var(--orange); }
+    .metric:nth-child(4) .metric-value { color: var(--gold); }
+    .metric-label {
+      margin-top: 8px;
+      font-weight: 900;
+    }
+    .metric p, .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card { padding: 16px; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th { font-weight: 900; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 29px;
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+    .badge.pass { background: #e6f6ed; color: #1e6a3d; }
+    .badge.note { background: #fff2dc; color: #87521c; }
+    .badge.fix { background: #fdeaea; color: var(--red); }
+    details { padding: 14px; }
+    details + details { margin-top: 12px; }
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    figure img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    figcaption {
+      padding: 9px 11px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .small-table table { min-width: 620px; }
+    @media (max-width: 900px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr; }
+      .button { width: 100%; justify-content: center; }
+      figure img { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Checkout Audit - 2026-06-18</p>
+    
+    <h1>Strict Checkout Audit: PASS</h1>
+    <p class="lead">Checkout ใช้ custom WooCommerce/Tailwind template โดย production Elementor เป็น visual reference เท่านั้น. รอบนี้ desktop และ mobile ยังผ่าน strict audit.</p>
+    <div class="actions">
+      <a class="button primary" href="../">เปิด Team Overview</a>
+      <a class="button" href="../performance-audit-2026-06-18/">Performance Evidence</a>
+      <a class="button" href="checkout-audit.json">Raw JSON</a>
+    </div>
+
+    <section>
+      <h2>Checkout Checklist</h2>
+      <div class="metrics">
+        <article class="metric"><div class="metric-value">PASS</div><div class="metric-label">Desktop checkout</div><p>No strict checkout differences detected.</p></article>
+        <article class="metric"><div class="metric-value">PASS</div><div class="metric-label">Mobile checkout</div><p>No strict checkout differences detected.</p></article>
+        <article class="metric"><div class="metric-value">Pure</div><div class="metric-label">Custom theme path</div><p>No local Elementor-rendered checkout dependency.</p></article>
+        <article class="metric"><div class="metric-value">Woo</div><div class="metric-label">Commerce flow</div><p>Cart seeding and checkout route were exercised.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Screenshots</h2>
+      <div class="shots">
+        <figure><a href="desktop-prod-checkout.png"><img src="desktop-prod-checkout.png" alt="Checkout desktop production"></a><figcaption>Checkout desktop production</figcaption></figure>
+        <figure><a href="desktop-local-checkout.png"><img src="desktop-local-checkout.png" alt="Checkout desktop custom theme"></a><figcaption>Checkout desktop custom theme</figcaption></figure>
+        <figure><a href="mobile-prod-checkout.png"><img src="mobile-prod-checkout.png" alt="Checkout mobile production"></a><figcaption>Checkout mobile production</figcaption></figure>
+        <figure><a href="mobile-local-checkout.png"><img src="mobile-local-checkout.png" alt="Checkout mobile custom theme"></a><figcaption>Checkout mobile custom theme</figcaption></figure>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

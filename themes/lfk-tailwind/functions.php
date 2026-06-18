@@ -30,9 +30,16 @@ add_action( 'wp_enqueue_scripts', function () {
 	$js_path  = $theme_dir . '/assets/js/theme.js';
 
 	wp_enqueue_style(
+		'lfk-anuphan',
+		'https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400;500;600;700&display=swap',
+		array(),
+		null
+	);
+
+	wp_enqueue_style(
 		'lfk-tailwind',
 		$theme_uri . '/assets/dist/theme.css',
-		array(),
+		array( 'lfk-anuphan' ),
 		file_exists( $css_path ) ? filemtime( $css_path ) : LFK_TAILWIND_VERSION
 	);
 

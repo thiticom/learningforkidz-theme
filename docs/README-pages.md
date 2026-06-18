@@ -1,16 +1,15 @@
 # GitHub Pages Report
 
-Serve this folder with GitHub Pages using the repository `main` branch and `/docs` folder.
+Public report files for Learning For Kidz custom theme checkpoints.
 
-- `index.html`: Thai team communication brief
-- `team-brief-th.pdf`: downloadable PDF
+- `index.html`: latest Thai team overview
 - `version-log.html`: reader-facing version and update log
-- `lfk-section-audit-2026-06-11/`: full visual audit
-- `theme-parity-audit-2026-06-17-full-pure/`: full pure custom theme PASS evidence for all audited routes
-- `theme-parity-audit-2026-06-17-taxonomies-pure/`: pure custom product taxonomy archive PASS evidence
-- `theme-parity-audit-2026-06-17-shop-pure/`: pure custom shop/product archive PASS evidence
-- `theme-parity-audit-2026-06-17-contact-pure/`: pure custom contact page PASS evidence
-- `theme-parity-audit-2026-06-17-promotion-pure/`: pure custom promotion page PASS evidence
-- `strict-checkout-audit-2026-06-17-pure/`: pure custom checkout PASS evidence
-- `theme-parity-audit-2026-06-17-cart-pure/`: pure custom cart PASS evidence
-- `theme-parity-audit-2026-06-17-cart/`: superseded cart evidence with desktop/mobile screenshots
+- `theme-parity-audit-2026-06-18-full/`: latest full visual parity evidence
+- `product-interaction-audit-2026-06-18/`: latest product gallery interaction evidence
+- `performance-audit-2026-06-18/`: latest speed/performance evidence
+- `strict-checkout-audit-2026-06-18/`: latest strict checkout evidence
+- `team-brief-th.pdf`: older Thai team PDF brief
+- `lfk-section-audit-2026-06-11/`: older section audit
+- `theme-parity-audit-2026-06-17-full-pure/`: previous full pure custom theme checkpoint
+
+GitHub Pages publishes the current `docs/` folder from `main`. For each important checkpoint, keep a dated evidence folder and add a version-log entry.

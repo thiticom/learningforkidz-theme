@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning For Kidz Performance Evidence</title>
+  <style>
+    :root {
+      --ink: #18202f;
+      --muted: #5f6a7d;
+      --line: #dfe4ec;
+      --panel: #fff;
+      --surface: #f7f9fb;
+      --cyan: #42bedd;
+      --blue: #2f6f9f;
+      --orange: #cc6f47;
+      --olive: #6d9444;
+      --gold: #a8871f;
+      --red: #b54747;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: "Noto Sans Thai", "Tahoma", "Segoe UI", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    img { display: block; max-width: 100%; }
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 68px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--orange);
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 0;
+      max-width: 1020px;
+      font-size: clamp(2.25rem, 5vw, 4.15rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+    p { margin: 0 0 12px; }
+    .lead {
+      margin-top: 16px;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button.primary {
+      border-color: var(--cyan);
+      background: var(--cyan);
+      color: #082330;
+    }
+    section { margin-top: 34px; }
+    .summary, .callout, .card, details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .summary, .callout { padding: 18px; }
+    .summary ul, .callout ul { margin: 0; padding-left: 22px; }
+    li + li { margin-top: 7px; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .metric {
+      min-height: 145px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    .metric-value {
+      color: var(--blue);
+      font-size: clamp(2.1rem, 5vw, 3.3rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+    .metric:nth-child(2) .metric-value { color: var(--olive); }
+    .metric:nth-child(3) .metric-value { color: var(--orange); }
+    .metric:nth-child(4) .metric-value { color: var(--gold); }
+    .metric-label {
+      margin-top: 8px;
+      font-weight: 900;
+    }
+    .metric p, .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card { padding: 16px; }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+    table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+    th { font-weight: 900; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 29px;
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
+    .badge.pass { background: #e6f6ed; color: #1e6a3d; }
+    .badge.note { background: #fff2dc; color: #87521c; }
+    .badge.fix { background: #fdeaea; color: var(--red); }
+    details { padding: 14px; }
+    details + details { margin-top: 12px; }
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    figure img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: top;
+      border-bottom: 1px solid var(--line);
+    }
+    figcaption {
+      padding: 9px 11px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .small-table table { min-width: 620px; }
+    @media (max-width: 900px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .metrics, .grid, .shots { grid-template-columns: 1fr; }
+      .button { width: 100%; justify-content: center; }
+      figure img { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Performance Audit - 2026-06-18</p>
+    
+    <h1>Performance Audit: Significant Load Reduction</h1>
+    <p class="lead">Percent reduced หมายถึง (production - local custom theme) / production x 100. ค่า negative แปลว่า local รอบนี้ใหญ่กว่าหรือช้ากว่าใน metric นั้น; report นี้จึงแยก image KB note ไว้ชัดเจน.</p>
+    <div class="actions">
+      <a class="button primary" href="../">เปิด Team Overview</a>
+      <a class="button" href="../theme-parity-audit-2026-06-18-full/">Full Visual Evidence</a>
+      <a class="button" href="performance.json">Raw JSON</a>
+    </div>
+
+    <section>
+      <h2>Median Improvement</h2>
+      <div class="metrics">
+        <article class="metric"><div class="metric-value">82%</div><div class="metric-label">Requests reduced</div><p>Average route requests: prod 168, local 41.</p></article>
+        <article class="metric"><div class="metric-value">71.3%</div><div class="metric-label">Encoded KB reduced</div><p>Average encoded KB: prod 2737, local 1017.</p></article>
+        <article class="metric"><div class="metric-value">87%</div><div class="metric-label">Load event reduced</div><p>Median load-event improvement across 42 route checks.</p></article>
+        <article class="metric"><div class="metric-value">85.7%</div><div class="metric-label">LCP reduced</div><p>Largest Contentful Paint proxy from browser performance entries.</p></article>
+      </div>
+      <div class="metrics">
+        <article class="metric"><div class="metric-value">85.5%</div><div class="metric-label">TBT proxy reduced</div><p>Long-task blocking proxy; lower is better.</p></article>
+        <article class="metric"><div class="metric-value">95.9%</div><div class="metric-label">JS KB reduced</div><p>Main win from removing Elementor/WooLentor runtime from custom theme pages.</p></article>
+        <article class="metric"><div class="metric-value">84.2%</div><div class="metric-label">CSS KB reduced</div><p>Custom Tailwind CSS replaces large page-builder CSS stacks.</p></article>
+        <article class="metric"><div class="metric-value">0.3%</div><div class="metric-label">Image KB reduced</div><p>Near-flat by design because screenshots/content still use real product imagery.</p></article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Watchlist / Lowest Load Reductions</h2>
+      <p class="muted">These are still mostly faster overall, but they are the pages to watch if we optimize further. Desktop home had only 11% load-event reduction in this run, even though request count and JS weight dropped sharply.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Load</th><th>Requests</th><th>KB</th><th>LCP</th><th>TBT proxy</th><th>Image KB</th></tr></thead>
+          <tbody>
+      <tr>
+        <th>desktop / Home</th>
+        <td>11%</td>
+        <td>85.9%</td>
+        <td>56.9%</td>
+        <td>11.9%</td>
+        <td>61.1%</td>
+        <td>-24.1%</td>
+      </tr>
+      <tr>
+        <th>mobile / Ages page</th>
+        <td>59.5%</td>
+        <td>88.6%</td>
+        <td>88.1%</td>
+        <td>57.5%</td>
+        <td>100%</td>
+        <td>16.1%</td>
+      </tr>
+      <tr>
+        <th>desktop / Contact page</th>
+        <td>73.9%</td>
+        <td>51.7%</td>
+        <td>30.1%</td>
+        <td>80.8%</td>
+        <td>49.4%</td>
+        <td>0.4%</td>
+      </tr>
+      <tr>
+        <th>mobile / Contact page</th>
+        <td>74.9%</td>
+        <td>69.5%</td>
+        <td>37.8%</td>
+        <td>86%</td>
+        <td>-54.5%</td>
+        <td>2.2%</td>
+      </tr>
+      <tr>
+        <th>desktop / Product brand archive</th>
+        <td>77.9%</td>
+        <td>80.5%</td>
+        <td>59.7%</td>
+        <td>75.3%</td>
+        <td>70.7%</td>
+        <td>-151.4%</td>
+      </tr>
+      <tr>
+        <th>mobile / Cart</th>
+        <td>78.3%</td>
+        <td>57.7%</td>
+        <td>45.2%</td>
+        <td>78%</td>
+        <td>98.6%</td>
+        <td>-146.8%</td>
+      </tr>
+      <tr>
+        <th>mobile / Product brand archive</th>
+        <td>79.2%</td>
+        <td>82.4%</td>
+        <td>61.4%</td>
+        <td>76.8%</td>
+        <td>65.5%</td>
+        <td>-33.1%</td>
+      </tr>
+      <tr>
+        <th>desktop / Refund policy</th>
+        <td>79.5%</td>
+        <td>86.1%</td>
+        <td>78.8%</td>
+        <td>77.8%</td>
+        <td>85.7%</td>
+        <td>0.9%</td>
+      </tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>All Route Metrics</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Requests</th><th>KB</th><th>DCL</th><th>Load</th><th>LCP</th><th>TBT proxy</th><th>JS KB</th><th>CSS KB</th><th>Image KB</th></tr></thead>
+          <tbody>
+      <tr>
+        <th>desktop / Home</th>
+        <td>85.9%</td>
+        <td>56.9%</td>
+        <td>-0.5%</td>
+        <td>11%</td>
+        <td>11.9%</td>
+        <td>61.1%</td>
+        <td>96.2%</td>
+        <td>91.5%</td>
+        <td>-24.1%</td>
+      </tr>
+      <tr>
+        <th>desktop / Shop archive</th>
+        <td>79.3%</td>
+        <td>68.3%</td>
+        <td>83.6%</td>
+        <td>84.5%</td>
+        <td>81.9%</td>
+        <td>34.5%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>0.6%</td>
+      </tr>
+      <tr>
+        <th>desktop / Product category archive</th>
+        <td>79.9%</td>
+        <td>81.9%</td>
+        <td>83.6%</td>
+        <td>84.8%</td>
+        <td>82.8%</td>
+        <td>70.5%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>-3.1%</td>
+      </tr>
+      <tr>
+        <th>desktop / Product brand archive</th>
+        <td>80.5%</td>
+        <td>59.7%</td>
+        <td>76%</td>
+        <td>77.9%</td>
+        <td>75.3%</td>
+        <td>70.7%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>-151.4%</td>
+      </tr>
+      <tr>
+        <th>desktop / Age taxonomy archive</th>
+        <td>81%</td>
+        <td>84%</td>
+        <td>84.5%</td>
+        <td>85.6%</td>
+        <td>84%</td>
+        <td>57.3%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>-3.6%</td>
+      </tr>
+      <tr>
+        <th>desktop / Single product</th>
+        <td>77.9%</td>
+        <td>63%</td>
+        <td>83%</td>
+        <td>84.3%</td>
+        <td>78.5%</td>
+        <td>81.8%</td>
+        <td>94.4%</td>
+        <td>84.7%</td>
+        <td>17.1%</td>
+      </tr>
+      <tr>
+        <th>desktop / Post archive</th>
+        <td>82.9%</td>
+        <td>78.9%</td>
+        <td>90.7%</td>
+        <td>91.2%</td>
+        <td>89.4%</td>
+        <td>74.6%</td>
+        <td>96.7%</td>
+        <td>83.4%</td>
+        <td>-20.2%</td>
+      </tr>
+      <tr>
+        <th>desktop / Single post</th>
+        <td>81.7%</td>
+        <td>70.1%</td>
+        <td>88.1%</td>
+        <td>88.7%</td>
+        <td>87.4%</td>
+        <td>42.5%</td>
+        <td>96.6%</td>
+        <td>84.4%</td>
+        <td>0.7%</td>
+      </tr>
+      <tr>
+        <th>desktop / Search results</th>
+        <td>78.1%</td>
+        <td>69.1%</td>
+        <td>90.1%</td>
+        <td>89.4%</td>
+        <td>89.7%</td>
+        <td>83.9%</td>
+        <td>95.9%</td>
+        <td>84.2%</td>
+        <td>-7%</td>
+      </tr>
+      <tr>
+        <th>desktop / Cart</th>
+        <td>55.6%</td>
+        <td>50.3%</td>
+        <td>79.7%</td>
+        <td>80.4%</td>
+        <td>80.4%</td>
+        <td>92.9%</td>
+        <td>53.2%</td>
+        <td>82.1%</td>
+        <td>3.5%</td>
+      </tr>
+      <tr>
+        <th>desktop / Checkout</th>
+        <td>51.1%</td>
+        <td>48.6%</td>
+        <td>81%</td>
+        <td>81.4%</td>
+        <td>65%</td>
+        <td>85.4%</td>
+        <td>51.3%</td>
+        <td>74.6%</td>
+        <td>6.3%</td>
+      </tr>
+      <tr>
+        <th>desktop / My Account</th>
+        <td>70.7%</td>
+        <td>64.5%</td>
+        <td>86.1%</td>
+        <td>86.4%</td>
+        <td>83.5%</td>
+        <td>64.9%</td>
+        <td>74%</td>
+        <td>69.1%</td>
+        <td>0.9%</td>
+      </tr>
+      <tr>
+        <th>desktop / Wishlist</th>
+        <td>78.1%</td>
+        <td>77.1%</td>
+        <td>88.8%</td>
+        <td>89%</td>
+        <td>88.5%</td>
+        <td>100%</td>
+        <td>95.4%</td>
+        <td>79.6%</td>
+        <td>0.9%</td>
+      </tr>
+      <tr>
+        <th>desktop / Contact page</th>
+        <td>51.7%</td>
+        <td>30.1%</td>
+        <td>81.9%</td>
+        <td>73.9%</td>
+        <td>80.8%</td>
+        <td>49.4%</td>
+        <td>32.5%</td>
+        <td>66.1%</td>
+        <td>0.4%</td>
+      </tr>
+      <tr>
+        <th>desktop / Promotion page</th>
+        <td>81.9%</td>
+        <td>14.3%</td>
+        <td>93.4%</td>
+        <td>93.6%</td>
+        <td>92.2%</td>
+        <td>97.1%</td>
+        <td>96%</td>
+        <td>90.3%</td>
+        <td>-211.3%</td>
+      </tr>
+      <tr>
+        <th>desktop / Ages page</th>
+        <td>83.7%</td>
+        <td>73.1%</td>
+        <td>85.9%</td>
+        <td>86.8%</td>
+        <td>84.4%</td>
+        <td>66.7%</td>
+        <td>96.6%</td>
+        <td>90.5%</td>
+        <td>0.8%</td>
+      </tr>
+      <tr>
+        <th>desktop / Brands page</th>
+        <td>82.6%</td>
+        <td>84.4%</td>
+        <td>89%</td>
+        <td>89.7%</td>
+        <td>88.2%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.4%</td>
+        <td>2.6%</td>
+      </tr>
+      <tr>
+        <th>desktop / About page</th>
+        <td>85.4%</td>
+        <td>72.6%</td>
+        <td>93.3%</td>
+        <td>93.5%</td>
+        <td>91.8%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>-33.1%</td>
+      </tr>
+      <tr>
+        <th>desktop / Refund policy</th>
+        <td>86.1%</td>
+        <td>78.8%</td>
+        <td>78.4%</td>
+        <td>79.5%</td>
+        <td>77.8%</td>
+        <td>85.7%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>0.9%</td>
+      </tr>
+      <tr>
+        <th>desktop / How to order</th>
+        <td>86.7%</td>
+        <td>90.6%</td>
+        <td>92.3%</td>
+        <td>92.6%</td>
+        <td>91.5%</td>
+        <td>75.9%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>6.3%</td>
+      </tr>
+      <tr>
+        <th>desktop / Privacy policy</th>
+        <td>86.1%</td>
+        <td>78.8%</td>
+        <td>89%</td>
+        <td>89.4%</td>
+        <td>88%</td>
+        <td>66.7%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>0.9%</td>
+      </tr>
+      <tr>
+        <th>mobile / Home</th>
+        <td>86.5%</td>
+        <td>52%</td>
+        <td>83.8%</td>
+        <td>85.2%</td>
+        <td>85.5%</td>
+        <td>72.8%</td>
+        <td>96.2%</td>
+        <td>91.5%</td>
+        <td>-85.5%</td>
+      </tr>
+      <tr>
+        <th>mobile / Shop archive</th>
+        <td>81.5%</td>
+        <td>47.1%</td>
+        <td>86.7%</td>
+        <td>87.7%</td>
+        <td>85.7%</td>
+        <td>100%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>0.2%</td>
+      </tr>
+      <tr>
+        <th>mobile / Product category archive</th>
+        <td>82.1%</td>
+        <td>73.6%</td>
+        <td>80.7%</td>
+        <td>82.4%</td>
+        <td>80.4%</td>
+        <td>88.9%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>-1.6%</td>
+      </tr>
+      <tr>
+        <th>mobile / Product brand archive</th>
+        <td>82.4%</td>
+        <td>61.4%</td>
+        <td>77.6%</td>
+        <td>79.2%</td>
+        <td>76.8%</td>
+        <td>65.5%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>-33.1%</td>
+      </tr>
+      <tr>
+        <th>mobile / Age taxonomy archive</th>
+        <td>81.5%</td>
+        <td>76.1%</td>
+        <td>86.1%</td>
+        <td>87.1%</td>
+        <td>85.7%</td>
+        <td>100%</td>
+        <td>94.7%</td>
+        <td>82.2%</td>
+        <td>-6.6%</td>
+      </tr>
+      <tr>
+        <th>mobile / Single product</th>
+        <td>78.4%</td>
+        <td>59.9%</td>
+        <td>85.4%</td>
+        <td>86.5%</td>
+        <td>84.5%</td>
+        <td>83.3%</td>
+        <td>94.4%</td>
+        <td>84.7%</td>
+        <td>26.3%</td>
+      </tr>
+      <tr>
+        <th>mobile / Post archive</th>
+        <td>86.3%</td>
+        <td>73.6%</td>
+        <td>91.6%</td>
+        <td>92%</td>
+        <td>90.4%</td>
+        <td>100%</td>
+        <td>96.7%</td>
+        <td>83.4%</td>
+        <td>0.6%</td>
+      </tr>
+      <tr>
+        <th>mobile / Single post</th>
+        <td>84.8%</td>
+        <td>75.1%</td>
+        <td>88.5%</td>
+        <td>89.2%</td>
+        <td>87.7%</td>
+        <td>66.7%</td>
+        <td>96.6%</td>
+        <td>84.4%</td>
+        <td>0.7%</td>
+      </tr>
+      <tr>
+        <th>mobile / Search results</th>
+        <td>82.1%</td>
+        <td>72.8%</td>
+        <td>91.7%</td>
+        <td>92.1%</td>
+        <td>91.5%</td>
+        <td>100%</td>
+        <td>95.9%</td>
+        <td>84.2%</td>
+        <td>-4.3%</td>
+      </tr>
+      <tr>
+        <th>mobile / Cart</th>
+        <td>57.7%</td>
+        <td>45.2%</td>
+        <td>77.3%</td>
+        <td>78.3%</td>
+        <td>78%</td>
+        <td>98.6%</td>
+        <td>53.2%</td>
+        <td>82%</td>
+        <td>-146.8%</td>
+      </tr>
+      <tr>
+        <th>mobile / Checkout</th>
+        <td>53%</td>
+        <td>43.7%</td>
+        <td>79.6%</td>
+        <td>79.8%</td>
+        <td>84.6%</td>
+        <td>85.4%</td>
+        <td>51.3%</td>
+        <td>74.6%</td>
+        <td>-177.3%</td>
+      </tr>
+      <tr>
+        <th>mobile / My Account</th>
+        <td>72.9%</td>
+        <td>61%</td>
+        <td>85.3%</td>
+        <td>86.2%</td>
+        <td>83.1%</td>
+        <td>91.9%</td>
+        <td>74%</td>
+        <td>69.1%</td>
+        <td>-308.7%</td>
+      </tr>
+      <tr>
+        <th>mobile / Wishlist</th>
+        <td>80.5%</td>
+        <td>74.4%</td>
+        <td>89.5%</td>
+        <td>89.9%</td>
+        <td>88.9%</td>
+        <td>100%</td>
+        <td>95.4%</td>
+        <td>79.6%</td>
+        <td>-347.9%</td>
+      </tr>
+      <tr>
+        <th>mobile / Contact page</th>
+        <td>69.5%</td>
+        <td>37.8%</td>
+        <td>86%</td>
+        <td>74.9%</td>
+        <td>86%</td>
+        <td>-54.5%</td>
+        <td>32.8%</td>
+        <td>67.4%</td>
+        <td>2.2%</td>
+      </tr>
+      <tr>
+        <th>mobile / Promotion page</th>
+        <td>82.5%</td>
+        <td>44.5%</td>
+        <td>92.4%</td>
+        <td>92.7%</td>
+        <td>91.2%</td>
+        <td>100%</td>
+        <td>96%</td>
+        <td>90.3%</td>
+        <td>0.1%</td>
+      </tr>
+      <tr>
+        <th>mobile / Ages page</th>
+        <td>88.6%</td>
+        <td>88.1%</td>
+        <td>55.9%</td>
+        <td>59.5%</td>
+        <td>57.5%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.5%</td>
+        <td>16.1%</td>
+      </tr>
+      <tr>
+        <th>mobile / Brands page</th>
+        <td>87.9%</td>
+        <td>90.1%</td>
+        <td>90%</td>
+        <td>90.5%</td>
+        <td>89.6%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.4%</td>
+        <td>5.1%</td>
+      </tr>
+      <tr>
+        <th>mobile / About page</th>
+        <td>88%</td>
+        <td>69.2%</td>
+        <td>92.1%</td>
+        <td>92.4%</td>
+        <td>90.9%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>-392.7%</td>
+      </tr>
+      <tr>
+        <th>mobile / Refund policy</th>
+        <td>88.7%</td>
+        <td>76.3%</td>
+        <td>92.4%</td>
+        <td>92.7%</td>
+        <td>91.6%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>-347.9%</td>
+      </tr>
+      <tr>
+        <th>mobile / How to order</th>
+        <td>87.4%</td>
+        <td>90.6%</td>
+        <td>93.1%</td>
+        <td>93.4%</td>
+        <td>92.5%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>6.3%</td>
+      </tr>
+      <tr>
+        <th>mobile / Privacy policy</th>
+        <td>90.4%</td>
+        <td>92.4%</td>
+        <td>89.2%</td>
+        <td>89.8%</td>
+        <td>89%</td>
+        <td>100%</td>
+        <td>96.6%</td>
+        <td>90.3%</td>
+        <td>37.5%</td>
+      </tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

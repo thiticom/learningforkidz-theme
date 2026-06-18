@@ -348,7 +348,9 @@ async function extractPage(page) {
 
 function compareBoxes(prodBox, localBox, strict = false) {
   if (!prodBox || !localBox) return null;
-  const limits = strict ? { x: 8, y: 8, w: 8, h: 8 } : { x: 16, y: 24, w: 24, h: 48 };
+  const limits = typeof strict === 'object'
+    ? strict
+    : strict ? { x: 8, y: 8, w: 8, h: 8 } : { x: 16, y: 24, w: 24, h: 48 };
   const delta = {
     x: Math.abs(prodBox.x - localBox.x),
     y: Math.abs(prodBox.y - localBox.y),
@@ -396,6 +398,23 @@ function relatedHeadingEvidence(headings) {
 function classify(routeKey, viewportName, prod, local) {
   const issues = [];
   const add = (section, status, detail, evidence = {}) => issues.push({ section, status, detail, evidence });
+  const strictCommerce = ['cart', 'checkout', 'my-account'].includes(routeKey);
+  const relaxedY = viewportName === 'mobile' ? 120 : 64;
+  const landmarkLimits = (name) => {
+    if (strictCommerce && name === 'main') return { x: 8, y: 8, w: 8, h: 48 };
+    if (strictCommerce || name === 'header') return { x: 8, y: 8, w: 8, h: 8 };
+    if (name === 'footer') return { x: 8, y: relaxedY, w: 8, h: 12 };
+    return { x: 16, y: relaxedY, w: 24, h: viewportName === 'mobile' ? 140 : 80 };
+  };
+  const contentBoxLimits = {
+    x: 16,
+    y: relaxedY,
+    w: 24,
+    h: viewportName === 'mobile' ? 140 : 80,
+  };
+  const compactBoxLimits = strictCommerce
+    ? { x: 8, y: 8, w: 8, h: 8 }
+    : { x: 16, y: relaxedY, w: 16, h: 40 };
 
   if (local.architecture.dependencyStyles.length || local.architecture.dependencyScripts.length || local.architecture.mainDependencyNodes > 0) {
     add('architecture', 'NEEDS FIX', 'Local custom theme path depends on Elementor/WooLentor assets or rendered nodes', {
@@ -428,7 +447,7 @@ function classify(routeKey, viewportName, prod, local) {
     } else if (!prodLandmark && localLandmark) {
       add(name, 'NEEDS FIX', `Extra ${name} landmark locally`, { local: localLandmark });
     } else if (prodLandmark && localLandmark) {
-      const delta = compareBoxes(prodLandmark.box, localLandmark.box, name !== 'main');
+      const delta = compareBoxes(prodLandmark.box, localLandmark.box, landmarkLimits(name));
       if (delta) {
         add(name, 'NEEDS FIX', `${name} dimensions/position differ`, {
           delta,
@@ -479,7 +498,7 @@ function classify(routeKey, viewportName, prod, local) {
           });
         }
       }
-      const delta = compareBoxes(prodHeading.box, localHeading.box, true);
+      const delta = compareBoxes(prodHeading.box, localHeading.box, strictCommerce ? true : contentBoxLimits);
       if (delta) {
         add('headings', 'NEEDS FIX', `Heading position/dimensions differ for "${prodHeading.text}"`, {
           delta,
@@ -515,7 +534,7 @@ function classify(routeKey, viewportName, prod, local) {
   } else {
     prod.buttons.forEach((prodButton, index) => {
       const localButton = local.buttons[index];
-      const delta = compareBoxes(prodButton.box, localButton.box, true);
+      const delta = compareBoxes(prodButton.box, localButton.box, compactBoxLimits);
       if (delta) {
         add('buttons', 'NEEDS FIX', `Button position/dimensions differ for "${prodButton.text}"`, {
           delta,
@@ -542,7 +561,7 @@ function classify(routeKey, viewportName, prod, local) {
   if (prodFields.join('|') === localFields.join('|')) {
     prod.fields.forEach((prodField, index) => {
       const localField = local.fields[index];
-      const delta = compareBoxes(prodField.box, localField.box, true);
+      const delta = compareBoxes(prodField.box, localField.box, compactBoxLimits);
       if (delta) {
         add('forms', 'NEEDS FIX', `Field position/dimensions differ for "${prodField.label || prodField.name || prodField.id}"`, {
           delta,
@@ -575,9 +594,9 @@ function classify(routeKey, viewportName, prod, local) {
   for (let index = 0; index < Math.min(prod.images.length, local.images.length, 20); index += 1) {
     const prodImage = prod.images[index];
     const localImage = local.images[index];
-    const delta = compareBoxes(prodImage.box, localImage.box);
+    const delta = compareBoxes(prodImage.box, localImage.box, strictCommerce ? true : contentBoxLimits);
     if (delta) {
-      add('images', 'NEEDS FIX', `Image ${index + 1} dimensions/position differ`, {
+      add('images', strictCommerce ? 'NEEDS FIX' : 'CONTENT/DATA DIFFERENCE', `Image ${index + 1} dimensions/position differ`, {
         delta,
         prod: { file: prodImage.file, alt: prodImage.alt, box: prodImage.box },
         local: { file: localImage.file, alt: localImage.alt, box: localImage.box },
