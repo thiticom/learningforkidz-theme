@@ -304,6 +304,55 @@ add_action( 'pre_get_posts', function ( $query ) {
 	$query->set( 'post_type', array( 'product', 'post', 'page' ) );
 } );
 
+add_action( 'pre_get_posts', function ( $query ) {
+	if ( is_admin() || ! $query->is_main_query() || ! lfk_is_product_archive_query( $query ) ) {
+		return;
+	}
+
+	$tax_query  = (array) $query->get( 'tax_query' );
+	$meta_query = (array) $query->get( 'meta_query' );
+
+	foreach ( array( 'product_brand' => 'filter_brand', 'age' => 'filter_age' ) as $taxonomy => $key ) {
+		$slugs = lfk_archive_filter_values( $key );
+		if ( $slugs ) {
+			$tax_query[] = array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $slugs,
+				'operator' => 'IN',
+			);
+		}
+	}
+
+	$price = lfk_archive_selected_price_range();
+	if ( $price['min'] || $price['max'] ) {
+		$price_query = array(
+			'key'  => '_price',
+			'type' => 'DECIMAL',
+		);
+
+		if ( $price['min'] && $price['max'] ) {
+			$price_query['value']   = array( $price['min'], $price['max'] );
+			$price_query['compare'] = 'BETWEEN';
+		} elseif ( $price['min'] ) {
+			$price_query['value']   = $price['min'];
+			$price_query['compare'] = '>=';
+		} else {
+			$price_query['value']   = $price['max'];
+			$price_query['compare'] = '<=';
+		}
+
+		$meta_query[] = $price_query;
+	}
+
+	if ( $tax_query ) {
+		$query->set( 'tax_query', $tax_query );
+	}
+	if ( $meta_query ) {
+		$query->set( 'meta_query', $meta_query );
+	}
+} );
+
 function lfk_is_local_site() {
 	$host = wp_parse_url( home_url(), PHP_URL_HOST );
 	return in_array( $host, array( '127.0.0.1', 'localhost' ), true ) || str_ends_with( (string) $host, '.local' );
@@ -644,6 +693,82 @@ function lfk_product_archive_hero_image_id() {
 	return 0;
 }
 
+function lfk_is_product_archive_query( $query ) {
+	if ( $query->is_post_type_archive( 'product' ) || $query->is_tax( array( 'product_cat', 'product_tag', 'product_brand', 'age' ) ) ) {
+		return true;
+	}
+
+	$taxonomy = (string) $query->get( 'taxonomy' );
+	return $taxonomy && str_starts_with( $taxonomy, 'pa_' );
+}
+
+function lfk_archive_filter_values( $key ) {
+	$value = isset( $_GET[ $key ] ) ? wp_unslash( $_GET[ $key ] ) : array();
+	if ( ! is_array( $value ) ) {
+		$value = explode( ',', (string) $value );
+	}
+
+	$values = array();
+	foreach ( $value as $item ) {
+		$slug = sanitize_title( $item );
+		if ( $slug ) {
+			$values[] = $slug;
+		}
+	}
+
+	return array_values( array_unique( $values ) );
+}
+
+function lfk_archive_selected_price_range() {
+	$min = isset( $_GET['min_price'] ) ? (float) wp_unslash( $_GET['min_price'] ) : 0;
+	$max = isset( $_GET['max_price'] ) ? (float) wp_unslash( $_GET['max_price'] ) : 0;
+
+	if ( ! $min && ! $max && isset( $_GET['lfk_price_range'] ) ) {
+		$raw_range = wp_unslash( $_GET['lfk_price_range'] );
+		if ( is_array( $raw_range ) ) {
+			$raw_range = reset( $raw_range );
+		}
+		$range = preg_split( '/[:-]/', sanitize_text_field( $raw_range ) );
+		$min   = isset( $range[0] ) ? (float) $range[0] : 0;
+		$max   = isset( $range[1] ) ? (float) $range[1] : 0;
+	}
+
+	return array(
+		'min' => max( 0, $min ),
+		'max' => max( 0, $max ),
+	);
+}
+
+function lfk_archive_filter_key( $taxonomy ) {
+	if ( 'product_brand' === $taxonomy ) {
+		return 'filter_brand';
+	}
+	if ( 'age' === $taxonomy ) {
+		return 'filter_age';
+	}
+
+	return 'filter_' . sanitize_key( $taxonomy );
+}
+
+function lfk_archive_filter_action_url() {
+	return remove_query_arg(
+		array( 'paged', 'product-page', 'filter_brand', 'filter_age', 'min_price', 'max_price', 'lfk_price_range' ),
+		get_pagenum_link( 1 )
+	);
+}
+
+function lfk_archive_filter_hidden_inputs() {
+	foreach ( array( 'orderby', 's', 'post_type' ) as $key ) {
+		if ( isset( $_GET[ $key ] ) && '' !== $_GET[ $key ] ) {
+			printf(
+				'<input type="hidden" name="%1$s" value="%2$s">',
+				esc_attr( $key ),
+				esc_attr( sanitize_text_field( wp_unslash( $_GET[ $key ] ) ) )
+			);
+		}
+	}
+}
+
 function lfk_archive_filter_terms( $taxonomy, $heading, $limit = 12 ) {
 	$terms = get_terms( array(
 		'taxonomy'   => $taxonomy,
@@ -656,16 +781,22 @@ function lfk_archive_filter_terms( $taxonomy, $heading, $limit = 12 ) {
 	if ( ! $terms || is_wp_error( $terms ) ) {
 		return;
 	}
+
+	$key      = lfk_archive_filter_key( $taxonomy );
+	$selected = lfk_archive_filter_values( $key );
 	?>
 	<div class="lfk-filter-group">
 		<div class="lfk-filter-heading"><?php echo esc_html( $heading ); ?></div>
 		<ul>
 			<?php foreach ( $terms as $term ) : ?>
+				<?php $is_selected = in_array( $term->slug, $selected, true ); ?>
 				<li>
-					<a class="<?php echo is_tax( $taxonomy, $term->slug ) ? 'is-active' : ''; ?>" href="<?php echo esc_url( get_term_link( $term ) ); ?>">
-						<span><?php echo esc_html( $term->name ); ?></span>
+					<label class="lfk-filter-option<?php echo $is_selected ? ' is-active' : ''; ?>">
+						<input type="checkbox" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo esc_attr( $term->slug ); ?>" <?php checked( $is_selected ); ?>>
+						<span class="lfk-filter-check" aria-hidden="true"></span>
+						<span class="lfk-filter-label"><?php echo esc_html( $term->name ); ?></span>
 						<small><?php echo esc_html( (string) $term->count ); ?></small>
-					</a>
+					</label>
 				</li>
 			<?php endforeach; ?>
 		</ul>
@@ -680,13 +811,20 @@ function lfk_archive_price_filters() {
 		array( 'min' => 5950, 'max' => 10999, 'label' => '5950฿ to 10999฿' ),
 		array( 'min' => 11000, 'max' => 17999, 'label' => '11000฿ to 17999฿' ),
 	);
+	$selected = lfk_archive_selected_price_range();
 	?>
 	<div class="lfk-filter-group">
 		<div class="lfk-filter-heading"><?php esc_html_e( 'กรองตามราคา', 'lfk-tailwind' ); ?></div>
 		<ul>
 			<?php foreach ( $ranges as $range ) : ?>
-				<?php $url = add_query_arg( array( 'min_price' => $range['min'], 'max_price' => $range['max'] ), get_pagenum_link( 1 ) ); ?>
-				<li><a href="<?php echo esc_url( $url ); ?>"><span><?php echo esc_html( $range['label'] ); ?></span></a></li>
+				<?php $is_selected = (float) $range['min'] === $selected['min'] && (float) $range['max'] === $selected['max']; ?>
+				<li>
+					<label class="lfk-filter-option<?php echo $is_selected ? ' is-active' : ''; ?>">
+						<input type="radio" name="lfk_price_range" value="<?php echo esc_attr( $range['min'] . '-' . $range['max'] ); ?>" <?php checked( $is_selected ); ?>>
+						<span class="lfk-filter-check" aria-hidden="true"></span>
+						<span class="lfk-filter-label"><?php echo esc_html( $range['label'] ); ?></span>
+					</label>
+				</li>
 			<?php endforeach; ?>
 		</ul>
 	</div>

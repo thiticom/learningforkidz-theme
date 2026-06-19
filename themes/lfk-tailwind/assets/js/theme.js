@@ -127,6 +127,7 @@
       var next = root.querySelector('[data-lfk-carousel-next]');
       var index = 0;
       var timer = null;
+      var shouldHydrateImages = !('IntersectionObserver' in window);
 
       if (!track || !track.children.length) return;
 
@@ -134,6 +135,55 @@
         if (window.matchMedia('(min-width: 1024px)').matches) return parseInt(root.getAttribute('data-lfk-visible-desktop') || '4', 10);
         if (window.matchMedia('(min-width: 640px)').matches) return parseInt(root.getAttribute('data-lfk-visible-tablet') || '3', 10);
         return parseInt(root.getAttribute('data-lfk-visible-mobile') || '2', 10);
+      }
+
+      function lazyAttribute(node, names) {
+        var value = '';
+        names.some(function (name) {
+          value = node.getAttribute(name) || '';
+          return !!value;
+        });
+        return value;
+      }
+
+      function hydrateImage(image) {
+        var srcset = lazyAttribute(image, ['data-srcset', 'data-lazy-srcset']);
+        var src = lazyAttribute(image, ['data-src', 'data-lazy-src', 'data-original']);
+
+        Array.prototype.slice.call(image.parentNode ? image.parentNode.querySelectorAll('source') : []).forEach(function (source) {
+          var sourceSrcset = lazyAttribute(source, ['data-srcset', 'data-lazy-srcset']);
+          if (sourceSrcset) source.setAttribute('srcset', sourceSrcset);
+        });
+
+        if (srcset) image.setAttribute('srcset', srcset);
+        if (src) image.setAttribute('src', src);
+        if (src || srcset) image.classList.add('entered', 'litespeed-loaded');
+      }
+
+      function hydrateSlide(slide) {
+        Array.prototype.slice.call(slide.querySelectorAll('img')).forEach(hydrateImage);
+      }
+
+      function hydrateAround(nextIndex) {
+        if (!shouldHydrateImages) return;
+
+        var count = visibleCount();
+        var start = Math.max(0, nextIndex - 1);
+        var end = Math.min(track.children.length - 1, nextIndex + count + 1);
+
+        for (var i = start; i <= end; i += 1) {
+          hydrateSlide(track.children[i]);
+        }
+      }
+
+      function enableHydration() {
+        shouldHydrateImages = true;
+        hydrateAround(index);
+      }
+
+      function isNearViewport() {
+        var rect = root.getBoundingClientRect();
+        return rect.top < window.innerHeight + 400 && rect.bottom > -200;
       }
 
       function maxIndex() {
@@ -147,6 +197,7 @@
         var gap = parseFloat(trackStyle.columnGap || trackStyle.gap || '0') || 0;
         var itemWidth = firstItem.getBoundingClientRect().width + gap;
         track.style.transform = 'translateX(' + (-index * itemWidth) + 'px)';
+        hydrateAround(index);
       }
 
       function restart() {
@@ -184,6 +235,16 @@
         show(index);
       });
 
+      if (shouldHydrateImages || isNearViewport()) {
+        enableHydration();
+      } else {
+        new IntersectionObserver(function (entries, observer) {
+          if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
+          observer.disconnect();
+          enableHydration();
+        }, { rootMargin: '400px 0px' }).observe(root);
+      }
+
       show(0);
       restart();
     });
@@ -202,6 +263,8 @@
     var forms = Array.prototype.slice.call(document.querySelectorAll('.woocommerce-ordering'));
 
     forms.forEach(function (form) {
+      if (form.closest('[data-lfk-archive]')) return;
+
       var select = form.querySelector('select.orderby');
       if (!select) return;
 
@@ -209,6 +272,186 @@
         form.submit();
       });
     });
+  }
+
+  function initArchiveEnhancements() {
+    var archive = document.querySelector('[data-lfk-archive]');
+    if (!archive || archive.getAttribute('data-lfk-archive-ready') === '1') return;
+
+    var products = archive.querySelector('.lfk-archive-products');
+    var list = archive.querySelector('.lfk-archive-product-list');
+    var status = archive.querySelector('[data-lfk-archive-status]');
+    var observer = null;
+    var nextPageLoading = false;
+    var request = null;
+
+    if (!products || !list) return;
+
+    archive.setAttribute('data-lfk-archive-ready', '1');
+    archive.classList.add('is-enhanced');
+
+    function pageOneUrl(url) {
+      var nextUrl = new URL(url, window.location.href);
+      nextUrl.pathname = nextUrl.pathname.replace(/\/page\/\d+\/?$/, '/');
+      nextUrl.searchParams.delete('paged');
+      nextUrl.searchParams.delete('product-page');
+      return nextUrl;
+    }
+
+    function setStatus(message) {
+      if (status) status.textContent = message || '';
+    }
+
+    function disconnectObserver() {
+      if (observer) observer.disconnect();
+      observer = null;
+    }
+
+    function replacePagination(nextArchive) {
+      var currentPagination = archive.querySelector('[data-lfk-pagination]');
+      var nextPagination = nextArchive.querySelector('[data-lfk-pagination]');
+
+      if (currentPagination && nextPagination) {
+        currentPagination.outerHTML = nextPagination.outerHTML;
+      } else if (currentPagination) {
+        currentPagination.remove();
+      } else if (nextPagination) {
+        products.appendChild(nextPagination.cloneNode(true));
+      }
+    }
+
+    function observeNextPage() {
+      disconnectObserver();
+
+      var nextLink = archive.querySelector('[data-lfk-pagination] a.next');
+      if (!nextLink || !window.IntersectionObserver) return;
+
+      observer = new IntersectionObserver(function (entries) {
+        if (!entries.some(function (entry) { return entry.isIntersecting; }) || nextPageLoading) return;
+        nextPageLoading = true;
+        fetchArchive(nextLink.href, { append: true, push: false }).finally(function () {
+          nextPageLoading = false;
+        });
+      }, { rootMargin: '600px 0px' });
+
+      observer.observe(nextLink);
+    }
+
+    function syncFromArchive(nextArchive, append) {
+      if (append) {
+        Array.prototype.slice.call(nextArchive.querySelectorAll('.lfk-archive-product-card')).forEach(function (item) {
+          list.appendChild(item);
+        });
+        replacePagination(nextArchive);
+        setStatus('');
+        observeNextPage();
+        return;
+      }
+
+      archive.outerHTML = nextArchive.outerHTML;
+      initArchiveEnhancements();
+    }
+
+    function fetchArchive(url, options) {
+      var settings = options || {};
+
+      if (request) request.abort();
+      request = window.AbortController ? new AbortController() : null;
+
+      products.classList.add('is-loading');
+      setStatus(settings.append ? 'กำลังโหลดสินค้าเพิ่มเติม...' : 'กำลังอัปเดตสินค้า...');
+
+      return window.fetch(url, {
+        credentials: 'same-origin',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        signal: request ? request.signal : undefined
+      }).then(function (response) {
+        return response.text();
+      }).then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var nextArchive = doc.querySelector('[data-lfk-archive]');
+
+        if (!nextArchive) {
+          window.location.href = url;
+          return;
+        }
+
+        if (settings.push) {
+          window.history.pushState({ lfkArchive: true }, '', url);
+        }
+
+        syncFromArchive(nextArchive, settings.append);
+      }).catch(function (error) {
+        if (error && 'AbortError' === error.name) return;
+        window.location.href = url;
+      }).finally(function () {
+        var currentProducts = document.querySelector('[data-lfk-archive] .lfk-archive-products');
+        if (currentProducts) currentProducts.classList.remove('is-loading');
+        setStatus('');
+      });
+    }
+
+    function filterUrlFromForm(form) {
+      var url = pageOneUrl(window.location.href);
+      var formData = new FormData(form);
+
+      ['filter_brand', 'filter_brand[]', 'filter_age', 'filter_age[]', 'min_price', 'max_price', 'lfk_price_range'].forEach(function (key) {
+        url.searchParams.delete(key);
+      });
+
+      formData.forEach(function (value, key) {
+        if (value) url.searchParams.append(key, value);
+      });
+
+      return url.toString();
+    }
+
+    archive.addEventListener('change', function (event) {
+      var filterForm = event.target.closest ? event.target.closest('[data-lfk-filter-form]') : null;
+      if (filterForm) {
+        fetchArchive(filterUrlFromForm(filterForm), { push: true });
+        return;
+      }
+
+      var orderSelect = event.target.closest ? event.target.closest('.woocommerce-ordering select.orderby') : null;
+      if (orderSelect) {
+        var url = pageOneUrl(window.location.href);
+        if (orderSelect.value) {
+          url.searchParams.set('orderby', orderSelect.value);
+        } else {
+          url.searchParams.delete('orderby');
+        }
+        fetchArchive(url.toString(), { push: true });
+      }
+    });
+
+    archive.addEventListener('submit', function (event) {
+      var filterForm = event.target.closest ? event.target.closest('[data-lfk-filter-form]') : null;
+      if (filterForm) {
+        event.preventDefault();
+        fetchArchive(filterUrlFromForm(filterForm), { push: true });
+      }
+    });
+
+    archive.addEventListener('click', function (event) {
+      var pageLink = event.target.closest ? event.target.closest('[data-lfk-pagination] a') : null;
+      if (!pageLink || !pageLink.href) return;
+
+      event.preventDefault();
+      fetchArchive(pageLink.href, { push: true });
+    });
+
+    window.lfkFetchArchive = fetchArchive;
+    if (!window.lfkArchivePopstateBound) {
+      window.lfkArchivePopstateBound = true;
+      window.addEventListener('popstate', function () {
+        if (window.lfkFetchArchive) {
+          window.lfkFetchArchive(window.location.href, { push: false });
+        }
+      });
+    }
+
+    observeNextPage();
   }
 
   function initProductGallery() {
@@ -537,6 +780,7 @@
     initCarousels();
     initBackToTop();
     initCatalogOrdering();
+    initArchiveEnhancements();
     initProductGallery();
     initCommerceFeedback();
   });

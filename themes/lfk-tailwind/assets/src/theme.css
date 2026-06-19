@@ -746,16 +746,45 @@
     @apply list-none;
   }
 
-  .lfk-filter-group a {
-    @apply flex items-center justify-between gap-3 text-[14px] leading-6 text-[#555555] hover:text-lfk-blue;
+  .lfk-filter-option {
+    @apply relative flex cursor-pointer items-center justify-between gap-3 text-[14px] leading-6 text-[#555555] hover:text-lfk-blue;
   }
 
-  .lfk-filter-group a.is-active {
+  .lfk-filter-option input {
+    @apply absolute h-px w-px overflow-hidden opacity-0;
+  }
+
+  .lfk-filter-check {
+    @apply inline-flex h-[15px] w-[15px] flex-shrink-0 items-center justify-center border border-[#b8c8d6] bg-white;
+  }
+
+  .lfk-filter-check::after {
+    content: "";
+    @apply hidden h-[7px] w-[7px] bg-lfk-blue;
+  }
+
+  .lfk-filter-option input:checked + .lfk-filter-check {
+    @apply border-lfk-blue;
+  }
+
+  .lfk-filter-option input:checked + .lfk-filter-check::after {
+    @apply block;
+  }
+
+  .lfk-filter-label {
+    @apply min-w-0 flex-1;
+  }
+
+  .lfk-filter-option.is-active {
     @apply font-semibold text-lfk-blue;
   }
 
   .lfk-filter-group small {
     @apply text-[12px] text-[#888888];
+  }
+
+  .lfk-filter-submit {
+    @apply mt-4 inline-flex min-h-[38px] items-center justify-center rounded-full bg-lfk-blue px-5 text-[14px] font-semibold text-white;
   }
 
   .lfk-archive-products {
@@ -805,6 +834,19 @@
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .lfk-archive-products.is-loading .lfk-archive-product-list {
+    opacity: 0.55;
+  }
+
+  .lfk-archive-load-status {
+    min-height: 28px;
+    padding-top: 18px;
+    text-align: center;
+    color: #555555;
+    font-size: 14px;
+    line-height: 20px;
   }
 
   .lfk-archive-product-card {
@@ -5880,6 +5922,91 @@ body.home .lfk-home-article-track {
 .lfk-product-description h2,
 .lfk-single-cart .single_add_to_cart_button {
   font-family: Anuphan, Tahoma, Arial, sans-serif;
+}
+
+/* Blog reading and comment refinements. */
+.lfk-post-single .lfk-rich-text {
+  font-family: Georgia, "Noto Serif Thai", "TH Sarabun New", serif;
+  font-size: 18px;
+  line-height: 1.85;
+}
+
+.lfk-post-single .lfk-rich-text h1,
+.lfk-post-single .lfk-rich-text h2,
+.lfk-post-single .lfk-rich-text h3,
+.lfk-post-single .lfk-rich-text h4,
+.lfk-post-single .lfk-rich-text h5,
+.lfk-post-single .lfk-rich-text h6,
+.lfk-post-single .lfk-post-header h1,
+.lfk-post-comments .comment-reply-title {
+  font-family: Anuphan, Tahoma, Arial, sans-serif;
+}
+
+.lfk-post-comments .comment-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.lfk-post-comments .comment-form .comment-form-author,
+.lfk-post-comments .comment-form .comment-form-email,
+.lfk-post-comments .comment-form .comment-form-url,
+.lfk-post-comments .comment-form .comment-form-cookies-consent,
+.lfk-post-comments .comment-form .form-submit {
+  margin-top: 0;
+}
+
+.lfk-post-comments textarea,
+.lfk-post-comments input[type="text"],
+.lfk-post-comments input[type="email"],
+.lfk-post-comments input[type="url"] {
+  border-color: #d8e1ea;
+  border-radius: 6px;
+  padding: 12px 14px;
+  box-shadow: none;
+  color: #222222;
+}
+
+.lfk-post-comments textarea {
+  height: 168px;
+}
+
+.lfk-post-comments input[type="text"],
+.lfk-post-comments input[type="email"],
+.lfk-post-comments input[type="url"] {
+  height: 46px;
+}
+
+.lfk-post-comments textarea:focus,
+.lfk-post-comments input[type="text"]:focus,
+.lfk-post-comments input[type="email"]:focus,
+.lfk-post-comments input[type="url"]:focus {
+  border-color: #0076be;
+  outline: 2px solid rgba(0, 118, 190, 0.14);
+  outline-offset: 0;
+}
+
+.lfk-post-comments .comment-form-cookies-consent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lfk-post-comments .submit {
+  width: auto;
+  min-width: 138px;
+  border-color: #0076be;
+  border-radius: 999px;
+  background: #0076be;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.lfk-post-comments .submit:hover,
+.lfk-post-comments .submit:focus {
+  border-color: #005c99;
+  background: #005c99;
+  color: #ffffff;
 }
 
 @media (max-width: 767px) {

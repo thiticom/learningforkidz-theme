@@ -37,7 +37,7 @@ if ( is_tax( 'product_cat' ) ) {
 	}
 }
 ?>
-<div class="lfk-product-archive<?php echo $hero_image_id ? ' lfk-product-archive--has-hero' : ''; ?>" role="main">
+<div class="lfk-product-archive<?php echo $hero_image_id ? ' lfk-product-archive--has-hero' : ''; ?>" role="main" data-lfk-archive>
 	<div class="lfk-shell">
 		<?php if ( function_exists( 'woocommerce_breadcrumb' ) ) : ?>
 			<div class="lfk-breadcrumbs">
@@ -102,20 +102,28 @@ if ( is_tax( 'product_cat' ) ) {
 				<details class="lfk-mobile-filters">
 					<summary><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></summary>
 					<div class="lfk-mobile-filters-panel">
-						<?php
-						lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
-						lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
-						lfk_archive_price_filters();
-						?>
+						<form class="lfk-filter-form" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>" data-lfk-filter-form>
+							<?php
+							lfk_archive_filter_hidden_inputs();
+							lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
+							lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
+							lfk_archive_price_filters();
+							?>
+							<noscript><button class="lfk-filter-submit" type="submit"><?php esc_html_e( 'ใช้ตัวกรอง', 'lfk-tailwind' ); ?></button></noscript>
+						</form>
 					</div>
 				</details>
 				<aside class="lfk-archive-sidebar" aria-label="<?php esc_attr_e( 'Product filters', 'lfk-tailwind' ); ?>">
 					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></div>
-					<?php
-					lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
-					lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
-					lfk_archive_price_filters();
-					?>
+					<form class="lfk-filter-form" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>" data-lfk-filter-form>
+						<?php
+						lfk_archive_filter_hidden_inputs();
+						lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
+						lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
+						lfk_archive_price_filters();
+						?>
+						<noscript><button class="lfk-filter-submit" type="submit"><?php esc_html_e( 'ใช้ตัวกรอง', 'lfk-tailwind' ); ?></button></noscript>
+					</form>
 				</aside>
 
 				<section class="lfk-archive-products" aria-label="<?php echo esc_attr( $archive_title ); ?>">
@@ -133,6 +141,12 @@ if ( is_tax( 'product_cat' ) ) {
 						endwhile;
 						?>
 					</ul>
+					<div class="lfk-archive-load-status" role="status" aria-live="polite" data-lfk-archive-status></div>
+					<?php if ( function_exists( 'woocommerce_pagination' ) ) : ?>
+						<nav class="lfk-pagination" aria-label="<?php esc_attr_e( 'Product pagination', 'lfk-tailwind' ); ?>" data-lfk-pagination>
+							<?php woocommerce_pagination(); ?>
+						</nav>
+					<?php endif; ?>
 				</section>
 			</div>
 
