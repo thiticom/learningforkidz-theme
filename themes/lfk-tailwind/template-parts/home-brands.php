@@ -10,8 +10,8 @@ $brands = array(
 	array( 'href' => '/product-category/brand/creative-spot/', 'src' => '2022/08/CreativeSpot.jpg', 'alt' => 'Creative Spot' ),
 	array( 'href' => '/product-category/brand/botley/', 'src' => '2023/09/Botley2_logo.jpg', 'alt' => 'Botley' ),
 	array( 'href' => '/product-category/brand/top-bright/', 'src' => '2022/09/1024px-Topbright_Logo-r.webp', 'alt' => 'Topbright' ),
-	array( 'href' => '/product-category/brand/zzzmoon/', 'src' => '2023/09/ZZzMoon-logo.webp', 'alt' => 'ZZzMoon' ),
-	array( 'href' => '/product-category/brand/science-can/', 'src' => '2023/09/Science-Can-logo.webp', 'alt' => 'Science Can' ),
+	array( 'href' => '/product-category/brand/zzzmoon/', 'src' => '2022/09/ZZzMoon-logo.webp', 'alt' => 'ZZzMoon' ),
+	array( 'href' => '/product-category/brand/science-can/', 'src' => '2022/09/Science-Can-logo.webp', 'alt' => 'Science Can' ),
 );
 $brand_track = array_merge(
 	array_slice( $brands, 8 ),

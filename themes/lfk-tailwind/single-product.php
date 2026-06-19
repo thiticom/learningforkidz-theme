@@ -99,19 +99,21 @@ while ( have_posts() ) :
 										<?php endif; ?>
 										sizes="(max-width: 767px) 370px, 575px"
 										alt="<?php echo esc_attr( $gallery_item['alt'] ?: wp_get_attachment_caption( $image_id ) ?: $product->get_name() ); ?>"
-										loading="eager"
+										loading="<?php echo 0 === $index ? 'eager' : 'lazy'; ?>"
+										fetchpriority="<?php echo 0 === $index ? 'high' : 'low'; ?>"
 									>
 									<?php if ( 0 === $index ) : ?>
 										<?php $full_image_data = wp_get_attachment_image_src( $image_id, 'full' ); ?>
 										<img
 											class="lfk-product-gallery-zoom-clone"
-											src="<?php echo esc_url( $full_image_data[0] ?? $gallery_item['src'] ); ?>"
+											src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221%22 height=%221%22 viewBox=%220 0 1 1%22%3E%3C/svg%3E"
+											data-src="<?php echo esc_url( $full_image_data[0] ?? $gallery_item['src'] ); ?>"
 											<?php if ( ! empty( $full_image_data[1] ) && ! empty( $full_image_data[2] ) ) : ?>
 												width="<?php echo esc_attr( $full_image_data[1] ); ?>"
 												height="<?php echo esc_attr( $full_image_data[2] ); ?>"
 											<?php endif; ?>
 											alt="<?php echo esc_attr( basename( (string) get_attached_file( $image_id ) ) ?: $product->get_name() ); ?>"
-											loading="eager"
+											loading="lazy"
 										>
 									<?php endif; ?>
 								<?php endforeach; ?>
@@ -130,7 +132,7 @@ while ( have_posts() ) :
 										data-mobile-height="<?php echo esc_attr( $gallery_item['mobile_height'] ); ?>"
 										data-desktop-height="<?php echo esc_attr( $gallery_item['desktop_height'] ); ?>"
 									>
-										<?php echo wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array( 'loading' => 'eager' ) ); ?>
+										<?php echo wp_get_attachment_image( $image_id, 'woocommerce_thumbnail', false, array( 'loading' => 0 === $index ? 'eager' : 'lazy' ) ); ?>
 									</button>
 								<?php endforeach; ?>
 							</div>

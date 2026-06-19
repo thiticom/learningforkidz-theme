@@ -31,6 +31,8 @@ if ( is_tax( 'product_cat' ) ) {
 		) );
 		if ( is_wp_error( $child_terms ) ) {
 			$child_terms = array();
+		} else {
+			$child_terms = array_values( $child_terms );
 		}
 	}
 }
@@ -77,7 +79,16 @@ if ( is_tax( 'product_cat' ) ) {
 					?>
 					<a class="lfk-category-card" href="<?php echo esc_url( $term_link ); ?>">
 						<?php if ( $thumbnail_id ) : ?>
-							<?php echo wp_get_attachment_image( $thumbnail_id, 'large', false, array( 'loading' => $index < 3 ? 'eager' : 'lazy' ) ); ?>
+							<?php
+							echo lfk_local_attachment_image(
+								$thumbnail_id,
+								'medium_large',
+								array(
+									'loading'       => 0 === $index ? 'eager' : 'lazy',
+									'fetchpriority' => 0 === $index ? 'high' : 'low',
+								)
+							);
+							?>
 						<?php else : ?>
 							<span class="lfk-category-card-fallback"><?php echo esc_html( $term->name ); ?></span>
 						<?php endif; ?>
@@ -88,6 +99,16 @@ if ( is_tax( 'product_cat' ) ) {
 
 		<?php elseif ( have_posts() ) : ?>
 			<div class="lfk-archive-layout">
+				<details class="lfk-mobile-filters">
+					<summary><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></summary>
+					<div class="lfk-mobile-filters-panel">
+						<?php
+						lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
+						lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
+						lfk_archive_price_filters();
+						?>
+					</div>
+				</details>
 				<aside class="lfk-archive-sidebar" aria-label="<?php esc_attr_e( 'Product filters', 'lfk-tailwind' ); ?>">
 					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></div>
 					<?php

@@ -26,43 +26,51 @@ $mobile_posts = array(
 <section class="lfk-articles-section">
 	<div class="lfk-shell">
 		<?php lfk_section_heading( 'บทความ' ); ?>
-		<div class="lfk-home-article-track lfk-home-article-track--desktop">
-			<?php foreach ( $desktop_posts as $post ) : ?>
-				<?php setup_postdata( $post ); ?>
-				<article class="lfk-article-card">
-					<a class="lfk-article-image" href="<?php the_permalink(); ?>">
-						<?php if ( has_post_thumbnail() ) : ?>
-							<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?>
-						<?php endif; ?>
-					</a>
-					<div class="lfk-article-body">
-						<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-						<div class="lfk-article-meta">
-							<span><?php echo lfk_svg_icon( 'calendar' ); ?><?php echo esc_html( get_the_date() ); ?></span>
-							<span><?php echo lfk_svg_icon( 'comment' ); ?><?php comments_number( 'No Comments', '1 Comment', '% Comments' ); ?></span>
-						</div>
-					</div>
-				</article>
-			<?php endforeach; ?>
+		<div class="lfk-carousel lfk-article-carousel lfk-article-carousel--desktop" data-lfk-carousel data-lfk-visible-desktop="4" data-lfk-visible-tablet="2" data-lfk-visible-mobile="1">
+			<div class="lfk-carousel-viewport">
+				<div class="lfk-home-article-track lfk-home-article-track--desktop" data-lfk-carousel-track>
+					<?php foreach ( $desktop_posts as $post ) : ?>
+						<?php setup_postdata( $post ); ?>
+						<article class="lfk-article-card">
+							<a class="lfk-article-image" href="<?php the_permalink(); ?>">
+								<?php if ( has_post_thumbnail() ) : ?>
+									<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?>
+								<?php endif; ?>
+							</a>
+							<div class="lfk-article-body">
+								<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+								<div class="lfk-article-meta">
+									<span><?php echo lfk_svg_icon( 'calendar' ); ?><?php echo esc_html( get_the_date() ); ?></span>
+									<span><?php echo lfk_svg_icon( 'comment' ); ?><?php comments_number( 'No Comments', '1 Comment', '% Comments' ); ?></span>
+								</div>
+							</div>
+						</article>
+					<?php endforeach; ?>
+				</div>
+			</div>
 		</div>
-		<div class="lfk-home-article-track lfk-home-article-track--mobile">
-			<?php foreach ( array_filter( $mobile_posts ) as $post ) : ?>
-				<?php setup_postdata( $post ); ?>
-				<article class="lfk-article-card">
-					<a class="lfk-article-image" href="<?php the_permalink(); ?>">
-						<?php if ( has_post_thumbnail() ) : ?>
-							<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?>
-						<?php endif; ?>
-					</a>
-					<div class="lfk-article-body">
-						<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-						<div class="lfk-article-meta">
-							<span><?php echo lfk_svg_icon( 'calendar' ); ?><?php echo esc_html( get_the_date() ); ?></span>
-							<span><?php echo lfk_svg_icon( 'comment' ); ?><?php comments_number( 'No Comments', '1 Comment', '% Comments' ); ?></span>
-						</div>
-					</div>
-				</article>
-			<?php endforeach; ?>
+		<div class="lfk-carousel lfk-article-carousel lfk-article-carousel--mobile" data-lfk-carousel data-lfk-visible-desktop="1" data-lfk-visible-tablet="1" data-lfk-visible-mobile="1">
+			<div class="lfk-carousel-viewport">
+				<div class="lfk-home-article-track lfk-home-article-track--mobile" data-lfk-carousel-track>
+					<?php foreach ( array_filter( $mobile_posts ) as $post ) : ?>
+						<?php setup_postdata( $post ); ?>
+						<article class="lfk-article-card">
+							<a class="lfk-article-image" href="<?php the_permalink(); ?>">
+								<?php if ( has_post_thumbnail() ) : ?>
+									<?php the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy' ) ); ?>
+								<?php endif; ?>
+							</a>
+							<div class="lfk-article-body">
+								<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+								<div class="lfk-article-meta">
+									<span><?php echo lfk_svg_icon( 'calendar' ); ?><?php echo esc_html( get_the_date() ); ?></span>
+									<span><?php echo lfk_svg_icon( 'comment' ); ?><?php comments_number( 'No Comments', '1 Comment', '% Comments' ); ?></span>
+								</div>
+							</div>
+						</article>
+					<?php endforeach; ?>
+				</div>
+			</div>
 		</div>
 		<?php wp_reset_postdata(); ?>
 	</div>

@@ -9,7 +9,7 @@
 			<h2>ทำไมต้องเลือกของเล่นเสริมพัฒนาการจาก Learning For Kidz?</h2>
 		</div>
 		<div class="lfk-intro-art">
-			<img src="<?php echo esc_url( lfk_remote_upload_url( '2025/06/Copy-of-ggg-1-1.png' ) ); ?>" alt="Learning for Kidz" width="358" height="384" fetchpriority="high">
+			<img src="<?php echo esc_url( lfk_remote_upload_url( '2025/06/Copy-of-ggg-1-1.png' ) ); ?>" alt="Learning for Kidz" width="358" height="384" loading="lazy">
 		</div>
 	</div>
 </section>

@@ -701,6 +701,31 @@
     display: none;
   }
 
+  .lfk-mobile-filters {
+    @apply mb-10 block border-y border-[#e6edf3] bg-white;
+  }
+
+  .lfk-mobile-filters summary {
+    @apply flex min-h-[50px] cursor-pointer list-none items-center gap-3 px-4 text-[18px] font-semibold leading-6 text-[#222222];
+  }
+
+  .lfk-mobile-filters summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .lfk-mobile-filters summary::before {
+    content: "+";
+    @apply text-[24px] font-semibold leading-none text-[#222222];
+  }
+
+  .lfk-mobile-filters[open] summary::before {
+    content: "-";
+  }
+
+  .lfk-mobile-filters-panel {
+    @apply border-t border-[#e6edf3] px-4 py-4;
+  }
+
   .lfk-sidebar-title {
     @apply mb-4 text-[22px] font-semibold leading-7 text-[#222222];
   }
@@ -908,6 +933,10 @@
       padding: 0;
       border: 0;
       background: transparent;
+    }
+
+    .lfk-mobile-filters {
+      display: none;
     }
 
     .lfk-archive-products {
@@ -5717,5 +5746,185 @@ body.home .lfk-brand-logo img {
   .lfk-cart-toast {
     right: 16px;
     bottom: 84px;
+  }
+}
+
+/* Production visual parity overrides. Keep these narrow and below earlier generated rules. */
+.lfk-logo {
+  width: 114px;
+}
+
+.lfk-logo img {
+  display: block;
+  width: 114px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.lfk-primary-nav .sub-menu {
+  min-width: 220px;
+  border-radius: 0;
+  background: #0076be;
+  padding: 0;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.lfk-primary-nav .sub-menu li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.lfk-primary-nav .sub-menu a {
+  position: relative;
+  padding: 11px 34px 11px 16px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.lfk-primary-nav .sub-menu a:hover,
+.lfk-primary-nav .sub-menu a:focus {
+  background: #005c99;
+  color: #ffffff;
+}
+
+.lfk-primary-nav .sub-menu .menu-item-has-children > a::after {
+  content: "›";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  color: currentColor;
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+body.home .lfk-wide-image-section .lfk-wide-image {
+  width: min(100%, 1170px);
+  height: auto;
+  aspect-ratio: 1900 / 442;
+  object-fit: contain;
+}
+
+body.home .lfk-products-section,
+body.home .lfk-product-grid,
+.lfk-product-card,
+.lfk-archive-product-card {
+  overflow: visible;
+}
+
+body.home .lfk-product-grid {
+  padding-bottom: 24px;
+}
+
+body.home .lfk-products-section--new .lfk-product-card:nth-child(n+3),
+body.home .lfk-products-section--featured .lfk-product-card,
+body.home .lfk-products-section--featured .lfk-product-card:nth-child(-n+2) {
+  top: 0;
+}
+
+body.home .lfk-kanoodle-section {
+  margin-top: 0;
+}
+
+body.home .lfk-kanoodle-carousel .lfk-carousel-viewport,
+body.home .lfk-article-carousel .lfk-carousel-viewport {
+  overflow: hidden;
+}
+
+body.home .lfk-kanoodle-grid {
+  display: flex;
+  width: max-content;
+  gap: 12px;
+  transform: translateX(0);
+  transition: transform 0.35s ease;
+}
+
+body.home .lfk-kanoodle-card {
+  width: 283.5px;
+  flex: 0 0 283.5px;
+  overflow: visible;
+}
+
+body.home .lfk-kanoodle-card img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+body.home .lfk-article-carousel--desktop {
+  display: block;
+}
+
+body.home .lfk-article-carousel--mobile {
+  display: none;
+}
+
+body.home .lfk-home-article-track {
+  top: 0;
+  gap: 0;
+  transform: translateX(0);
+  transition: transform 0.35s ease;
+}
+
+.lfk-product-description .lfk-rich-text,
+.lfk-product-description .lfk-rich-text p,
+.lfk-product-description .lfk-rich-text li,
+.lfk-single-summary,
+.lfk-product-meta {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+.lfk-single-title,
+.lfk-single-price,
+.lfk-product-tabs,
+.lfk-product-description h2,
+.lfk-single-cart .single_add_to_cart_button {
+  font-family: Anuphan, Tahoma, Arial, sans-serif;
+}
+
+@media (max-width: 767px) {
+  .lfk-logo {
+    width: 110px;
+  }
+
+  .lfk-logo img {
+    width: 110px;
+    height: auto;
+  }
+
+  body.home .lfk-wide-image-section .lfk-wide-image {
+    width: min(100%, 370px);
+    height: auto;
+    aspect-ratio: 1900 / 442;
+  }
+
+  body.home .lfk-kanoodle-section {
+    margin-top: 0;
+  }
+
+  body.home .lfk-kanoodle-card {
+    width: 370px;
+    flex-basis: 370px;
+  }
+
+  body.home .lfk-kanoodle-card:nth-child(n+7) {
+    display: flex;
+  }
+
+  body.home .lfk-article-carousel--desktop {
+    display: none;
+  }
+
+  body.home .lfk-article-carousel--mobile {
+    display: block;
+  }
+
+  body.home .lfk-home-article-track--mobile {
+    transform: translateX(0);
+  }
+
+  body.home .lfk-home-article-track .lfk-article-card {
+    width: 370px;
+    flex: 0 0 370px;
   }
 }

@@ -23,12 +23,18 @@ $kanoodle_track = array_merge( $kanoodle_items, $kanoodle_items, $kanoodle_items
 <section class="lfk-kanoodle-section">
 	<div class="lfk-shell">
 		<?php lfk_section_heading( 'ของเล่นฝึกสมอง: ไวรัลบน TikTok' ); ?>
-		<div class="lfk-kanoodle-grid">
-			<?php foreach ( $kanoodle_track as $item ) : ?>
-				<a class="lfk-kanoodle-card" href="<?php echo esc_url( home_url( $item['href'] ) ); ?>">
-					<img src="<?php echo esc_url( lfk_remote_upload_url( $item['src'] ) ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" width="300" height="300" loading="lazy">
-				</a>
-			<?php endforeach; ?>
+		<div class="lfk-carousel lfk-kanoodle-carousel" data-lfk-carousel data-lfk-visible-desktop="4" data-lfk-visible-tablet="2" data-lfk-visible-mobile="1">
+			<button class="lfk-carousel-arrow lfk-carousel-prev" type="button" aria-label="<?php esc_attr_e( 'Previous Kanoodle products', 'lfk-tailwind' ); ?>" data-lfk-carousel-prev><?php echo lfk_svg_icon( 'chevron-left' ); ?></button>
+			<div class="lfk-carousel-viewport">
+				<div class="lfk-kanoodle-grid" data-lfk-carousel-track>
+					<?php foreach ( $kanoodle_track as $item ) : ?>
+						<a class="lfk-kanoodle-card" href="<?php echo esc_url( home_url( $item['href'] ) ); ?>">
+							<img src="<?php echo esc_url( lfk_remote_upload_url( $item['src'] ) ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" width="300" height="300" loading="lazy">
+						</a>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<button class="lfk-carousel-arrow lfk-carousel-next" type="button" aria-label="<?php esc_attr_e( 'Next Kanoodle products', 'lfk-tailwind' ); ?>" data-lfk-carousel-next><?php echo lfk_svg_icon( 'chevron-right' ); ?></button>
 		</div>
 	</div>
 </section>

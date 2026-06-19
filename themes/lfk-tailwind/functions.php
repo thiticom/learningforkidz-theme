@@ -39,7 +39,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style(
 		'lfk-tailwind',
 		$theme_uri . '/assets/dist/theme.css',
-		array( 'lfk-anuphan' ),
+		array(),
 		file_exists( $css_path ) ? filemtime( $css_path ) : LFK_TAILWIND_VERSION
 	);
 
@@ -59,6 +59,150 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
 
 	return str_replace( ' src=', ' defer src=', $tag );
 }, 10, 2 );
+
+add_filter( 'style_loader_tag', function ( $html, $handle, $href, $media ) {
+	if ( 'lfk-anuphan' !== $handle ) {
+		return $html;
+	}
+
+	$href = esc_url( $href );
+
+	return '<link rel="preload" as="style" id="lfk-anuphan-preload" href="' . $href . '" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n"
+		. '<noscript><link rel="stylesheet" id="lfk-anuphan-css" href="' . $href . '" media="' . esc_attr( $media ) . '"></noscript>' . "\n";
+}, 10, 4 );
+
+add_filter( 'wp_resource_hints', function ( $urls, $relation_type ) {
+	if ( 'preconnect' !== $relation_type || ! lfk_should_trim_plugin_assets() ) {
+		return $urls;
+	}
+
+	$urls[] = array(
+		'href'        => 'https://fonts.googleapis.com',
+		'crossorigin' => '',
+	);
+	$urls[] = array(
+		'href'        => 'https://fonts.gstatic.com',
+		'crossorigin' => '',
+	);
+
+	return $urls;
+}, 10, 2 );
+
+function lfk_print_image_preload( $image_id, $size, $sizes, $media = '' ) {
+	$image = wp_get_attachment_image_src( $image_id, $size );
+	if ( ! $image ) {
+		return;
+	}
+
+	$srcset       = wp_get_attachment_image_srcset( $image_id, $size );
+	$href         = lfk_prefer_local_upload_webp_url( $image[0] );
+	$versioned    = lfk_version_local_upload_url( $image[0] );
+	$attrs        = array(
+		'rel'  => 'preload',
+		'as'   => 'image',
+		'href' => $href,
+	);
+
+	if ( $srcset && $href === $versioned ) {
+		$attrs['imagesrcset'] = lfk_version_local_upload_srcset( $srcset );
+		$attrs['imagesizes']  = $sizes;
+	}
+
+	if ( $media ) {
+		$attrs['media'] = $media;
+	}
+
+	echo '<link';
+	foreach ( $attrs as $name => $value ) {
+		echo ' ' . esc_attr( $name ) . '="' . esc_attr( $value ) . '"';
+	}
+	echo '>' . "\n";
+}
+
+function lfk_version_local_upload_url( $url ) {
+	$uploads = wp_get_upload_dir();
+	if ( empty( $uploads['baseurl'] ) || empty( $uploads['basedir'] ) || ! str_starts_with( $url, $uploads['baseurl'] ) ) {
+		return $url;
+	}
+
+	$relative = ltrim( substr( $url, strlen( $uploads['baseurl'] ) ), '/' );
+	$file     = trailingslashit( $uploads['basedir'] ) . $relative;
+	if ( ! file_exists( $file ) ) {
+		return $url;
+	}
+
+	return add_query_arg( 'v', filemtime( $file ), $url );
+}
+
+function lfk_version_local_upload_srcset( $srcset ) {
+	if ( ! $srcset ) {
+		return '';
+	}
+
+	$items = array();
+	foreach ( explode( ',', $srcset ) as $item ) {
+		$parts = preg_split( '/\s+/', trim( $item ) );
+		if ( empty( $parts[0] ) ) {
+			continue;
+		}
+
+		$url      = lfk_version_local_upload_url( $parts[0] );
+		$items[] = trim( $url . ' ' . implode( ' ', array_slice( $parts, 1 ) ) );
+	}
+
+	return implode( ', ', $items );
+}
+
+add_action( 'wp_head', function () {
+	if ( is_front_page() ) {
+		$front_id = (int) get_option( 'page_on_front' );
+		$slides   = function_exists( 'get_field' ) ? get_field( 'hero_banner_slider', $front_id ) : array();
+		$first    = is_array( $slides ) ? reset( $slides ) : null;
+
+		if ( is_array( $first ) ) {
+			$desktop_img = isset( $first['desktop_image'] ) && is_array( $first['desktop_image'] ) ? $first['desktop_image'] : null;
+			$mobile_img  = isset( $first['mobile_image'] ) && is_array( $first['mobile_image'] ) ? $first['mobile_image'] : null;
+			$desktop_id  = ! empty( $desktop_img['ID'] ) ? (int) $desktop_img['ID'] : ( ! empty( $desktop_img['id'] ) ? (int) $desktop_img['id'] : 0 );
+			$mobile_id   = ! empty( $mobile_img['ID'] ) ? (int) $mobile_img['ID'] : ( ! empty( $mobile_img['id'] ) ? (int) $mobile_img['id'] : 0 );
+
+			if ( $mobile_id ) {
+				lfk_print_image_preload( $mobile_id, 'full', '100vw', '(max-width: 767px)' );
+			}
+			if ( $desktop_id ) {
+				lfk_print_image_preload( $desktop_id, 'full', '100vw', '(min-width: 768px)' );
+			}
+		}
+	}
+
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		$product = wc_get_product( get_queried_object_id() );
+		if ( $product && $product->get_image_id() ) {
+			lfk_print_image_preload( $product->get_image_id(), 'woocommerce_single', '(max-width: 767px) 370px, 575px' );
+		}
+	}
+
+	if ( is_tax( 'product_cat' ) ) {
+		$term = get_queried_object();
+		if ( $term instanceof WP_Term ) {
+			$children = get_terms( array(
+				'taxonomy'   => 'product_cat',
+				'parent'     => $term->term_id,
+				'hide_empty' => true,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+			) );
+			if ( ! is_wp_error( $children ) ) {
+				foreach ( $children as $child ) {
+					$thumbnail_id = (int) get_term_meta( $child->term_id, 'thumbnail_id', true );
+					if ( $thumbnail_id ) {
+						lfk_print_image_preload( $thumbnail_id, 'medium_large', '(max-width: 767px) calc(100vw - 32px), 33vw' );
+						break;
+					}
+				}
+			}
+		}
+	}
+}, 1 );
 
 function lfk_theme_template_path( $template_name ) {
 	$template = locate_template( $template_name );
@@ -305,6 +449,7 @@ function lfk_dequeue_local_recaptcha() {
 		'addtoany',
 		'berocket_lmp_style',
 		'brands-styles',
+		'classic-theme-styles',
 		'e-animation-fadeIn',
 		'e-apple-webkit',
 		'e-popup',
@@ -344,6 +489,8 @@ function lfk_dequeue_local_recaptcha() {
 		'woolentor-product-grid-modern',
 		'woolentor-quickview',
 		'woolentor-widgets',
+		'global-styles',
+		'wp-block-library',
 		'yith-wcan-shortcodes',
 	);
 
@@ -571,7 +718,31 @@ function lfk_svg_icon( $name ) {
 }
 
 function lfk_remote_upload_url( $path ) {
-	return 'https://www.learningforkidz.com/wp-content/uploads/' . ltrim( $path, '/' );
+	$relative = ltrim( $path, '/' );
+	$uploads  = wp_get_upload_dir();
+	if ( ! empty( $uploads['baseurl'] ) && ! empty( $uploads['basedir'] ) ) {
+		$local_file = trailingslashit( $uploads['basedir'] ) . $relative;
+		if ( file_exists( $local_file ) ) {
+			return lfk_prefer_local_upload_webp_url( trailingslashit( $uploads['baseurl'] ) . $relative );
+		}
+	}
+
+	return 'https://www.learningforkidz.com/wp-content/uploads/' . $relative;
+}
+
+function lfk_prefer_local_upload_webp_url( $url ) {
+	$uploads = wp_get_upload_dir();
+	if ( empty( $uploads['baseurl'] ) || empty( $uploads['basedir'] ) || ! str_starts_with( $url, $uploads['baseurl'] ) ) {
+		return $url;
+	}
+
+	$relative = ltrim( substr( $url, strlen( $uploads['baseurl'] ) ), '/' );
+	$file     = trailingslashit( $uploads['basedir'] ) . $relative;
+	if ( file_exists( $file . '.webp' ) ) {
+		$url .= '.webp';
+	}
+
+	return lfk_version_local_upload_url( $url );
 }
 
 function lfk_logo_url() {
@@ -683,6 +854,74 @@ function lfk_content_with_image_aspect_ratios( $content ) {
 	);
 }
 
+function lfk_product_card_image( $product ) {
+	if ( ! $product instanceof WC_Product ) {
+		return '';
+	}
+
+	$image_id = $product->get_image_id();
+	if ( ! $image_id ) {
+		return $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) );
+	}
+
+	$image = wp_get_attachment_image_src( $image_id, 'woocommerce_thumbnail' );
+	if ( ! $image ) {
+		return $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) );
+	}
+
+	$alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+	if ( '' === $alt ) {
+		$alt = $product->get_name();
+	}
+
+	return sprintf(
+		'<img width="%1$d" height="%2$d" src="%3$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" alt="%4$s" loading="lazy" decoding="async">',
+		(int) $image[1],
+		(int) $image[2],
+		esc_url( lfk_prefer_local_upload_webp_url( $image[0] ) ),
+		esc_attr( $alt )
+	);
+}
+
+function lfk_local_attachment_image( $attachment_id, $size, $attributes = array() ) {
+	$image = wp_get_attachment_image_src( $attachment_id, $size );
+	if ( ! $image ) {
+		return wp_get_attachment_image( $attachment_id, $size, false, $attributes );
+	}
+
+	$alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+	if ( '' === $alt ) {
+		$alt = get_the_title( $attachment_id );
+	}
+
+	$default_class = 'attachment-' . esc_attr( $size ) . ' size-' . esc_attr( $size );
+	$attributes    = wp_parse_args(
+		$attributes,
+		array(
+			'alt'      => $alt,
+			'class'    => $default_class,
+			'decoding' => 'async',
+			'loading'  => 'lazy',
+		)
+	);
+	if ( ! empty( $attributes['class'] ) && ! str_contains( $attributes['class'], $default_class ) ) {
+		$attributes['class'] = trim( $default_class . ' ' . $attributes['class'] );
+	}
+
+	$attributes['src']    = lfk_prefer_local_upload_webp_url( $image[0] );
+	$attributes['width']  = (int) $image[1];
+	$attributes['height'] = (int) $image[2];
+
+	$html = '<img';
+	foreach ( $attributes as $name => $value ) {
+		if ( false === $value || null === $value || '' === $value ) {
+			continue;
+		}
+		$html .= sprintf( ' %s="%s"', esc_attr( $name ), esc_attr( $value ) );
+	}
+	return $html . '>';
+}
+
 function lfk_product_card( $product ) {
 	if ( ! $product instanceof WC_Product ) {
 		return;
@@ -693,7 +932,7 @@ function lfk_product_card( $product ) {
 	?>
 	<article class="<?php echo esc_attr( $classes ); ?>">
 		<a class="lfk-product-image" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
-			<?php echo $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) ); ?>
+			<?php echo lfk_product_card_image( $product ); ?>
 		</a>
 		<h2 class="lfk-product-title"><a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h2>
 		<div class="lfk-product-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
@@ -745,7 +984,7 @@ function lfk_archive_product_card( $product ) {
 	?>
 	<li class="<?php echo esc_attr( $classes ); ?>">
 		<a class="lfk-product-image" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
-			<?php echo $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) ); ?>
+			<?php echo lfk_product_card_image( $product ); ?>
 		</a>
 		<h2 class="lfk-product-title"><a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( lfk_archive_product_title( $product ) ); ?></a></h2>
 		<div class="lfk-product-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>

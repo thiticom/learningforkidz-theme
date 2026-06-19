@@ -25,7 +25,7 @@
 				<?php echo lfk_svg_icon( 'menu' ); ?>
 			</button>
 			<a class="lfk-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Learning for Kidz home', 'lfk-tailwind' ); ?>">
-				<img src="<?php echo esc_url( lfk_logo_url() ); ?>" alt="<?php esc_attr_e( 'Learning for Kidz', 'lfk-tailwind' ); ?>" width="150" height="105">
+				<img class="skip-lazy" src="<?php echo esc_url( lfk_logo_url() ); ?>" alt="<?php esc_attr_e( 'Learning for Kidz', 'lfk-tailwind' ); ?>" width="114" height="80" loading="eager" fetchpriority="high" data-no-lazy="1">
 			</a>
 			<nav class="lfk-primary-nav" aria-label="<?php esc_attr_e( 'Primary menu', 'lfk-tailwind' ); ?>">
 				<?php
