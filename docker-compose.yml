@@ -31,6 +31,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ./themes/lfk-tailwind:/var/www/html/wp-content/themes/lfk-tailwind
+      - ./plugins/lfk-resource-downloads:/var/www/html/wp-content/plugins/lfk-resource-downloads
 
   cli:
     image: wordpress:cli-php8.2
@@ -47,6 +48,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ./themes/lfk-tailwind:/var/www/html/wp-content/themes/lfk-tailwind
+      - ./plugins/lfk-resource-downloads:/var/www/html/wp-content/plugins/lfk-resource-downloads
 
 volumes:
   db_data:

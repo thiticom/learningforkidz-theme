@@ -33,6 +33,7 @@
 			<a href="<?php echo esc_url( home_url( '/about-us' ) ); ?>">เกี่ยวกับเรา</a>
 			<a href="<?php echo esc_url( home_url( '/promotion/' ) ); ?>">โปรโมชั่น</a>
 			<a href="<?php echo esc_url( home_url( '/article/' ) ); ?>">บทความ</a>
+			<a href="<?php echo esc_url( home_url( '/downloads/' ) ); ?>">ไฟล์ดาวน์โหลด</a>
 			<h5 class="lfk-footer-subhead">ติดต่อเรา</h5>
 			<p>บริษัท พัฒนาวิชาการและประเมินผล จำกัด</p>
 			<p>เลขที่ 209/33 ซอย งามวงศ์วาน 35 (พงษ์เพชรพัฒนา) แขวง ทุ่งสองห้อง เขตหลักสี่ กรุงเทพมหานคร</p>
@@ -83,6 +84,7 @@
 				<a href="<?php echo esc_url( home_url( '/about-us' ) ); ?>">เกี่ยวกับเรา</a>
 				<a href="<?php echo esc_url( home_url( '/promotion/' ) ); ?>">โปรโมชั่น</a>
 				<a href="<?php echo esc_url( home_url( '/article/' ) ); ?>">บทความ</a>
+				<a href="<?php echo esc_url( home_url( '/downloads/' ) ); ?>">ไฟล์ดาวน์โหลด</a>
 			</div>
 			<img class="lfk-footer-mobile-security" src="<?php echo esc_url( lfk_remote_upload_url( '2025/06/payment-security-badge-1.png' ) ); ?>" alt="Payment security" width="175" height="35" loading="lazy">
 		</nav>

@@ -33,16 +33,17 @@ $age_cards = array(
 <div class="lfk-ages-page" role="main">
 	<div class="lfk-shell">
 		<div class="lfk-age-visual-grid">
-			<?php foreach ( $age_cards as $card ) : ?>
+			<?php foreach ( $age_cards as $index => $card ) : ?>
 				<?php
 				$age = get_term_by( 'slug', $card['slug'], 'age' );
 				if ( ! $age || is_wp_error( $age ) ) {
 					continue;
 				}
+				$is_priority_image = $index < 2;
 				?>
 				<section class="lfk-age-visual-card">
 					<a href="<?php echo esc_url( get_term_link( $age ) ); ?>">
-						<img src="<?php echo esc_url( lfk_remote_upload_url( $card['image'] ) ); ?>" alt="<?php echo esc_attr( $card['alt'] ); ?>" width="350" height="350" loading="lazy">
+						<img<?php echo $is_priority_image ? ' class="skip-lazy" data-no-lazy="1"' : ''; ?> src="<?php echo esc_url( lfk_remote_upload_url( $card['image'] ) ); ?>" alt="<?php echo esc_attr( $card['alt'] ); ?>" width="350" height="350" loading="<?php echo $is_priority_image ? 'eager' : 'lazy'; ?>"<?php echo $is_priority_image ? ' fetchpriority="high"' : ''; ?>>
 						<h2><?php echo esc_html( $age->name ); ?></h2>
 					</a>
 				</section>

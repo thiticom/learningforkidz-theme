@@ -46,6 +46,7 @@ docker compose run --rm cli wp core install \
   --admin_email=admin@example.test \
   --skip-email
 docker compose run --rm cli wp plugin install woocommerce --activate
+docker compose run --rm cli wp plugin activate lfk-resource-downloads
 docker compose run --rm cli wp theme activate lfk-tailwind
 ```
 
@@ -54,3 +55,14 @@ Default local URL:
 ```text
 http://100.109.57.34:8085
 ```
+
+## Resource Downloads
+
+The `plugins/lfk-resource-downloads` plugin adds gated product guides and lesson
+plans:
+
+- Add resources in WordPress Admin → Download Resources.
+- Set a resource type, choose a media-library file, and add related WooCommerce
+  product SKUs or IDs when the resource should appear on product detail pages.
+- Create a library page with `[lfk_resource_library]`.
+- Export captured name/email leads from Download Resources → Leads.

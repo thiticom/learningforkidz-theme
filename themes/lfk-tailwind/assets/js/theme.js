@@ -4,9 +4,258 @@
     var menu = document.querySelector('[data-lfk-mobile-nav]');
     if (!button || !menu) return;
 
+    var submenuParents = Array.prototype.slice.call(menu.querySelectorAll('.menu-item-has-children'));
+
+    function setSubmenu(item, isOpen) {
+      var toggle = item.querySelector(':scope > .lfk-mobile-submenu-toggle');
+      var submenu = item.querySelector(':scope > .sub-menu');
+
+      item.classList.toggle('is-submenu-open', isOpen);
+      if (toggle) toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (submenu) submenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+
+    submenuParents.forEach(function (item, index) {
+      var link = item.querySelector(':scope > a');
+      var submenu = item.querySelector(':scope > .sub-menu');
+      if (!link || !submenu) return;
+
+      var toggle = item.querySelector(':scope > .lfk-mobile-submenu-toggle');
+      if (!toggle) {
+        toggle = document.createElement('button');
+        toggle.className = 'lfk-mobile-submenu-toggle';
+        toggle.type = 'button';
+        toggle.innerHTML = '<span aria-hidden="true"></span>';
+        link.insertAdjacentElement('afterend', toggle);
+      }
+
+      if (!submenu.id) {
+        submenu.id = 'lfk-mobile-submenu-' + index;
+      }
+
+      toggle.setAttribute('aria-controls', submenu.id);
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Toggle submenu: ' + link.textContent.trim());
+      submenu.setAttribute('aria-hidden', 'true');
+
+      toggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        setSubmenu(item, !item.classList.contains('is-submenu-open'));
+      });
+    });
+
     button.addEventListener('click', function () {
       var isOpen = menu.classList.toggle('is-open');
       button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      document.documentElement.classList.toggle('is-lfk-menu-open', isOpen);
+
+      if (!isOpen) {
+        submenuParents.forEach(function (item) {
+          setSubmenu(item, false);
+        });
+      }
+    });
+  }
+
+  function initSearchOverlay() {
+    var openButton = document.querySelector('[data-lfk-search-open]');
+    var overlay = document.querySelector('[data-lfk-search-overlay]');
+    if (!openButton || !overlay) return;
+
+    var input = overlay.querySelector('[data-lfk-search-input]');
+    var results = overlay.querySelector('[data-lfk-search-results]');
+    var closeButtons = Array.prototype.slice.call(overlay.querySelectorAll('[data-lfk-search-close]'));
+    var searchTimer = null;
+    var searchRequest = null;
+    var searchConfig = window.lfkSearch || {};
+    var minChars = parseInt(searchConfig.minChars || '2', 10);
+
+    function cancelSearch() {
+      if (searchTimer) window.clearTimeout(searchTimer);
+      searchTimer = null;
+
+      if (searchRequest) searchRequest.abort();
+      searchRequest = null;
+    }
+
+    function clearResults() {
+      if (!results) return;
+      results.innerHTML = '';
+      results.hidden = true;
+    }
+
+    function showSearchStatus(message) {
+      if (!results) return;
+
+      results.innerHTML = '';
+      var status = document.createElement('div');
+      status.className = 'lfk-search-status';
+      status.textContent = message;
+      results.appendChild(status);
+      results.hidden = false;
+    }
+
+    function renderSearchResults(data, term) {
+      if (!results) return;
+
+      var items = data && data.results ? data.results : [];
+      results.innerHTML = '';
+
+      if (!items.length) {
+        showSearchStatus('ไม่พบผลลัพธ์');
+        return;
+      }
+
+      var list = document.createElement('div');
+      list.className = 'lfk-search-result-list';
+
+      items.forEach(function (item) {
+        var link = document.createElement('a');
+        link.className = 'lfk-search-result';
+        link.href = item.url;
+
+        if (item.image) {
+          var image = document.createElement('img');
+          image.className = 'lfk-search-result-image';
+          image.src = item.image;
+          image.alt = '';
+          image.loading = 'lazy';
+          link.appendChild(image);
+        }
+
+        var body = document.createElement('span');
+        body.className = 'lfk-search-result-body';
+
+        var type = document.createElement('span');
+        type.className = 'lfk-search-result-type';
+        type.textContent = item.type || '';
+        body.appendChild(type);
+
+        var title = document.createElement('span');
+        title.className = 'lfk-search-result-title';
+        title.textContent = item.title || '';
+        body.appendChild(title);
+
+        if (item.summary) {
+          var summary = document.createElement('span');
+          summary.className = 'lfk-search-result-summary';
+          summary.textContent = item.summary;
+          body.appendChild(summary);
+        }
+
+        link.appendChild(body);
+        list.appendChild(link);
+      });
+
+      results.appendChild(list);
+
+      if (data && data.searchUrl) {
+        var allResults = document.createElement('a');
+        allResults.className = 'lfk-search-all-results';
+        allResults.href = data.searchUrl;
+        allResults.textContent = 'ดูผลการค้นหาทั้งหมด: ' + term;
+        results.appendChild(allResults);
+      }
+
+      results.hidden = false;
+    }
+
+    function fetchSearchResults(term) {
+      if (!searchConfig.ajaxUrl || !window.fetch || !window.URLSearchParams) {
+        clearResults();
+        return;
+      }
+
+      cancelSearch();
+      showSearchStatus('กำลังค้นหา...');
+
+      var params = new URLSearchParams();
+      params.set('action', 'lfk_ajax_search');
+      params.set('term', term);
+
+      searchRequest = window.AbortController ? new AbortController() : null;
+
+      window.fetch(searchConfig.ajaxUrl + '?' + params.toString(), {
+        credentials: 'same-origin',
+        signal: searchRequest ? searchRequest.signal : undefined
+      }).then(function (response) {
+        return response.json();
+      }).then(function (payload) {
+        if (!input || input.value.trim() !== term) return;
+
+        if (payload && payload.success) {
+          renderSearchResults(payload.data || {}, term);
+        } else {
+          showSearchStatus('ค้นหาไม่ได้ในตอนนี้');
+        }
+      }).catch(function (error) {
+        if (error && 'AbortError' === error.name) return;
+        showSearchStatus('ค้นหาไม่ได้ในตอนนี้');
+      }).finally(function () {
+        searchRequest = null;
+      });
+    }
+
+    function queueSearch() {
+      if (!input) return;
+
+      var term = input.value.trim();
+      if (term.length < minChars) {
+        cancelSearch();
+        clearResults();
+        return;
+      }
+
+      if (searchTimer) window.clearTimeout(searchTimer);
+      if (searchRequest) {
+        searchRequest.abort();
+        searchRequest = null;
+      }
+
+      searchTimer = window.setTimeout(function () {
+        fetchSearchResults(term);
+      }, 250);
+    }
+
+    function openSearch(event) {
+      if (event) event.preventDefault();
+
+      overlay.hidden = false;
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      openButton.setAttribute('aria-expanded', 'true');
+      document.documentElement.classList.add('is-lfk-search-open');
+
+      if (input) {
+        window.setTimeout(function () {
+          input.focus();
+          queueSearch();
+        }, 0);
+      }
+    }
+
+    function closeSearch() {
+      cancelSearch();
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.hidden = true;
+      openButton.setAttribute('aria-expanded', 'false');
+      document.documentElement.classList.remove('is-lfk-search-open');
+      openButton.focus();
+    }
+
+    openButton.addEventListener('click', openSearch);
+    if (input) input.addEventListener('input', queueSearch);
+
+    closeButtons.forEach(function (button) {
+      button.addEventListener('click', closeSearch);
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if ('Escape' === event.key && overlay.classList.contains('is-open')) {
+        closeSearch();
+      }
     });
   }
 
@@ -125,6 +374,7 @@
       var track = root.querySelector('[data-lfk-carousel-track]');
       var prev = root.querySelector('[data-lfk-carousel-prev]');
       var next = root.querySelector('[data-lfk-carousel-next]');
+      var dots = Array.prototype.slice.call(root.querySelectorAll('[data-lfk-carousel-dot]'));
       var index = 0;
       var timer = null;
       var shouldHydrateImages = !('IntersectionObserver' in window);
@@ -190,6 +440,16 @@
         return Math.max(0, track.children.length - visibleCount());
       }
 
+      function updateDots() {
+        if (!dots.length) return;
+
+        var activeIndex = index % dots.length;
+        dots.forEach(function (dot, dotIndex) {
+          dot.classList.toggle('is-active', dotIndex === activeIndex);
+          dot.setAttribute('aria-current', dotIndex === activeIndex ? 'true' : 'false');
+        });
+      }
+
       function show(nextIndex) {
         index = Math.max(0, Math.min(nextIndex, maxIndex()));
         var firstItem = track.children[0];
@@ -198,6 +458,7 @@
         var itemWidth = firstItem.getBoundingClientRect().width + gap;
         track.style.transform = 'translateX(' + (-index * itemWidth) + 'px)';
         hydrateAround(index);
+        updateDots();
       }
 
       function restart() {
@@ -225,6 +486,13 @@
           restart();
         });
       }
+
+      dots.forEach(function (dot, dotIndex) {
+        dot.addEventListener('click', function () {
+          show(dotIndex);
+          restart();
+        });
+      });
 
       root.addEventListener('mouseenter', pause);
       root.addEventListener('mouseleave', restart);
@@ -776,6 +1044,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initMobileMenu();
+    initSearchOverlay();
     initHeroSlider();
     initCarousels();
     initBackToTop();

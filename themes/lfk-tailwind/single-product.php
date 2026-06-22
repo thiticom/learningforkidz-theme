@@ -165,6 +165,8 @@ while ( have_posts() ) :
 							<div><span><?php esc_html_e( 'แบรนด์:', 'lfk-tailwind' ); ?></span> <a href="<?php echo esc_url( get_term_link( $brand[0] ) ); ?>"><?php echo esc_html( $brand[0]->name ); ?></a></div>
 						<?php endif; ?>
 					</div>
+
+					<?php do_action( 'lfk_single_product_downloads', $product ); ?>
 				</section>
 			</div>
 

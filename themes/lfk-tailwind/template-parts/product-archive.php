@@ -36,8 +36,14 @@ if ( is_tax( 'product_cat' ) ) {
 		}
 	}
 }
+$show_hero_image = $hero_image_id && $child_terms;
+$hero_image_html = '';
+if ( $show_hero_image ) {
+	$hero_image_html = wp_get_attachment_image( $hero_image_id, 'full', false, array( 'loading' => 'eager' ) );
+	$show_hero_image = '' !== trim( $hero_image_html );
+}
 ?>
-<div class="lfk-product-archive<?php echo $hero_image_id ? ' lfk-product-archive--has-hero' : ''; ?>" role="main" data-lfk-archive>
+<div class="lfk-product-archive<?php echo $child_terms ? ' lfk-product-archive--category-directory' : ''; ?><?php echo $show_hero_image ? ' lfk-product-archive--has-hero' : ''; ?>" role="main" data-lfk-archive>
 	<div class="lfk-shell">
 		<?php if ( function_exists( 'woocommerce_breadcrumb' ) ) : ?>
 			<div class="lfk-breadcrumbs">
@@ -51,9 +57,9 @@ if ( is_tax( 'product_cat' ) ) {
 			</div>
 		<?php endif; ?>
 
-		<?php if ( $hero_image_id ) : ?>
+		<?php if ( $show_hero_image ) : ?>
 			<div class="lfk-archive-hero">
-				<?php echo wp_get_attachment_image( $hero_image_id, 'full', false, array( 'loading' => 'eager' ) ); ?>
+				<?php echo $hero_image_html; ?>
 			</div>
 		<?php endif; ?>
 
@@ -68,34 +74,64 @@ if ( is_tax( 'product_cat' ) ) {
 		<?php endif; ?>
 
 		<?php if ( $child_terms ) : ?>
-			<section class="lfk-category-archive-grid" aria-label="<?php echo esc_attr( $archive_title ); ?>">
-				<?php foreach ( $child_terms as $index => $term ) : ?>
-					<?php
-					$thumbnail_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
-					$term_link    = get_term_link( $term );
-					if ( is_wp_error( $term_link ) ) {
-						continue;
-					}
-					?>
-					<a class="lfk-category-card" href="<?php echo esc_url( $term_link ); ?>">
-						<?php if ( $thumbnail_id ) : ?>
-							<?php
-							echo lfk_local_attachment_image(
-								$thumbnail_id,
-								'medium_large',
-								array(
-									'loading'       => 0 === $index ? 'eager' : 'lazy',
-									'fetchpriority' => 0 === $index ? 'high' : 'low',
-								)
-							);
-							?>
-						<?php else : ?>
-							<span class="lfk-category-card-fallback"><?php echo esc_html( $term->name ); ?></span>
-						<?php endif; ?>
-						<h2><?php echo esc_html( $term->name ); ?></h2>
-					</a>
-				<?php endforeach; ?>
-			</section>
+			<div class="lfk-archive-layout lfk-category-archive-layout">
+				<details class="lfk-mobile-filters lfk-category-filters">
+					<summary><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></summary>
+					<div class="lfk-mobile-filters-panel">
+						<nav class="lfk-category-filter-list" aria-label="<?php echo esc_attr( $archive_title ); ?>">
+							<?php foreach ( $child_terms as $term ) : ?>
+								<?php $term_link = get_term_link( $term ); ?>
+								<?php if ( ! is_wp_error( $term_link ) ) : ?>
+									<a href="<?php echo esc_url( $term_link ); ?>"><?php echo esc_html( $term->name ); ?></a>
+								<?php endif; ?>
+							<?php endforeach; ?>
+						</nav>
+					</div>
+				</details>
+				<aside class="lfk-archive-sidebar lfk-category-sidebar" aria-label="<?php esc_attr_e( 'Product category filters', 'lfk-tailwind' ); ?>">
+					<details class="lfk-category-filter-box">
+						<summary><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></summary>
+						<div class="lfk-category-filter-panel">
+							<nav class="lfk-category-filter-list" aria-label="<?php echo esc_attr( $archive_title ); ?>">
+								<?php foreach ( $child_terms as $term ) : ?>
+									<?php $term_link = get_term_link( $term ); ?>
+									<?php if ( ! is_wp_error( $term_link ) ) : ?>
+										<a href="<?php echo esc_url( $term_link ); ?>"><?php echo esc_html( $term->name ); ?></a>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</nav>
+						</div>
+					</details>
+				</aside>
+				<section class="lfk-category-archive-grid" aria-label="<?php echo esc_attr( $archive_title ); ?>">
+					<?php foreach ( $child_terms as $index => $term ) : ?>
+						<?php
+						$thumbnail_id = (int) get_term_meta( $term->term_id, 'thumbnail_id', true );
+						$term_link    = get_term_link( $term );
+						if ( is_wp_error( $term_link ) ) {
+							continue;
+						}
+						?>
+						<a class="lfk-category-card" href="<?php echo esc_url( $term_link ); ?>">
+							<?php if ( $thumbnail_id ) : ?>
+								<?php
+								echo lfk_local_attachment_image(
+									$thumbnail_id,
+									'medium_large',
+									array(
+										'loading'       => 0 === $index ? 'eager' : 'lazy',
+										'fetchpriority' => 0 === $index ? 'high' : 'low',
+									)
+								);
+								?>
+							<?php else : ?>
+								<span class="lfk-category-card-fallback"><?php echo esc_html( $term->name ); ?></span>
+							<?php endif; ?>
+							<h2><?php echo esc_html( $term->name ); ?> <span class="lfk-category-count">(<?php echo esc_html( (string) $term->count ); ?>)</span></h2>
+						</a>
+					<?php endforeach; ?>
+				</section>
+			</div>
 
 		<?php elseif ( have_posts() ) : ?>
 			<div class="lfk-archive-layout">
@@ -135,9 +171,19 @@ if ( is_tax( 'product_cat' ) ) {
 
 					<ul class="lfk-archive-product-list">
 						<?php
+						$product_index = 0;
 						while ( have_posts() ) :
 							the_post();
-							lfk_archive_product_card( wc_get_product( get_the_ID() ) );
+							lfk_archive_product_card(
+								wc_get_product( get_the_ID() ),
+								array(
+									'class'         => 0 === $product_index ? 'skip-lazy' : '',
+									'data-no-lazy'  => 0 === $product_index ? '1' : '',
+									'fetchpriority' => 0 === $product_index ? 'high' : 'low',
+									'loading'       => 0 === $product_index ? 'eager' : 'lazy',
+								)
+							);
+							$product_index++;
 						endwhile;
 						?>
 					</ul>

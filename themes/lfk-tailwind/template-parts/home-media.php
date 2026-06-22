@@ -35,6 +35,11 @@ $kanoodle_track = array_merge( $kanoodle_items, $kanoodle_items, $kanoodle_items
 				</div>
 			</div>
 			<button class="lfk-carousel-arrow lfk-carousel-next" type="button" aria-label="<?php esc_attr_e( 'Next Kanoodle products', 'lfk-tailwind' ); ?>" data-lfk-carousel-next><?php echo lfk_svg_icon( 'chevron-right' ); ?></button>
+			<div class="lfk-carousel-dots lfk-kanoodle-dots" aria-label="<?php esc_attr_e( 'Kanoodle carousel pagination', 'lfk-tailwind' ); ?>">
+				<?php foreach ( $kanoodle_items as $index => $item ) : ?>
+					<button class="lfk-carousel-dot<?php echo 0 === $index ? ' is-active' : ''; ?>" type="button" aria-label="<?php echo esc_attr( sprintf( __( 'Show Kanoodle slide %d', 'lfk-tailwind' ), $index + 1 ) ); ?>" data-lfk-carousel-dot></button>
+				<?php endforeach; ?>
+			</div>
 		</div>
 	</div>
 </section>

@@ -40,13 +40,14 @@
 				?>
 			</nav>
 			<div class="lfk-icon-row">
-				<a class="lfk-icon-link" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'lfk-tailwind' ); ?>"><?php echo lfk_svg_icon( 'search' ); ?></a>
-				<a class="lfk-icon-link" href="<?php echo esc_url( home_url( '/wishlists/' ) ); ?>" aria-label="<?php esc_attr_e( 'Wishlist', 'lfk-tailwind' ); ?>"><?php echo lfk_svg_icon( 'heart' ); ?></a>
-				<a class="lfk-icon-link hidden md:inline-flex" href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" aria-label="<?php esc_attr_e( 'Account', 'lfk-tailwind' ); ?>"><?php echo lfk_svg_icon( 'user' ); ?></a>
-				<a class="lfk-cart-link" href="<?php echo esc_url( wc_get_cart_url() ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'lfk-tailwind' ); ?>">
+				<a class="lfk-icon-link lfk-search-link" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'lfk-tailwind' ); ?>" aria-controls="lfk-search-overlay" aria-expanded="false" data-lfk-search-open><?php echo lfk_svg_icon( 'search' ); ?></a>
+				<a class="lfk-icon-link lfk-wishlist-link" href="<?php echo esc_url( home_url( '/wishlists/' ) ); ?>" aria-label="<?php esc_attr_e( 'Wishlist', 'lfk-tailwind' ); ?>"><?php echo lfk_svg_icon( 'heart' ); ?></a>
+				<a class="lfk-icon-link lfk-account-link" href="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>" aria-label="<?php esc_attr_e( 'Account', 'lfk-tailwind' ); ?>"><?php echo lfk_svg_icon( 'user' ); ?></a>
+				<?php $lfk_cart_count = lfk_cart_count(); ?>
+				<a class="lfk-cart-link lfk-cart-icon-link" href="<?php echo esc_url( wc_get_cart_url() ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'lfk-tailwind' ); ?>">
 					<span class="lfk-cart-total"><?php echo wp_kses_post( lfk_cart_total() ); ?></span>
 					<?php echo lfk_svg_icon( 'cart' ); ?>
-					<span class="lfk-cart-count"><?php echo esc_html( lfk_cart_count() ); ?></span>
+					<span class="lfk-cart-count<?php echo $lfk_cart_count > 0 ? '' : ' is-empty'; ?>"><?php echo esc_html( $lfk_cart_count ); ?></span>
 				</a>
 			</div>
 		</div>
@@ -62,5 +63,13 @@
 			) );
 			?>
 		</nav>
+	</div>
+	<div class="lfk-search-overlay" id="lfk-search-overlay" role="dialog" aria-modal="true" aria-labelledby="lfk-search-label" aria-hidden="true" hidden data-lfk-search-overlay>
+		<button class="lfk-search-backdrop" type="button" aria-label="<?php esc_attr_e( 'Close search', 'lfk-tailwind' ); ?>" data-lfk-search-close></button>
+		<form class="lfk-search-modal" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
+			<label class="sr-only" id="lfk-search-label" for="lfk-search-field"><?php esc_html_e( 'Search', 'lfk-tailwind' ); ?></label>
+			<input class="lfk-search-modal-input" id="lfk-search-field" type="search" name="s" placeholder="<?php esc_attr_e( 'Type to start searching...', 'lfk-tailwind' ); ?>" autocomplete="off" data-lfk-search-input>
+			<div class="lfk-search-results" aria-live="polite" hidden data-lfk-search-results></div>
+		</form>
 	</div>
 </header>

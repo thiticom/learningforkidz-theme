@@ -6,6 +6,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'LFK_TAILWIND_VERSION', '0.1.0' );
 
+function lfk_is_staging_host() {
+	$host = isset( $_SERVER['HTTP_HOST'] ) ? strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) ) : '';
+	$host = preg_replace( '/:\d+$/', '', $host );
+
+	return 'staging.learningforkidz.com' === $host;
+}
+
+add_action( 'send_headers', function () {
+	if ( lfk_is_staging_host() ) {
+		header( 'X-Robots-Tag: noindex, nofollow', true );
+	}
+} );
+
+add_filter( 'wp_robots', function ( $robots ) {
+	if ( ! lfk_is_staging_host() ) {
+		return $robots;
+	}
+
+	unset( $robots['index'], $robots['follow'] );
+	$robots['noindex']  = true;
+	$robots['nofollow'] = true;
+
+	return $robots;
+} );
+
+add_filter( 'rank_math/frontend/robots', function ( $robots ) {
+	if ( ! lfk_is_staging_host() ) {
+		return $robots;
+	}
+
+	return array(
+		'index'  => 'noindex',
+		'follow' => 'nofollow',
+	);
+}, 1000 );
+
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
@@ -50,6 +86,15 @@ add_action( 'wp_enqueue_scripts', function () {
 		file_exists( $js_path ) ? filemtime( $js_path ) : LFK_TAILWIND_VERSION,
 		true
 	);
+
+	wp_localize_script(
+		'lfk-theme',
+		'lfkSearch',
+		array(
+			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+			'minChars' => 2,
+		)
+	);
 } );
 
 add_filter( 'script_loader_tag', function ( $tag, $handle ) {
@@ -88,7 +133,7 @@ add_filter( 'wp_resource_hints', function ( $urls, $relation_type ) {
 	return $urls;
 }, 10, 2 );
 
-function lfk_print_image_preload( $image_id, $size, $sizes, $media = '' ) {
+function lfk_print_image_preload( $image_id, $size, $sizes, $media = '', $extra_attrs = array() ) {
 	$image = wp_get_attachment_image_src( $image_id, $size );
 	if ( ! $image ) {
 		return;
@@ -110,6 +155,43 @@ function lfk_print_image_preload( $image_id, $size, $sizes, $media = '' ) {
 
 	if ( $media ) {
 		$attrs['media'] = $media;
+	}
+
+	foreach ( $extra_attrs as $name => $value ) {
+		if ( false === $value || null === $value || '' === $value ) {
+			continue;
+		}
+		$attrs[ $name ] = $value;
+	}
+
+	echo '<link';
+	foreach ( $attrs as $name => $value ) {
+		echo ' ' . esc_attr( $name ) . '="' . esc_attr( $value ) . '"';
+	}
+	echo '>' . "\n";
+}
+
+function lfk_print_fixed_image_preload( $image_id, $size, $media = '', $extra_attrs = array() ) {
+	$image = wp_get_attachment_image_src( $image_id, $size );
+	if ( ! $image ) {
+		return;
+	}
+
+	$attrs = array(
+		'rel'  => 'preload',
+		'as'   => 'image',
+		'href' => lfk_prefer_local_upload_webp_url( $image[0] ),
+	);
+
+	if ( $media ) {
+		$attrs['media'] = $media;
+	}
+
+	foreach ( $extra_attrs as $name => $value ) {
+		if ( false === $value || null === $value || '' === $value ) {
+			continue;
+		}
+		$attrs[ $name ] = $value;
 	}
 
 	echo '<link';
@@ -195,10 +277,33 @@ add_action( 'wp_head', function () {
 				foreach ( $children as $child ) {
 					$thumbnail_id = (int) get_term_meta( $child->term_id, 'thumbnail_id', true );
 					if ( $thumbnail_id ) {
-						lfk_print_image_preload( $thumbnail_id, 'medium_large', '(max-width: 767px) calc(100vw - 32px), 33vw' );
+						lfk_print_image_preload( $thumbnail_id, 'medium_large', '(max-width: 767px) 164px, 260px', '', array( 'fetchpriority' => 'high' ) );
 						break;
 					}
 				}
+			}
+		}
+	}
+
+	if ( is_tax( 'product_brand' ) && function_exists( 'wc_get_product' ) ) {
+		global $wp_query;
+
+		$first_post = isset( $wp_query->posts[0] ) ? $wp_query->posts[0] : null;
+		$product_id = $first_post instanceof WP_Post ? (int) $first_post->ID : 0;
+		$product    = $product_id ? wc_get_product( $product_id ) : null;
+		if ( $product && $product->get_image_id() ) {
+			lfk_print_image_preload( $product->get_image_id(), 'woocommerce_thumbnail', '(max-width: 767px) 155px, 260px', '', array( 'fetchpriority' => 'high' ) );
+		}
+	}
+
+	if ( is_home() && ! is_paged() ) {
+		global $wp_query;
+
+		$posts = isset( $wp_query->posts ) && is_array( $wp_query->posts ) ? array_slice( $wp_query->posts, 0, 2 ) : array();
+		foreach ( $posts as $post ) {
+			$thumbnail_id = get_post_thumbnail_id( $post );
+			if ( $thumbnail_id ) {
+				lfk_print_fixed_image_preload( $thumbnail_id, 'medium', '', array( 'fetchpriority' => 'high' ) );
 			}
 		}
 	}
@@ -303,6 +408,60 @@ add_action( 'pre_get_posts', function ( $query ) {
 
 	$query->set( 'post_type', array( 'product', 'post', 'page' ) );
 } );
+
+add_action( 'wp_ajax_lfk_ajax_search', 'lfk_ajax_search' );
+add_action( 'wp_ajax_nopriv_lfk_ajax_search', 'lfk_ajax_search' );
+function lfk_ajax_search() {
+	$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( $_GET['term'] ) ) : '';
+	$term = trim( $term );
+
+	if ( strlen( $term ) < 2 ) {
+		wp_send_json_success( array(
+			'results'   => array(),
+			'searchUrl' => add_query_arg( 's', $term, home_url( '/' ) ),
+		) );
+	}
+
+	$query = new WP_Query( array(
+		's'                   => $term,
+		'post_type'           => array( 'product', 'post', 'page' ),
+		'post_status'         => 'publish',
+		'posts_per_page'      => 6,
+		'no_found_rows'       => true,
+		'ignore_sticky_posts' => true,
+	) );
+
+	$results = array();
+
+	foreach ( $query->posts as $post ) {
+		$post_type = get_post_type( $post );
+		$product   = 'product' === $post_type && function_exists( 'wc_get_product' ) ? wc_get_product( $post->ID ) : null;
+		$image     = get_the_post_thumbnail_url( $post, 'thumbnail' );
+		$summary   = '';
+
+		if ( $product ) {
+			$summary = wp_strip_all_tags( $product->get_price_html() );
+		} elseif ( has_excerpt( $post ) ) {
+			$summary = wp_trim_words( get_the_excerpt( $post ), 12 );
+		}
+		$summary = html_entity_decode( $summary, ENT_QUOTES, get_bloginfo( 'charset' ) );
+
+		$results[] = array(
+			'title'   => html_entity_decode( get_the_title( $post ), ENT_QUOTES, get_bloginfo( 'charset' ) ),
+			'url'     => get_permalink( $post ),
+			'image'   => $image ?: '',
+			'type'    => 'product' === $post_type ? __( 'สินค้า', 'lfk-tailwind' ) : ( 'post' === $post_type ? __( 'บทความ', 'lfk-tailwind' ) : __( 'หน้า', 'lfk-tailwind' ) ),
+			'summary' => $summary,
+		);
+	}
+
+	wp_reset_postdata();
+
+	wp_send_json_success( array(
+		'results'   => $results,
+		'searchUrl' => add_query_arg( 's', $term, home_url( '/' ) ),
+	) );
+}
 
 add_action( 'pre_get_posts', function ( $query ) {
 	if ( is_admin() || ! $query->is_main_query() || ! lfk_is_product_archive_query( $query ) ) {
@@ -474,7 +633,7 @@ function lfk_is_woo_service_page() {
 }
 
 function lfk_view_needs_cart_scripts() {
-	if ( is_front_page() || is_singular( 'product' ) || is_search() || is_page( 'promotion' ) ) {
+	if ( is_singular( 'product' ) || is_page( 'promotion' ) ) {
 		return true;
 	}
 
@@ -482,11 +641,7 @@ function lfk_view_needs_cart_scripts() {
 		return true;
 	}
 
-	if ( function_exists( 'is_shop' ) && is_shop() ) {
-		return true;
-	}
-
-	return is_post_type_archive( 'product' ) || ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() );
+	return false;
 }
 
 function lfk_dequeue_local_recaptcha() {
@@ -567,8 +722,11 @@ function lfk_dequeue_local_recaptcha() {
 		'addtoany-core',
 		'addtoany-jquery',
 		'berocket_lmp_js',
+		'elementor-app-loader',
+		'elementor-common',
 		'elementor-frontend',
 		'elementor-frontend-modules',
+		'elementor-pro-app',
 		'elementor-pro-frontend',
 		'elementor-pro-webpack-runtime',
 		'elementor-webpack-runtime',
@@ -615,7 +773,7 @@ function lfk_dequeue_local_recaptcha() {
 	}
 
 	if ( ! lfk_view_needs_cart_scripts() ) {
-		foreach ( array( 'wc-add-to-cart', 'wc-jquery-blockui', 'wc-js-cookie', 'woocommerce' ) as $handle ) {
+		foreach ( array( 'wc-add-to-cart', 'wc-jquery-blockui', 'wc-js-cookie', 'woocommerce', 'jquery', 'jquery-core', 'jquery-migrate' ) as $handle ) {
 			wp_dequeue_script( $handle );
 			wp_deregister_script( $handle );
 		}
@@ -739,6 +897,178 @@ function lfk_archive_selected_price_range() {
 	);
 }
 
+function lfk_archive_context_tax_query( $exclude_filter_taxonomy = '' ) {
+	$tax_query    = array();
+	$queried_term = get_queried_object();
+
+	if ( $queried_term instanceof WP_Term && taxonomy_exists( $queried_term->taxonomy ) ) {
+		$tax_query[] = array(
+			'taxonomy'         => $queried_term->taxonomy,
+			'field'            => 'term_id',
+			'terms'            => array( $queried_term->term_id ),
+			'include_children' => true,
+		);
+	}
+
+	foreach ( array( 'product_brand' => 'filter_brand', 'age' => 'filter_age' ) as $taxonomy => $key ) {
+		if ( $taxonomy === $exclude_filter_taxonomy ) {
+			continue;
+		}
+
+		$slugs = lfk_archive_filter_values( $key );
+		if ( $slugs ) {
+			$tax_query[] = array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $slugs,
+				'operator' => 'IN',
+			);
+		}
+	}
+
+	if ( count( $tax_query ) > 1 ) {
+		$tax_query['relation'] = 'AND';
+	}
+
+	return $tax_query;
+}
+
+function lfk_archive_context_meta_query() {
+	$price      = lfk_archive_selected_price_range();
+	$meta_query = array();
+
+	if ( $price['min'] || $price['max'] ) {
+		$price_query = array(
+			'key'  => '_price',
+			'type' => 'DECIMAL',
+		);
+
+		if ( $price['min'] && $price['max'] ) {
+			$price_query['value']   = array( $price['min'], $price['max'] );
+			$price_query['compare'] = 'BETWEEN';
+		} elseif ( $price['min'] ) {
+			$price_query['value']   = $price['min'];
+			$price_query['compare'] = '>=';
+		} else {
+			$price_query['value']   = $price['max'];
+			$price_query['compare'] = '<=';
+		}
+
+		$meta_query[] = $price_query;
+	}
+
+	return $meta_query;
+}
+
+function lfk_archive_context_product_ids( $exclude_filter_taxonomy = '' ) {
+	static $cache = array();
+
+	$cache_key = md5( wp_json_encode( array(
+		'exclude' => $exclude_filter_taxonomy,
+		'term'    => get_queried_object_id(),
+		'query'   => array(
+			'brand' => lfk_archive_filter_values( 'filter_brand' ),
+			'age'   => lfk_archive_filter_values( 'filter_age' ),
+			'price' => lfk_archive_selected_price_range(),
+		),
+	) ) );
+
+	if ( isset( $cache[ $cache_key ] ) ) {
+		return $cache[ $cache_key ];
+	}
+
+	$args = array(
+		'post_type'              => 'product',
+		'post_status'            => 'publish',
+		'fields'                 => 'ids',
+		'posts_per_page'         => -1,
+		'no_found_rows'          => true,
+		'update_post_meta_cache' => false,
+		'update_post_term_cache' => false,
+	);
+
+	$tax_query = lfk_archive_context_tax_query( $exclude_filter_taxonomy );
+	if ( $tax_query ) {
+		$args['tax_query'] = $tax_query;
+	}
+
+	$meta_query = lfk_archive_context_meta_query();
+	if ( $meta_query ) {
+		$args['meta_query'] = $meta_query;
+	}
+
+	$cache[ $cache_key ] = get_posts( $args );
+
+	return $cache[ $cache_key ];
+}
+
+function lfk_archive_filter_terms_for_context( $taxonomy ) {
+	$product_ids = lfk_archive_context_product_ids( $taxonomy );
+	if ( ! $product_ids ) {
+		return array();
+	}
+
+	$object_terms = wp_get_object_terms( $product_ids, $taxonomy, array(
+		'fields' => 'all_with_object_id',
+	) );
+
+	if ( ! $object_terms || is_wp_error( $object_terms ) ) {
+		return array();
+	}
+
+	$terms       = array();
+	$term_counts = array();
+	foreach ( $object_terms as $term ) {
+		if ( ! $term instanceof WP_Term || empty( $term->slug ) || empty( $term->object_id ) ) {
+			continue;
+		}
+
+		$terms[ $term->slug ]                             = $term;
+		$term_counts[ $term->slug ][ (int) $term->object_id ] = true;
+	}
+
+	foreach ( $terms as $slug => $term ) {
+		$terms[ $slug ]->count = isset( $term_counts[ $slug ] ) ? count( $term_counts[ $slug ] ) : 0;
+	}
+
+	return lfk_archive_sort_filter_terms( array_values( $terms ), $taxonomy );
+}
+
+function lfk_archive_age_sort_value( WP_Term $term ) {
+	$order = array(
+		'18-months'  => 10,
+		'2-years'    => 20,
+		'3-4-years'  => 30,
+		'5-7-years'  => 40,
+		'8-up'       => 50,
+	);
+
+	if ( isset( $order[ $term->slug ] ) ) {
+		return $order[ $term->slug ];
+	}
+
+	if ( preg_match( '/(\d+)/', $term->name, $match ) ) {
+		return (int) $match[1] * 10;
+	}
+
+	return 999;
+}
+
+function lfk_archive_sort_filter_terms( $terms, $taxonomy ) {
+	usort( $terms, function ( $a, $b ) use ( $taxonomy ) {
+		if ( 'age' === $taxonomy ) {
+			$age_compare = lfk_archive_age_sort_value( $a ) <=> lfk_archive_age_sort_value( $b );
+			if ( 0 !== $age_compare ) {
+				return $age_compare;
+			}
+		}
+
+		return strnatcasecmp( $a->name, $b->name );
+	} );
+
+	return $terms;
+}
+
 function lfk_archive_filter_key( $taxonomy ) {
 	if ( 'product_brand' === $taxonomy ) {
 		return 'filter_brand';
@@ -770,15 +1100,8 @@ function lfk_archive_filter_hidden_inputs() {
 }
 
 function lfk_archive_filter_terms( $taxonomy, $heading, $limit = 12 ) {
-	$terms = get_terms( array(
-		'taxonomy'   => $taxonomy,
-		'hide_empty' => true,
-		'number'     => $limit,
-		'orderby'    => 'count',
-		'order'      => 'DESC',
-	) );
-
-	if ( ! $terms || is_wp_error( $terms ) ) {
+	$terms = array_slice( lfk_archive_filter_terms_for_context( $taxonomy ), 0, $limit );
+	if ( ! $terms ) {
 		return;
 	}
 
@@ -795,7 +1118,6 @@ function lfk_archive_filter_terms( $taxonomy, $heading, $limit = 12 ) {
 						<input type="checkbox" name="<?php echo esc_attr( $key ); ?>[]" value="<?php echo esc_attr( $term->slug ); ?>" <?php checked( $is_selected ); ?>>
 						<span class="lfk-filter-check" aria-hidden="true"></span>
 						<span class="lfk-filter-label"><?php echo esc_html( $term->name ); ?></span>
-						<small><?php echo esc_html( (string) $term->count ); ?></small>
 					</label>
 				</li>
 			<?php endforeach; ?>
@@ -815,18 +1137,13 @@ function lfk_archive_price_filters() {
 	?>
 	<div class="lfk-filter-group">
 		<div class="lfk-filter-heading"><?php esc_html_e( 'กรองตามราคา', 'lfk-tailwind' ); ?></div>
-		<ul>
+		<select class="lfk-price-select" name="lfk_price_range" aria-label="<?php esc_attr_e( 'กรองตามราคา', 'lfk-tailwind' ); ?>">
+			<option value=""><?php esc_html_e( 'เลือกช่วงราคา', 'lfk-tailwind' ); ?></option>
 			<?php foreach ( $ranges as $range ) : ?>
 				<?php $is_selected = (float) $range['min'] === $selected['min'] && (float) $range['max'] === $selected['max']; ?>
-				<li>
-					<label class="lfk-filter-option<?php echo $is_selected ? ' is-active' : ''; ?>">
-						<input type="radio" name="lfk_price_range" value="<?php echo esc_attr( $range['min'] . '-' . $range['max'] ); ?>" <?php checked( $is_selected ); ?>>
-						<span class="lfk-filter-check" aria-hidden="true"></span>
-						<span class="lfk-filter-label"><?php echo esc_html( $range['label'] ); ?></span>
-					</label>
-				</li>
+				<option value="<?php echo esc_attr( $range['min'] . '-' . $range['max'] ); ?>" <?php selected( $is_selected ); ?>><?php echo esc_html( $range['label'] ); ?></option>
 			<?php endforeach; ?>
-		</ul>
+		</select>
 	</div>
 	<?php
 }
@@ -935,21 +1252,23 @@ function lfk_article_card( $post = null, $index = 0 ) {
 		<a class="lfk-article-image" href="<?php echo esc_url( get_permalink( $post ) ); ?>">
 			<?php if ( has_post_thumbnail( $post ) ) : ?>
 				<?php
-				echo get_the_post_thumbnail(
-					$post,
-					'medium',
-					array(
-						'loading' => $image_loading,
-						'style'   => $image_style,
-					)
+				$image_attrs = array(
+					'loading' => $image_loading,
+					'style'   => $image_style,
 				);
+				if ( $index < 2 ) {
+					$image_attrs['class']         = 'skip-lazy';
+					$image_attrs['data-no-lazy']  = '1';
+					$image_attrs['fetchpriority'] = 'high';
+				}
+				echo lfk_local_attachment_image( $thumbnail_id, 'medium', $image_attrs );
 				?>
 			<?php else : ?>
 				<img class="lfk-article-fallback" src="<?php echo esc_url( lfk_logo_url() ); ?>" alt="" loading="<?php echo esc_attr( $image_loading ); ?>">
 			<?php endif; ?>
 		</a>
 		<div class="lfk-article-author">
-			<?php echo get_avatar( (int) $post->post_author, 128, '', get_the_author_meta( 'display_name', (int) $post->post_author ), array( 'class' => 'lfk-article-avatar-image' ) ); ?>
+			<img class="lfk-article-avatar-image skip-lazy" src="<?php echo esc_url( lfk_logo_url() ); ?>" alt="<?php esc_attr_e( 'Learning for Kidz', 'lfk-tailwind' ); ?>" width="60" height="60" loading="<?php echo esc_attr( $image_loading ); ?>" decoding="async" data-no-lazy="1">
 		</div>
 		<div class="lfk-article-body">
 			<h3><a href="<?php echo esc_url( get_permalink( $post ) ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a></h3>
@@ -992,19 +1311,27 @@ function lfk_content_with_image_aspect_ratios( $content ) {
 	);
 }
 
-function lfk_product_card_image( $product ) {
+function lfk_product_card_image( $product, $attributes = array() ) {
 	if ( ! $product instanceof WC_Product ) {
 		return '';
 	}
 
+	$attributes = wp_parse_args(
+		$attributes,
+		array(
+			'decoding' => 'async',
+			'loading'  => 'lazy',
+		)
+	);
+
 	$image_id = $product->get_image_id();
 	if ( ! $image_id ) {
-		return $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) );
+		return $product->get_image( 'woocommerce_thumbnail', $attributes );
 	}
 
 	$image = wp_get_attachment_image_src( $image_id, 'woocommerce_thumbnail' );
 	if ( ! $image ) {
-		return $product->get_image( 'woocommerce_thumbnail', array( 'loading' => 'lazy' ) );
+		return $product->get_image( 'woocommerce_thumbnail', $attributes );
 	}
 
 	$alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
@@ -1012,13 +1339,29 @@ function lfk_product_card_image( $product ) {
 		$alt = $product->get_name();
 	}
 
-	return sprintf(
-		'<img width="%1$d" height="%2$d" src="%3$s" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image" alt="%4$s" loading="lazy" decoding="async">',
-		(int) $image[1],
-		(int) $image[2],
-		esc_url( lfk_prefer_local_upload_webp_url( $image[0] ) ),
-		esc_attr( $alt )
+	$default_class = 'attachment-woocommerce_thumbnail size-woocommerce_thumbnail wp-post-image';
+	$attributes    = wp_parse_args(
+		$attributes,
+		array(
+			'alt'    => $alt,
+			'class'  => $default_class,
+			'height' => (int) $image[2],
+			'src'    => lfk_prefer_local_upload_webp_url( $image[0] ),
+			'width'  => (int) $image[1],
+		)
 	);
+	if ( ! empty( $attributes['class'] ) && ! str_contains( $attributes['class'], $default_class ) ) {
+		$attributes['class'] = trim( $default_class . ' ' . $attributes['class'] );
+	}
+
+	$html = '<img';
+	foreach ( $attributes as $name => $value ) {
+		if ( false === $value || null === $value || '' === $value ) {
+			continue;
+		}
+		$html .= sprintf( ' %s="%s"', esc_attr( $name ), esc_attr( $value ) );
+	}
+	return $html . '>';
 }
 
 function lfk_local_attachment_image( $attachment_id, $size, $attributes = array() ) {
@@ -1112,7 +1455,7 @@ function lfk_archive_product_title( $product ) {
 	return str_replace( 'Numberblobs', 'Numberblocks', $title );
 }
 
-function lfk_archive_product_card( $product ) {
+function lfk_archive_product_card( $product, $image_attributes = array() ) {
 	if ( ! $product instanceof WC_Product ) {
 		return;
 	}
@@ -1122,7 +1465,7 @@ function lfk_archive_product_card( $product ) {
 	?>
 	<li class="<?php echo esc_attr( $classes ); ?>">
 		<a class="lfk-product-image" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
-			<?php echo lfk_product_card_image( $product ); ?>
+			<?php echo lfk_product_card_image( $product, $image_attributes ); ?>
 		</a>
 		<h2 class="lfk-product-title"><a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( lfk_archive_product_title( $product ) ); ?></a></h2>
 		<div class="lfk-product-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
@@ -1144,7 +1487,8 @@ function lfk_archive_product_card( $product ) {
 }
 
 add_filter( 'woocommerce_add_to_cart_fragments', function ( $fragments ) {
-	$fragments['.lfk-cart-count'] = '<span class="lfk-cart-count">' . esc_html( lfk_cart_count() ) . '</span>';
+	$cart_count                    = lfk_cart_count();
+	$fragments['.lfk-cart-count'] = '<span class="lfk-cart-count' . ( $cart_count > 0 ? '' : ' is-empty' ) . '">' . esc_html( $cart_count ) . '</span>';
 	$fragments['.lfk-cart-total'] = '<span class="lfk-cart-total">' . wp_kses_post( lfk_cart_total() ) . '</span>';
 	return $fragments;
 } );
