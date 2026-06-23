@@ -17,11 +17,7 @@ if ( have_posts() ) {
 	}
 }
 
-$ordered_results = array_merge(
-	array_slice( $product_results, 0, 3 ),
-	$content_results,
-	array_slice( $product_results, 3 )
-);
+$has_results = $product_results || $content_results;
 ?>
 <main id="primary" class="lfk-search-page">
 	<div class="lfk-shell">
@@ -29,17 +25,38 @@ $ordered_results = array_merge(
 			<h4><?php echo esc_html( sprintf( __( 'Search Results for: %s', 'lfk-tailwind' ), $query ) ); ?></h4>
 		</header>
 
-		<?php if ( $ordered_results ) : ?>
-			<div class="lfk-article-grid lfk-search-grid">
+		<?php if ( $product_results ) : ?>
+			<ul class="lfk-search-grid lfk-search-product-grid">
 				<?php
-				foreach ( $ordered_results as $index => $result ) {
-					lfk_article_card( $result, $index );
+				foreach ( $product_results as $index => $product_id ) {
+					$product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : null;
+					if ( ! $product ) {
+						continue;
+					}
+
+					lfk_archive_product_card(
+						$product,
+						array(
+							'loading'       => $index < 4 ? 'eager' : 'lazy',
+							'fetchpriority' => 0 === $index ? 'high' : false,
+						)
+					);
+				}
+				?>
+			</ul>
+		<?php endif; ?>
+
+		<?php if ( $content_results ) : ?>
+			<div class="lfk-article-grid lfk-search-grid lfk-search-content-grid">
+				<?php
+				foreach ( $content_results as $index => $result ) {
+					lfk_article_card( $result, $index + count( $product_results ) );
 				}
 				?>
 			</div>
 		<?php endif; ?>
 
-		<?php if ( ! $ordered_results ) : ?>
+		<?php if ( ! $has_results ) : ?>
 			<div class="lfk-empty-state">
 				<p><?php esc_html_e( 'No results found. Try another keyword or browse the shop.', 'lfk-tailwind' ); ?></p>
 				<a class="lfk-search-submit" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php esc_html_e( 'Go to shop', 'lfk-tailwind' ); ?></a>

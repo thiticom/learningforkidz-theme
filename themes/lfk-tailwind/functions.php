@@ -407,7 +407,94 @@ add_action( 'pre_get_posts', function ( $query ) {
 	}
 
 	$query->set( 'post_type', array( 'product', 'post', 'page' ) );
+	$query->set( 'posts_per_page', 12 );
+	$query->set( 'no_found_rows', true );
+	$query->set( 'ignore_sticky_posts', true );
+	$query->set( 'lfk_include_sku', true );
 } );
+
+function lfk_search_query_includes_products( $query ) {
+	$post_type = $query instanceof WP_Query ? $query->get( 'post_type' ) : '';
+
+	if ( is_array( $post_type ) ) {
+		return in_array( 'product', $post_type, true );
+	}
+
+	return 'product' === $post_type;
+}
+
+function lfk_add_search_product_id( &$product_ids, $product_id, $limit ) {
+	if ( count( $product_ids ) >= $limit || ! function_exists( 'wc_get_product' ) ) {
+		return;
+	}
+
+	$product_id = absint( $product_id );
+	if ( ! $product_id ) {
+		return;
+	}
+
+	$product = wc_get_product( $product_id );
+	if ( ! $product ) {
+		return;
+	}
+
+	if ( $product->is_type( 'variation' ) ) {
+		$product_id = absint( $product->get_parent_id() );
+		$product    = $product_id ? wc_get_product( $product_id ) : null;
+	}
+
+	if ( ! $product || 'publish' !== $product->get_status() || in_array( $product_id, $product_ids, true ) ) {
+		return;
+	}
+
+	$product_ids[] = $product_id;
+}
+
+function lfk_product_ids_matching_sku( $term, $limit = 12 ) {
+	global $wpdb;
+
+	if ( ! function_exists( 'wc_get_product' ) ) {
+		return array();
+	}
+
+	$term = trim( sanitize_text_field( wp_unslash( $term ) ) );
+	if ( strlen( $term ) < 2 ) {
+		return array();
+	}
+
+	$limit       = max( 1, min( 50, absint( $limit ) ) );
+	$product_ids = array();
+
+	if ( function_exists( 'wc_get_product_id_by_sku' ) ) {
+		lfk_add_search_product_id( $product_ids, wc_get_product_id_by_sku( $term ), $limit );
+	}
+
+	$like        = '%' . $wpdb->esc_like( $term ) . '%';
+	$prefix_like = $wpdb->esc_like( $term ) . '%';
+	$candidates  = $wpdb->get_col(
+		$wpdb->prepare(
+			"SELECT CASE WHEN posts.post_type = 'product_variation' AND posts.post_parent > 0 THEN posts.post_parent ELSE posts.ID END
+			FROM {$wpdb->postmeta} AS meta
+			INNER JOIN {$wpdb->posts} AS posts ON posts.ID = meta.post_id
+			WHERE meta.meta_key = '_sku'
+				AND meta.meta_value LIKE %s
+				AND posts.post_type IN ('product', 'product_variation')
+				AND posts.post_status = 'publish'
+			ORDER BY CASE WHEN meta.meta_value = %s THEN 0 WHEN meta.meta_value LIKE %s THEN 1 ELSE 2 END, posts.menu_order ASC, posts.post_title ASC
+			LIMIT %d",
+			$like,
+			$term,
+			$prefix_like,
+			$limit * 3
+		)
+	);
+
+	foreach ( $candidates as $candidate_id ) {
+		lfk_add_search_product_id( $product_ids, $candidate_id, $limit );
+	}
+
+	return array_slice( $product_ids, 0, $limit );
+}
 
 add_action( 'wp_ajax_lfk_ajax_search', 'lfk_ajax_search' );
 add_action( 'wp_ajax_nopriv_lfk_ajax_search', 'lfk_ajax_search' );
@@ -422,26 +509,73 @@ function lfk_ajax_search() {
 		) );
 	}
 
-	$query = new WP_Query( array(
-		's'                   => $term,
-		'post_type'           => array( 'product', 'post', 'page' ),
-		'post_status'         => 'publish',
-		'posts_per_page'      => 6,
-		'no_found_rows'       => true,
-		'ignore_sticky_posts' => true,
-	) );
+	$product_ids = lfk_product_ids_matching_sku( $term, 6 );
+	$remaining   = max( 0, 6 - count( $product_ids ) );
+
+	if ( $remaining ) {
+		$product_query = new WP_Query( array(
+			's'                   => $term,
+			'post_type'           => 'product',
+			'post_status'         => 'publish',
+			'posts_per_page'      => $remaining,
+			'fields'              => 'ids',
+			'no_found_rows'       => true,
+			'ignore_sticky_posts' => true,
+			'lfk_include_sku'     => true,
+		) );
+
+		foreach ( $product_query->posts as $product_id ) {
+			if ( ! in_array( $product_id, $product_ids, true ) ) {
+				$product_ids[] = $product_id;
+			}
+		}
+	}
+
+	$content_ids = array();
+	$remaining   = max( 0, 6 - count( $product_ids ) );
+
+	if ( $remaining ) {
+		$content_query = new WP_Query( array(
+			's'                     => $term,
+			'post_type'             => array( 'post', 'page' ),
+			'post_status'           => 'publish',
+			'posts_per_page'        => $remaining,
+			'fields'                => 'ids',
+			'no_found_rows'         => true,
+			'ignore_sticky_posts'   => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		) );
+
+		$content_ids = $content_query->posts;
+	}
 
 	$results = array();
 
-	foreach ( $query->posts as $post ) {
+	foreach ( $product_ids as $product_id ) {
+		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : null;
+		if ( ! $product ) {
+			continue;
+		}
+
+		$summary = html_entity_decode( wp_strip_all_tags( $product->get_price_html() ), ENT_QUOTES, get_bloginfo( 'charset' ) );
+
+		$results[] = array(
+			'title'   => html_entity_decode( $product->get_name(), ENT_QUOTES, get_bloginfo( 'charset' ) ),
+			'url'     => get_permalink( $product_id ),
+			'image'   => get_the_post_thumbnail_url( $product_id, 'thumbnail' ) ?: '',
+			'type'    => __( 'สินค้า', 'lfk-tailwind' ),
+			'summary' => $summary,
+		);
+	}
+
+	foreach ( $content_ids as $content_id ) {
+		$post      = get_post( $content_id );
 		$post_type = get_post_type( $post );
-		$product   = 'product' === $post_type && function_exists( 'wc_get_product' ) ? wc_get_product( $post->ID ) : null;
 		$image     = get_the_post_thumbnail_url( $post, 'thumbnail' );
 		$summary   = '';
 
-		if ( $product ) {
-			$summary = wp_strip_all_tags( $product->get_price_html() );
-		} elseif ( has_excerpt( $post ) ) {
+		if ( has_excerpt( $post ) ) {
 			$summary = wp_trim_words( get_the_excerpt( $post ), 12 );
 		}
 		$summary = html_entity_decode( $summary, ENT_QUOTES, get_bloginfo( 'charset' ) );
@@ -454,8 +588,6 @@ function lfk_ajax_search() {
 			'summary' => $summary,
 		);
 	}
-
-	wp_reset_postdata();
 
 	wp_send_json_success( array(
 		'results'   => $results,
@@ -1497,26 +1629,30 @@ add_filter( 'posts_search', 'lfk_product_search_by_sku', 9999, 2 );
 function lfk_product_search_by_sku( $search, $wp_query ) {
 	global $wpdb;
 
-	if ( is_admin() || ! is_search() || ! isset( $wp_query->query_vars['s'] ) ) {
+	if ( is_admin() || ! isset( $wp_query->query_vars['s'] ) ) {
 		return $search;
 	}
 
-	$post_type = $wp_query->query_vars['post_type'];
-	if ( ( ! is_array( $post_type ) && 'product' !== $post_type ) || ( is_array( $post_type ) && ! in_array( 'product', $post_type, true ) ) ) {
+	if ( ! $wp_query->is_search() && ! $wp_query->get( 'lfk_include_sku' ) ) {
 		return $search;
 	}
 
-	$product_id = wc_get_product_id_by_sku( $wp_query->query_vars['s'] );
-	if ( ! $product_id ) {
+	if ( ! lfk_search_query_includes_products( $wp_query ) ) {
 		return $search;
 	}
 
-	$product = wc_get_product( $product_id );
-	if ( $product && $product->is_type( 'variation' ) ) {
-		$product_id = $product->get_parent_id();
+	$product_ids = lfk_product_ids_matching_sku( $wp_query->query_vars['s'], 20 );
+	if ( ! $product_ids ) {
+		return $search;
 	}
 
-	return str_replace( 'AND (((', "AND (({$wpdb->posts}.ID IN (" . (int) $product_id . ')) OR ((', $search );
+	$sku_search = "{$wpdb->posts}.ID IN (" . implode( ',', array_map( 'absint', $product_ids ) ) . ')';
+
+	if ( '' === trim( $search ) ) {
+		return " AND {$sku_search}";
+	}
+
+	return str_replace( 'AND (((', "AND (({$sku_search}) OR ((", $search );
 }
 
 add_filter( 'woocommerce_account_menu_items', function ( $items ) {

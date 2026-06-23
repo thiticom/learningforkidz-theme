@@ -4184,25 +4184,27 @@
 
   .lfk-post-index .lfk-article-author {
     position: absolute;
-    top: 214px;
-    left: 30px;
+    top: 16px;
+    left: 16px;
     z-index: 1;
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     margin: 0;
+    pointer-events: none;
   }
 
   .lfk-post-index .lfk-article-avatar-image {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
   }
 
   .lfk-post-index .lfk-article-body {
     display: block;
     min-height: 0;
-    padding: 40px 30px 62px;
+    padding: 26px 30px 62px;
   }
 
   .lfk-post-index .lfk-article-body h3 {
@@ -4280,7 +4282,15 @@
     }
 
     .lfk-post-index .lfk-article-author {
-      top: 170px;
+      top: 12px;
+      left: 12px;
+      width: 46px;
+      height: 46px;
+    }
+
+    .lfk-post-index .lfk-article-avatar-image {
+      width: 46px;
+      height: 46px;
     }
 
     .lfk-post-index .lfk-article-grid {
@@ -4288,7 +4298,7 @@
     }
 
     .lfk-post-index .lfk-article-body {
-      padding: 40px 30px 62px;
+      padding: 24px 30px 62px;
     }
 
     body.blog .lfk-site-footer,
@@ -4299,7 +4309,7 @@
 
   .lfk-search-page {
     background: #ffffff;
-    height: 1487px;
+    min-height: 1487px;
     margin-top: 45px;
     margin-bottom: 50px;
     padding-top: 10px;
@@ -4331,6 +4341,14 @@
     padding-bottom: 45px;
   }
 
+  .lfk-search-product-grid {
+    grid-template-columns: repeat(4, 274px);
+    gap: 40px 24px;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
   .lfk-search-grid .lfk-article-card {
     position: relative;
     display: flex;
@@ -4359,25 +4377,27 @@
 
   .lfk-search-grid .lfk-article-author {
     position: absolute;
-    top: 214px;
-    left: 30px;
+    top: 16px;
+    left: 16px;
     z-index: 1;
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     margin: 0;
+    pointer-events: none;
   }
 
   .lfk-search-grid .lfk-article-avatar-image {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
   }
 
   .lfk-search-grid .lfk-article-body {
     display: block;
     min-height: 0;
-    padding: 40px 30px 62px;
+    padding: 26px 30px 62px;
   }
 
   .lfk-search-grid .lfk-article-body h3 {
@@ -4425,7 +4445,7 @@
 
   @media (max-width: 767px) {
     .lfk-search-page {
-      height: 3656px;
+      min-height: 3656px;
       margin-top: 43px;
       margin-bottom: 50px;
       padding-top: 10px;
@@ -4441,6 +4461,11 @@
       padding-bottom: 52px;
     }
 
+    .lfk-search-product-grid {
+      grid-template-columns: repeat(2, 175px);
+      gap: 40px 20px;
+    }
+
     .lfk-search-grid .lfk-article-card {
       height: 345px;
     }
@@ -4454,7 +4479,15 @@
     }
 
     .lfk-search-grid .lfk-article-author {
-      top: 170px;
+      top: 12px;
+      left: 12px;
+      width: 46px;
+      height: 46px;
+    }
+
+    .lfk-search-grid .lfk-article-avatar-image {
+      width: 46px;
+      height: 46px;
     }
 
     body.search .lfk-site-footer {
@@ -4905,25 +4938,27 @@
 
   .lfk-post-related .lfk-article-author {
     position: absolute;
-    top: 214px;
-    left: 30px;
+    top: 16px;
+    left: 16px;
     z-index: 1;
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     margin: 0;
+    pointer-events: none;
   }
 
   .lfk-post-related .lfk-article-avatar-image {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     border-radius: 9999px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
   }
 
   .lfk-post-related .lfk-article-body {
     display: block;
     min-height: 0;
-    padding: 40px 30px 62px;
+    padding: 26px 30px 62px;
   }
 
   .lfk-post-related .lfk-article-body h3 {
@@ -5059,7 +5094,15 @@
     }
 
     .lfk-post-related .lfk-article-author {
-      top: 170px;
+      top: 12px;
+      left: 12px;
+      width: 46px;
+      height: 46px;
+    }
+
+    .lfk-post-related .lfk-article-avatar-image {
+      width: 46px;
+      height: 46px;
     }
 
     .lfk-post-single .lfk-rich-text .wp-image-32944,
@@ -5718,15 +5761,18 @@ body.tax-age .lfk-site-footer {
 }
 
 @media (max-width: 767px) {
-  body.tax-product_brand .lfk-product-archive {
+  body.tax-product_brand .lfk-product-archive,
+  body.tax-age .lfk-product-archive {
     padding-top: 110px;
   }
 
-  body.tax-product_brand .lfk-mobile-filters {
+  body.tax-product_brand .lfk-mobile-filters,
+  body.tax-age .lfk-mobile-filters {
     margin-bottom: 20px;
   }
 
-  body.tax-product_brand .lfk-archive-ordering {
+  body.tax-product_brand .lfk-archive-ordering,
+  body.tax-age .lfk-archive-ordering {
     height: 57px;
     padding-top: 20px;
   }
