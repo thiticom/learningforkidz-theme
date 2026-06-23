@@ -91,7 +91,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		'lfk-theme',
 		'lfkSearch',
 		array(
-			'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+			'ajaxUrl'  => add_query_arg( 'lfk_ajax_search', '1', home_url( '/' ) ),
 			'minChars' => 2,
 		)
 	);
@@ -498,6 +498,15 @@ function lfk_product_ids_matching_sku( $term, $limit = 12 ) {
 
 add_action( 'wp_ajax_lfk_ajax_search', 'lfk_ajax_search' );
 add_action( 'wp_ajax_nopriv_lfk_ajax_search', 'lfk_ajax_search' );
+add_action( 'template_redirect', 'lfk_frontend_ajax_search', 0 );
+function lfk_frontend_ajax_search() {
+	if ( ! isset( $_GET['lfk_ajax_search'] ) ) {
+		return;
+	}
+
+	lfk_ajax_search();
+}
+
 function lfk_ajax_search() {
 	$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( $_GET['term'] ) ) : '';
 	$term = trim( $term );
