@@ -171,6 +171,7 @@
       showSearchStatus('กำลังค้นหา...');
 
       var params = new URLSearchParams();
+      params.set('lfk_ajax_search', '1');
       params.set('action', 'lfk_ajax_search');
       params.set('term', term);
 

@@ -91,7 +91,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		'lfk-theme',
 		'lfkSearch',
 		array(
-			'ajaxUrl'  => add_query_arg( 'lfk_ajax_search', '1', home_url( '/' ) ),
+			'ajaxUrl'  => home_url( '/' ),
 			'minChars' => 2,
 		)
 	);
