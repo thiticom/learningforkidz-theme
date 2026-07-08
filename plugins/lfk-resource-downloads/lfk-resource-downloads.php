@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LFK Resource Downloads
  * Description: Gates product guides and lesson plans behind a name/email form and records leads for CRM export.
- * Version: 0.2.0
+ * Version: 0.3.4
  * Author: Learning for Kidz
  * Text Domain: lfk-resource-downloads
  */
@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 final class LFK_Resource_Downloads {
-	const VERSION           = '0.2.0';
+	const VERSION           = '0.3.4';
 	const POST_TYPE         = 'lfk_resource';
 	const DB_VERSION        = '1';
 	const DB_VERSION_OPTION = 'lfk_resource_downloads_db_version';
@@ -27,10 +27,12 @@ final class LFK_Resource_Downloads {
 		add_action( 'admin_post_nopriv_lfk_resource_download', array( __CLASS__, 'handle_download' ) );
 		add_action( 'admin_post_lfk_resource_leads_export', array( __CLASS__, 'handle_leads_export' ) );
 		add_action( 'lfk_single_product_downloads', array( __CLASS__, 'render_single_product_downloads' ) );
+		add_action( 'template_redirect', array( __CLASS__, 'maybe_render_standalone_viewer' ), 0 );
 
 		add_shortcode( 'lfk_resource_library', array( __CLASS__, 'render_library_shortcode' ) );
 		add_shortcode( 'lfk_product_resources', array( __CLASS__, 'render_product_shortcode' ) );
 		add_filter( 'the_content', array( __CLASS__, 'append_product_resources' ), 20 );
+		add_filter( 'script_loader_tag', array( __CLASS__, 'script_loader_tag' ), 10, 3 );
 	}
 
 	public static function activate() {
@@ -258,12 +260,150 @@ final class LFK_Resource_Downloads {
 		);
 	}
 
+	private static function register_pdf_viewer_script() {
+		if ( wp_script_is( 'lfk-resource-pdf-viewer', 'registered' ) ) {
+			return;
+		}
+
+		$script_path = plugin_dir_path( __FILE__ ) . 'assets/js/pdf-viewer.js';
+		$version     = file_exists( $script_path ) ? (string) filemtime( $script_path ) : self::VERSION;
+
+		wp_register_script(
+			'lfk-resource-pdf-viewer',
+			plugins_url( 'assets/js/pdf-viewer.js', __FILE__ ),
+			array(),
+			$version,
+			true
+		);
+	}
+
 	private static function enqueue_frontend_bundle() {
 		self::register_frontend_style();
 		self::register_frontend_script();
 
 		wp_enqueue_style( 'lfk-resource-downloads' );
 		wp_enqueue_script( 'lfk-resource-downloads' );
+	}
+
+	private static function enqueue_pdf_viewer_script() {
+		self::register_pdf_viewer_script();
+		wp_enqueue_script( 'lfk-resource-pdf-viewer' );
+	}
+
+	public static function script_loader_tag( $tag, $handle, $src ) {
+		if ( 'lfk-resource-pdf-viewer' !== $handle ) {
+			return $tag;
+		}
+
+		return sprintf(
+			'<script type="module" src="%s" id="%s-js"></script>' . "\n",
+			esc_url( $src ),
+			esc_attr( $handle )
+		);
+	}
+
+	public static function maybe_render_standalone_viewer() {
+		if ( ! self::is_standalone_viewer_request() ) {
+			return;
+		}
+
+		$resource_id = isset( $_GET['lfk_resource_view'] ) ? absint( wp_unslash( $_GET['lfk_resource_view'] ) ) : 0;
+		$resource    = $resource_id ? get_post( $resource_id ) : null;
+
+		if ( ! $resource || self::POST_TYPE !== $resource->post_type || 'publish' !== $resource->post_status ) {
+			self::render_standalone_viewer_error( __( 'This PDF viewer link is not available.', 'lfk-resource-downloads' ), 404 );
+		}
+
+		$file_id = (int) get_post_meta( $resource_id, '_lfk_resource_file_id', true );
+		if ( ! $file_id || ! self::file_is_pdf( $file_id ) ) {
+			self::render_standalone_viewer_error( __( 'This PDF viewer link is not available.', 'lfk-resource-downloads' ), 404 );
+		}
+
+		global $wp_query;
+		if ( $wp_query instanceof WP_Query ) {
+			$wp_query->is_404 = false;
+		}
+
+		self::enqueue_frontend_bundle();
+		self::enqueue_pdf_viewer_script();
+
+		$product_id = isset( $_GET['lfk_product_id'] ) ? absint( wp_unslash( $_GET['lfk_product_id'] ) ) : 0;
+		$back_url   = self::get_standalone_viewer_back_url( $resource_id );
+		$title      = get_the_title( $resource );
+
+		status_header( 200 );
+		nocache_headers();
+		$document_title = sprintf(
+			/* translators: %s: PDF resource title. */
+			__( '%s - PDF viewer', 'lfk-resource-downloads' ),
+			$title
+		);
+		$title_filter   = function () use ( $document_title ) {
+			return $document_title;
+		};
+		add_filter(
+			'pre_get_document_title',
+			$title_filter,
+			99
+		);
+		add_filter( 'rank_math/frontend/title', $title_filter, 99 );
+		add_filter( 'rank_math/opengraph/facebook/title', $title_filter, 99 );
+		add_filter( 'rank_math/opengraph/twitter/title', $title_filter, 99 );
+
+		get_header();
+		?>
+		<main id="primary" class="lfk-resource-viewer-page">
+			<div class="lfk-resource-viewer-page__inner">
+				<?php
+				self::render_pdf_viewer(
+					$resource,
+					array(
+						'back_url'   => $back_url,
+						'standalone' => true,
+					)
+				);
+				?>
+				<?php self::render_download_modal( $resource, $product_id, true ); ?>
+			</div>
+		</main>
+		<?php
+		get_footer();
+		exit;
+	}
+
+	private static function is_standalone_viewer_request() {
+		$request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$request_path = trim( (string) wp_parse_url( $request_uri, PHP_URL_PATH ), '/' );
+
+		return 'resource-viewer' === $request_path;
+	}
+
+	private static function render_standalone_viewer_error( $message, $status_code ) {
+		self::enqueue_frontend_bundle();
+
+		status_header( $status_code );
+		nocache_headers();
+		add_filter(
+			'pre_get_document_title',
+			function () {
+				return __( 'PDF viewer unavailable', 'lfk-resource-downloads' );
+			}
+		);
+
+		get_header();
+		?>
+		<main id="primary" class="lfk-resource-viewer-page lfk-resource-viewer-page--message">
+			<div class="lfk-resource-viewer-page__message">
+				<h1><?php esc_html_e( 'PDF viewer unavailable', 'lfk-resource-downloads' ); ?></h1>
+				<p><?php echo esc_html( $message ); ?></p>
+				<a class="lfk-resource-viewer-page__back" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+					<?php esc_html_e( 'Back to home', 'lfk-resource-downloads' ); ?>
+				</a>
+			</div>
+		</main>
+		<?php
+		get_footer();
+		exit;
 	}
 
 	public static function render_leads_page() {
@@ -451,49 +591,242 @@ final class LFK_Resource_Downloads {
 		$form_id    = 'lfk-resource-' . $resource->ID;
 		$modal_id   = $form_id . '-modal';
 		$file_ext   = self::get_file_extension( $file_id );
+		$is_pdf     = self::file_is_pdf( $file_id );
+		$viewer_url = $is_pdf ? self::viewer_url( $resource->ID, $product_id ) : '';
 
 		if ( ! $file_id ) {
 			return;
 		}
 		?>
-		<article class="lfk-resource-downloads__card">
-			<button
-				type="button"
-				class="lfk-resource-downloads__file"
-				data-lfk-resource-modal-open
-				aria-controls="<?php echo esc_attr( $modal_id ); ?>"
-			>
-				<span class="lfk-resource-downloads__file-icon" data-file-ext="<?php echo esc_attr( $file_ext ); ?>" aria-hidden="true"></span>
-				<span class="lfk-resource-downloads__file-body">
-					<span class="lfk-resource-downloads__type"><?php echo esc_html( $type_label ); ?></span>
-					<span class="lfk-resource-downloads__title"><?php echo esc_html( get_the_title( $resource ) ); ?></span>
-				</span>
-			</button>
-			<div class="lfk-resource-downloads__modal" id="<?php echo esc_attr( $modal_id ); ?>" role="dialog" aria-modal="true" aria-labelledby="<?php echo esc_attr( $form_id ); ?>-title" hidden>
-				<div class="lfk-resource-downloads__modal-backdrop" data-lfk-resource-modal-close></div>
-				<div class="lfk-resource-downloads__dialog">
-					<button type="button" class="lfk-resource-downloads__close" data-lfk-resource-modal-close aria-label="<?php esc_attr_e( 'Close', 'lfk-resource-downloads' ); ?>">×</button>
-					<div class="lfk-resource-downloads__dialog-icon" aria-hidden="true"></div>
-					<h3 id="<?php echo esc_attr( $form_id ); ?>-title"><?php echo esc_html( get_the_title( $resource ) ); ?></h3>
-					<?php if ( trim( $resource->post_content ) ) : ?>
-						<div class="lfk-resource-downloads__description">
-							<?php echo wp_kses_post( wpautop( $resource->post_content ) ); ?>
+		<article class="lfk-resource-downloads__card<?php echo $is_pdf ? ' lfk-resource-downloads__card--banner' : ''; ?>">
+			<?php if ( $is_pdf ) : ?>
+				<div class="lfk-resource-downloads__banner">
+					<div class="lfk-resource-downloads__banner-copy">
+						<span class="lfk-resource-downloads__banner-badge"><?php esc_html_e( 'คู่มือฉบับเต็ม', 'lfk-resource-downloads' ); ?></span>
+						<div class="lfk-resource-downloads__banner-text">
+							<h3><?php esc_html_e( 'อ่านคู่มือการเล่นก่อนเริ่มสนุก', 'lfk-resource-downloads' ); ?></h3>
+							<p><?php echo esc_html( get_the_title( $resource ) ); ?></p>
 						</div>
-					<?php endif; ?>
-					<form class="lfk-resource-downloads__form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
-						<input type="hidden" name="action" value="lfk_resource_download">
-						<input type="hidden" name="lfk_resource_id" value="<?php echo esc_attr( $resource->ID ); ?>">
-						<input type="hidden" name="lfk_product_id" value="<?php echo esc_attr( $product_id ); ?>">
-						<?php wp_nonce_field( 'lfk_resource_download_' . $resource->ID, 'lfk_resource_nonce' ); ?>
-						<label for="<?php echo esc_attr( $form_id ); ?>-name"><?php esc_html_e( 'Name', 'lfk-resource-downloads' ); ?></label>
-						<input id="<?php echo esc_attr( $form_id ); ?>-name" type="text" name="lfk_name" autocomplete="name" required>
-						<label for="<?php echo esc_attr( $form_id ); ?>-email"><?php esc_html_e( 'Email', 'lfk-resource-downloads' ); ?></label>
-						<input id="<?php echo esc_attr( $form_id ); ?>-email" type="email" name="lfk_email" autocomplete="email" required>
-						<button type="submit"><?php esc_html_e( 'Download file', 'lfk-resource-downloads' ); ?></button>
-					</form>
+						<a class="lfk-resource-downloads__banner-action" href="<?php echo esc_url( $viewer_url ); ?>">
+							<?php esc_html_e( 'เปิดอ่านคู่มือ', 'lfk-resource-downloads' ); ?>
+						</a>
+					</div>
+					<div class="lfk-resource-downloads__banner-pages" aria-hidden="true">
+						<span class="lfk-resource-downloads__banner-page lfk-resource-downloads__banner-page--back">
+							<span></span>
+							<span></span>
+							<span></span>
+						</span>
+						<span class="lfk-resource-downloads__banner-page lfk-resource-downloads__banner-page--front">
+							<span class="lfk-resource-downloads__banner-page-chip"><?php echo esc_html( $file_ext ); ?></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</span>
+					</div>
+				</div>
+			<?php else : ?>
+				<button
+					type="button"
+					class="lfk-resource-downloads__file"
+					data-lfk-resource-modal-open
+					aria-controls="<?php echo esc_attr( $modal_id ); ?>"
+				>
+					<span class="lfk-resource-downloads__file-icon" data-file-ext="<?php echo esc_attr( $file_ext ); ?>" aria-hidden="true"></span>
+					<span class="lfk-resource-downloads__file-body">
+						<span class="lfk-resource-downloads__type"><?php echo esc_html( $type_label ); ?></span>
+						<span class="lfk-resource-downloads__title"><?php echo esc_html( get_the_title( $resource ) ); ?></span>
+					</span>
+				</button>
+			<?php endif; ?>
+			<?php if ( ! $is_pdf ) : ?>
+				<?php self::render_download_modal( $resource, $product_id, false ); ?>
+			<?php endif; ?>
+		</article>
+		<?php
+	}
+
+	private static function render_download_modal( $resource, $product_id, $is_pdf ) {
+		$form_id  = 'lfk-resource-' . $resource->ID;
+		$modal_id = $form_id . '-modal';
+		?>
+		<div class="lfk-resource-downloads__modal" id="<?php echo esc_attr( $modal_id ); ?>" role="dialog" aria-modal="true" aria-labelledby="<?php echo esc_attr( $form_id ); ?>-title" hidden>
+			<div class="lfk-resource-downloads__modal-backdrop" data-lfk-resource-modal-close></div>
+			<div class="lfk-resource-downloads__dialog">
+				<button type="button" class="lfk-resource-downloads__close" data-lfk-resource-modal-close aria-label="<?php esc_attr_e( 'Close', 'lfk-resource-downloads' ); ?>">×</button>
+				<div class="lfk-resource-downloads__dialog-icon" aria-hidden="true"></div>
+				<h3 id="<?php echo esc_attr( $form_id ); ?>-title"><?php echo esc_html( get_the_title( $resource ) ); ?></h3>
+				<?php if ( trim( $resource->post_content ) ) : ?>
+					<div class="lfk-resource-downloads__description">
+						<?php echo wp_kses_post( wpautop( $resource->post_content ) ); ?>
+					</div>
+				<?php endif; ?>
+				<form class="lfk-resource-downloads__form" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+					<input type="hidden" name="action" value="lfk_resource_download">
+					<input type="hidden" name="lfk_resource_id" value="<?php echo esc_attr( $resource->ID ); ?>">
+					<input type="hidden" name="lfk_product_id" value="<?php echo esc_attr( $product_id ); ?>">
+					<?php wp_nonce_field( 'lfk_resource_download_' . $resource->ID, 'lfk_resource_nonce' ); ?>
+					<label for="<?php echo esc_attr( $form_id ); ?>-name"><?php esc_html_e( 'Name', 'lfk-resource-downloads' ); ?></label>
+					<input id="<?php echo esc_attr( $form_id ); ?>-name" type="text" name="lfk_name" autocomplete="name" required>
+					<label for="<?php echo esc_attr( $form_id ); ?>-email"><?php esc_html_e( 'Email', 'lfk-resource-downloads' ); ?></label>
+					<input id="<?php echo esc_attr( $form_id ); ?>-email" type="email" name="lfk_email" autocomplete="email" required>
+					<button type="submit">
+						<?php echo esc_html( $is_pdf ? __( 'Download PDF', 'lfk-resource-downloads' ) : __( 'Download file', 'lfk-resource-downloads' ) ); ?>
+					</button>
+				</form>
+			</div>
+		</div>
+		<?php
+	}
+
+	private static function render_pdf_viewer( $resource, $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'back_url'   => '',
+				'standalone' => false,
+			)
+		);
+
+		$resource_id = (int) $resource->ID;
+		$file_id     = (int) get_post_meta( $resource_id, '_lfk_resource_file_id', true );
+
+		if ( ! $file_id || ! self::file_is_pdf( $file_id ) ) {
+			return;
+		}
+
+		$file_url = wp_get_attachment_url( $file_id );
+		if ( ! $file_url ) {
+			return;
+		}
+
+		self::enqueue_pdf_viewer_script();
+
+		$viewer_id    = 'lfk-resource-viewer-' . $resource_id;
+		$heading_id   = $viewer_id . '-heading';
+		$modal_id     = 'lfk-resource-' . $resource_id . '-modal';
+		$pdf_worker   = plugins_url( 'assets/vendor/pdfjs/pdf.worker.min.js', __FILE__ );
+		$display_name = get_the_title( $resource );
+		$file_path    = get_attached_file( $file_id );
+		$file_size    = $file_path && is_readable( $file_path ) ? size_format( filesize( $file_path ), 1 ) : '';
+		$meta_label   = $file_size ? sprintf(
+			/* translators: %s: PDF file size. */
+			__( 'PDF · %s', 'lfk-resource-downloads' ),
+			$file_size
+		) : __( 'PDF', 'lfk-resource-downloads' );
+		$meta_format  = $file_size ? sprintf(
+			/* translators: %s: PDF file size. */
+			__( 'PDF · %%d pages · %s', 'lfk-resource-downloads' ),
+			$file_size
+		) : __( 'PDF · %d pages', 'lfk-resource-downloads' );
+		?>
+		<section
+			id="<?php echo esc_attr( $viewer_id ); ?>"
+			class="lfk-resource-downloads__viewer download-pdf-viewer<?php echo ! empty( $args['standalone'] ) ? ' download-pdf-viewer--standalone' : ''; ?>"
+			aria-labelledby="<?php echo esc_attr( $heading_id ); ?>"
+			data-lfk-pdf-viewer
+			data-pdf-url="<?php echo esc_url( $file_url ); ?>"
+			data-pdf-worker-src="<?php echo esc_url( $pdf_worker ); ?>"
+			data-pdf-document-meta-template="<?php echo esc_attr( $meta_format ); ?>"
+			data-pdf-loading="<?php esc_attr_e( 'กำลังเปิด PDF...', 'lfk-resource-downloads' ); ?>"
+			data-pdf-loading-page="<?php esc_attr_e( 'กำลังโหลดหน้า %d', 'lfk-resource-downloads' ); ?>"
+			data-pdf-page-status="<?php esc_attr_e( 'หน้า %1$d / %2$d', 'lfk-resource-downloads' ); ?>"
+			data-pdf-page-label="<?php esc_attr_e( 'หน้า %1$d / %2$d', 'lfk-resource-downloads' ); ?>"
+			data-pdf-viewer-error="<?php esc_attr_e( 'Unable to open PDF. Please use the direct PDF link.', 'lfk-resource-downloads' ); ?>"
+			data-pdf-search-ready="<?php esc_attr_e( 'ค้นหา PDF', 'lfk-resource-downloads' ); ?>"
+			data-pdf-search-indexing="<?php esc_attr_e( 'กำลังค้นหา %1$d/%2$d หน้า', 'lfk-resource-downloads' ); ?>"
+			data-pdf-search-results="<?php esc_attr_e( 'ผลลัพธ์ %1$d / %2$d', 'lfk-resource-downloads' ); ?>"
+			data-pdf-search-no-results="<?php esc_attr_e( 'ไม่พบผลลัพธ์', 'lfk-resource-downloads' ); ?>"
+		>
+			<div class="download-pdf-viewer__toolbar">
+				<?php if ( ! empty( $args['back_url'] ) ) : ?>
+					<a class="download-pdf-viewer__back-link" href="<?php echo esc_url( $args['back_url'] ); ?>">
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+						<?php esc_html_e( 'กลับไปหน้าสินค้า', 'lfk-resource-downloads' ); ?>
+					</a>
+					<span class="download-pdf-viewer__toolbar-divider" aria-hidden="true"></span>
+				<?php endif; ?>
+				<div class="download-pdf-viewer__title">
+					<h2 id="<?php echo esc_attr( $heading_id ); ?>"><?php echo esc_html( $display_name ); ?></h2>
+					<span data-pdf-document-meta><?php echo esc_html( $meta_label ); ?></span>
+				</div>
+				<div class="download-pdf-viewer__toolbar-spacer"></div>
+				<div class="download-pdf-viewer__searchbar" role="search">
+					<label class="screen-reader-text" for="<?php echo esc_attr( $viewer_id ); ?>-search">
+						<?php esc_html_e( 'Search PDF', 'lfk-resource-downloads' ); ?>
+					</label>
+					<svg class="download-pdf-viewer__search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+					<input
+						id="<?php echo esc_attr( $viewer_id ); ?>-search"
+						class="download-pdf-viewer__search-input"
+						type="search"
+						placeholder="<?php esc_attr_e( 'ค้นหาในคู่มือ…', 'lfk-resource-downloads' ); ?>"
+						data-pdf-search-input
+						disabled
+					>
+					<div class="download-pdf-viewer__search-controls">
+						<button type="button" class="download-pdf-viewer__button" data-pdf-search-prev aria-label="<?php esc_attr_e( 'Previous search result', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"></path></svg>
+						</button>
+						<button type="button" class="download-pdf-viewer__button" data-pdf-search-next aria-label="<?php esc_attr_e( 'Next search result', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+						</button>
+						<span class="download-pdf-viewer__search-status" data-pdf-search-status>
+							<?php esc_html_e( 'Search PDF', 'lfk-resource-downloads' ); ?>
+						</span>
+					</div>
+				</div>
+				<button type="button" class="download-pdf-viewer__download-link" data-lfk-resource-modal-open aria-controls="<?php echo esc_attr( $modal_id ); ?>">
+					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"></path><path d="m7 10 5 5 5-5"></path><path d="M5 20h14"></path></svg>
+					<?php esc_html_e( 'ดาวน์โหลด PDF', 'lfk-resource-downloads' ); ?>
+				</button>
+			</div>
+
+			<div class="download-pdf-viewer__body">
+				<aside class="download-pdf-viewer__thumb-rail" data-pdf-thumb-rail>
+					<div class="download-pdf-viewer__thumb-rail-header">
+						<span><?php esc_html_e( 'หน้า', 'lfk-resource-downloads' ); ?></span>
+						<button type="button" class="download-pdf-viewer__thumb-toggle" data-pdf-thumb-toggle aria-label="<?php esc_attr_e( 'Hide page thumbnails', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+						</button>
+					</div>
+					<div class="download-pdf-viewer__thumb-list" data-pdf-thumbnails></div>
+				</aside>
+
+				<div class="download-pdf-viewer__stage">
+					<button type="button" class="download-pdf-viewer__thumb-open" data-pdf-thumb-toggle hidden>
+						<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+						<?php esc_html_e( 'หน้า', 'lfk-resource-downloads' ); ?>
+					</button>
+					<div class="download-pdf-viewer__status" data-pdf-status>
+						<?php esc_html_e( 'Loading PDF...', 'lfk-resource-downloads' ); ?>
+					</div>
+					<div class="download-pdf-viewer__pages" data-pdf-pages></div>
+					<div class="download-pdf-viewer__controls">
+						<button type="button" class="download-pdf-viewer__button" data-pdf-prev aria-label="<?php esc_attr_e( 'Previous page', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+						</button>
+						<span class="download-pdf-viewer__counter" data-pdf-page-label>
+							<?php esc_html_e( 'Loading...', 'lfk-resource-downloads' ); ?>
+						</span>
+						<button type="button" class="download-pdf-viewer__button" data-pdf-next aria-label="<?php esc_attr_e( 'Next page', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+						</button>
+						<span class="download-pdf-viewer__control-separator" aria-hidden="true"></span>
+						<button type="button" class="download-pdf-viewer__button" data-pdf-zoom-out aria-label="<?php esc_attr_e( 'Zoom out', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path></svg>
+						</button>
+						<span class="download-pdf-viewer__zoom-label" data-pdf-zoom-label>100%</span>
+						<button type="button" class="download-pdf-viewer__button" data-pdf-zoom-in aria-label="<?php esc_attr_e( 'Zoom in', 'lfk-resource-downloads' ); ?>">
+							<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+						</button>
+						<button type="button" class="download-pdf-viewer__text-button" data-pdf-zoom-reset>
+							<?php esc_html_e( 'พอดีหน้า', 'lfk-resource-downloads' ); ?>
+						</button>
+					</div>
 				</div>
 			</div>
-		</article>
+		</section>
 		<?php
 	}
 
@@ -504,6 +837,19 @@ final class LFK_Resource_Downloads {
 		$extension = $path ? pathinfo( $path, PATHINFO_EXTENSION ) : '';
 
 		return $extension ? strtoupper( substr( sanitize_key( $extension ), 0, 4 ) ) : 'FILE';
+	}
+
+	private static function file_is_pdf( $file_id ) {
+		if ( ! $file_id ) {
+			return false;
+		}
+
+		$mime_type = get_post_mime_type( $file_id );
+		if ( 'application/pdf' === $mime_type ) {
+			return true;
+		}
+
+		return 'PDF' === self::get_file_extension( $file_id );
 	}
 
 	private static function get_resources( $product_id = 0, $type = '' ) {
@@ -578,6 +924,41 @@ final class LFK_Resource_Downloads {
 
 		self::record_lead( $resource_id, $product_id, $name, $email );
 		self::send_file( $file_id );
+	}
+
+	private static function viewer_url( $resource_id, $product_id ) {
+		$redirect_url = add_query_arg(
+			array(
+				'lfk_resource_view' => absint( $resource_id ),
+				'lfk_product_id'    => absint( $product_id ),
+			),
+			home_url( '/resource-viewer/' )
+		);
+
+		return $redirect_url;
+	}
+
+	private static function get_standalone_viewer_back_url( $resource_id ) {
+		$product_id = isset( $_GET['lfk_product_id'] ) ? absint( wp_unslash( $_GET['lfk_product_id'] ) ) : 0;
+
+		if ( $product_id && self::resource_matches_product( $resource_id, $product_id ) ) {
+			$product_url = get_permalink( $product_id );
+			if ( $product_url ) {
+				return $product_url;
+			}
+		}
+
+		$stored_product_ids = get_post_meta( $resource_id, '_lfk_resource_product_ids', true );
+		$product_ids        = array_filter( array_map( 'absint', explode( ',', (string) $stored_product_ids ) ) );
+
+		foreach ( $product_ids as $fallback_product_id ) {
+			$product_url = get_permalink( $fallback_product_id );
+			if ( $product_url ) {
+				return $product_url;
+			}
+		}
+
+		return home_url( '/' );
 	}
 
 	private static function resource_matches_product( $resource_id, $product_id ) {
