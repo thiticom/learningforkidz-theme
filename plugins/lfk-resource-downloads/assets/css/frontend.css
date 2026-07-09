@@ -229,18 +229,31 @@
 	line-height: 1.2;
 	text-align: center;
 	text-decoration: none;
-	transition: background 150ms ease, color 150ms ease;
+	transition: background 150ms ease, box-shadow 150ms ease, color 150ms ease, transform 150ms ease;
 }
 
-.lfk-resource-downloads .lfk-resource-downloads__banner-action {
-	color: #fff;
-}
-
-.lfk-resource-downloads__banner-action:hover,
-.lfk-resource-downloads__banner-action:focus {
-	background: #d99a35;
+.lfk-resource-downloads .lfk-resource-downloads__banner-action,
+.lfk-resource-downloads .lfk-resource-downloads__banner-action:focus {
+	background: #0076be;
 	color: #fff;
 	outline: none;
+}
+
+.lfk-resource-downloads .lfk-resource-downloads__banner-action:active {
+	background: #005f9d;
+	color: #fff;
+	transform: translateY(1px);
+}
+
+.lfk-resource-downloads .lfk-resource-downloads__banner-action:focus-visible {
+	box-shadow: 0 0 0 3px rgba(0, 118, 190, 0.24);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.lfk-resource-downloads .lfk-resource-downloads__banner-action:hover {
+		background: #005f9d;
+		color: #fff;
+	}
 }
 
 .lfk-resource-downloads__banner-pages {
