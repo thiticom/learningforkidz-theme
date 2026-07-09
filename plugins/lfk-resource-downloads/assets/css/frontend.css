@@ -1257,6 +1257,22 @@
 	overflow: auto;
 }
 
+.download-pdf-viewer.is-zoomed .download-pdf-viewer__pages {
+	cursor: grab;
+	overscroll-behavior: contain;
+	touch-action: none;
+}
+
+.download-pdf-viewer.is-panning .download-pdf-viewer__pages {
+	cursor: grabbing;
+	user-select: none;
+}
+
+.download-pdf-viewer.is-zoomed .download-pdf-viewer__pages .stf__parent,
+.download-pdf-viewer.is-zoomed .download-pdf-viewer__pages .stf__block {
+	touch-action: none;
+}
+
 .lfk-resource-viewer-page .download-pdf-viewer__pages {
 	min-height: 100%;
 }

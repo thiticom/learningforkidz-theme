@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LFK Resource Downloads
  * Description: Gates product guides and lesson plans behind a name/email form and records leads for CRM export.
- * Version: 0.3.5
+ * Version: 0.3.6
  * Author: Learning for Kidz
  * Text Domain: lfk-resource-downloads
  */
@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 final class LFK_Resource_Downloads {
-	const VERSION           = '0.3.5';
+	const VERSION           = '0.3.6';
 	const POST_TYPE         = 'lfk_resource';
 	const DB_VERSION        = '1';
 	const DB_VERSION_OPTION = 'lfk_resource_downloads_db_version';
@@ -135,6 +135,16 @@ final class LFK_Resource_Downloads {
 		$type        = get_post_meta( $post->ID, '_lfk_resource_type', true ) ?: 'product_guide';
 		$file_id     = (int) get_post_meta( $post->ID, '_lfk_resource_file_id', true );
 		$file_url    = $file_id ? wp_get_attachment_url( $file_id ) : '';
+		$cover_id    = (int) get_post_meta( $post->ID, '_lfk_resource_cover_id', true );
+		$cover_url   = $cover_id ? wp_get_attachment_url( $cover_id ) : '';
+		$cover_img   = $cover_id ? wp_get_attachment_image(
+			$cover_id,
+			'medium',
+			false,
+			array(
+				'style' => 'display:block;max-width:140px;height:auto;margin:8px 0;border:1px solid #dcdcde;border-radius:4px;',
+			)
+		) : '';
 		$product_ids = self::format_product_ids_for_input( get_post_meta( $post->ID, '_lfk_resource_product_ids', true ) );
 
 		wp_nonce_field( 'lfk_resource_meta_' . $post->ID, 'lfk_resource_meta_nonce' );
@@ -153,6 +163,17 @@ final class LFK_Resource_Downloads {
 			<input type="text" id="lfk_resource_file_url" class="regular-text" value="<?php echo esc_url( $file_url ); ?>" readonly>
 			<button type="button" class="button" data-lfk-resource-file-picker><?php esc_html_e( 'Choose file', 'lfk-resource-downloads' ); ?></button>
 			<button type="button" class="button" data-lfk-resource-file-clear><?php esc_html_e( 'Clear', 'lfk-resource-downloads' ); ?></button>
+		</p>
+		<p>
+			<label for="lfk_resource_cover_url"><strong><?php esc_html_e( 'Cover preview', 'lfk-resource-downloads' ); ?></strong></label><br>
+			<input type="hidden" id="lfk_resource_cover_id" name="lfk_resource_cover_id" value="<?php echo esc_attr( $cover_id ); ?>">
+			<span id="lfk_resource_cover_preview">
+				<?php echo $cover_img ? wp_kses_post( $cover_img ) : ''; ?>
+			</span>
+			<input type="text" id="lfk_resource_cover_url" class="regular-text" value="<?php echo esc_url( $cover_url ); ?>" readonly>
+			<button type="button" class="button" data-lfk-resource-cover-picker><?php esc_html_e( 'Choose cover', 'lfk-resource-downloads' ); ?></button>
+			<button type="button" class="button" data-lfk-resource-cover-clear><?php esc_html_e( 'Clear', 'lfk-resource-downloads' ); ?></button>
+			<span class="description"><?php esc_html_e( 'Used on the product-page guide banner. Clear it to use the paper preview fallback.', 'lfk-resource-downloads' ); ?></span>
 		</p>
 		<p>
 			<label for="lfk_resource_product_ids"><strong><?php esc_html_e( 'Related products', 'lfk-resource-downloads' ); ?></strong></label><br>
@@ -181,11 +202,18 @@ final class LFK_Resource_Downloads {
 		}
 
 		$file_id         = isset( $_POST['lfk_resource_file_id'] ) ? absint( wp_unslash( $_POST['lfk_resource_file_id'] ) ) : 0;
+		$cover_id        = isset( $_POST['lfk_resource_cover_id'] ) ? absint( wp_unslash( $_POST['lfk_resource_cover_id'] ) ) : 0;
 		$product_ids_raw = isset( $_POST['lfk_resource_product_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['lfk_resource_product_ids'] ) ) : '';
 		$product_ids     = self::parse_related_products( $product_ids_raw );
 
 		update_post_meta( $post_id, '_lfk_resource_type', $type );
 		update_post_meta( $post_id, '_lfk_resource_file_id', $file_id );
+
+		if ( $cover_id ) {
+			update_post_meta( $post_id, '_lfk_resource_cover_id', $cover_id );
+		} else {
+			delete_post_meta( $post_id, '_lfk_resource_cover_id' );
+		}
 
 		if ( $product_ids ) {
 			update_post_meta( $post_id, '_lfk_resource_product_ids', self::format_product_ids_for_storage( $product_ids ) );
