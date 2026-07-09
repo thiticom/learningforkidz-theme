@@ -1171,6 +1171,22 @@
 	border: 2px solid var(--lfk-pdf-blue);
 }
 
+.download-pdf-viewer__thumb.has-viewport .download-pdf-viewer__thumb-viewport {
+	display: block;
+}
+
+.download-pdf-viewer__thumb-viewport {
+	position: absolute;
+	z-index: 2;
+	display: none;
+	box-sizing: border-box;
+	border: 2px solid var(--lfk-pdf-blue);
+	border-radius: 3px;
+	background: rgba(15, 117, 188, 0.14);
+	box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.86);
+	pointer-events: none;
+}
+
 .download-pdf-viewer__thumb canvas {
 	display: block;
 	width: 100%;
@@ -1186,6 +1202,7 @@
 	border-radius: 3px;
 	background: #fff;
 	color: var(--lfk-pdf-blue);
+	z-index: 3;
 	padding: 2px 5px;
 	font-size: 11px;
 	font-weight: 700;
@@ -1257,13 +1274,25 @@
 	overflow: auto;
 }
 
-.download-pdf-viewer.is-zoomed .download-pdf-viewer__pages {
+.download-pdf-viewer__page-viewport {
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	overflow: auto;
+}
+
+.download-pdf-viewer__page-viewport .download-pdf-viewer__pages {
+	overflow: visible;
+}
+
+.download-pdf-viewer.is-zoomed .download-pdf-viewer__page-viewport {
 	cursor: grab;
 	overscroll-behavior: contain;
 	touch-action: none;
 }
 
-.download-pdf-viewer.is-panning .download-pdf-viewer__pages {
+.download-pdf-viewer.is-panning .download-pdf-viewer__page-viewport {
 	cursor: grabbing;
 	user-select: none;
 }
@@ -1271,6 +1300,11 @@
 .download-pdf-viewer.is-zoomed .download-pdf-viewer__pages .stf__parent,
 .download-pdf-viewer.is-zoomed .download-pdf-viewer__pages .stf__block {
 	touch-action: none;
+}
+
+.download-pdf-viewer.is-zoomed .download-pdf-viewer__pages .stf__block,
+.download-pdf-viewer.is-zoomed .download-pdf-viewer__page {
+	pointer-events: none;
 }
 
 .lfk-resource-viewer-page .download-pdf-viewer__pages {
