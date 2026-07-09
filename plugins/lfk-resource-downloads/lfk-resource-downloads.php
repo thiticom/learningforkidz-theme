@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LFK Resource Downloads
  * Description: Gates product guides and lesson plans behind a name/email form and records leads for CRM export.
- * Version: 0.3.4
+ * Version: 0.3.5
  * Author: Learning for Kidz
  * Text Domain: lfk-resource-downloads
  */
@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 final class LFK_Resource_Downloads {
-	const VERSION           = '0.3.4';
+	const VERSION           = '0.3.5';
 	const POST_TYPE         = 'lfk_resource';
 	const DB_VERSION        = '1';
 	const DB_VERSION_OPTION = 'lfk_resource_downloads_db_version';
@@ -593,6 +593,19 @@ final class LFK_Resource_Downloads {
 		$file_ext   = self::get_file_extension( $file_id );
 		$is_pdf     = self::file_is_pdf( $file_id );
 		$viewer_url = $is_pdf ? self::viewer_url( $resource->ID, $product_id ) : '';
+		$cover_id   = $is_pdf ? (int) get_post_meta( $resource->ID, '_lfk_resource_cover_id', true ) : 0;
+		$cover_img  = $cover_id ? wp_get_attachment_image(
+			$cover_id,
+			'medium',
+			false,
+			array(
+				'class'         => 'lfk-resource-downloads__banner-cover skip-lazy',
+				'data-no-lazy'  => '1',
+				'decoding'      => 'async',
+				'fetchpriority' => 'high',
+				'loading'       => 'eager',
+			)
+		) : '';
 
 		if ( ! $file_id ) {
 			return;
@@ -619,9 +632,13 @@ final class LFK_Resource_Downloads {
 						</span>
 						<span class="lfk-resource-downloads__banner-page lfk-resource-downloads__banner-page--front">
 							<span class="lfk-resource-downloads__banner-page-chip"><?php echo esc_html( $file_ext ); ?></span>
-							<span></span>
-							<span></span>
-							<span></span>
+							<?php if ( $cover_img ) : ?>
+								<?php echo wp_kses_post( $cover_img ); ?>
+							<?php else : ?>
+								<span></span>
+								<span></span>
+								<span></span>
+							<?php endif; ?>
 						</span>
 					</div>
 				</div>

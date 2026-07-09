@@ -131,6 +131,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 		const settings = getViewerSettings(viewer);
 		const pdfUrl = viewer.getAttribute('data-pdf-url');
 		const pagesRoot = viewer.querySelector('[data-pdf-pages]');
+		const stage = viewer.querySelector('.download-pdf-viewer__stage');
 		const status = viewer.querySelector('[data-pdf-status]');
 		const prevButton = viewer.querySelector('[data-pdf-prev]');
 		const nextButton = viewer.querySelector('[data-pdf-next]');
@@ -1147,6 +1148,17 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			zoomResetButton.addEventListener('click', function () {
 				setZoom(1);
 			});
+		}
+
+		if (stage) {
+			stage.addEventListener('wheel', function (event) {
+				if (!event.ctrlKey && !event.metaKey) {
+					return;
+				}
+
+				event.preventDefault();
+				setZoom(zoom + (event.deltaY > 0 ? -0.1 : 0.1));
+			}, { passive: false });
 		}
 
 		if (pageSlider) {
