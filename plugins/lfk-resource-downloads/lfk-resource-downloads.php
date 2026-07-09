@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LFK Resource Downloads
  * Description: Gates product guides and lesson plans behind a name/email form and records leads for CRM export.
- * Version: 0.3.7
+ * Version: 0.3.8
  * Author: Learning for Kidz
  * Text Domain: lfk-resource-downloads
  */
@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 final class LFK_Resource_Downloads {
-	const VERSION           = '0.3.7';
+	const VERSION           = '0.3.8';
 	const POST_TYPE         = 'lfk_resource';
 	const DB_VERSION        = '1';
 	const DB_VERSION_OPTION = 'lfk_resource_downloads_db_version';
@@ -33,6 +33,12 @@ final class LFK_Resource_Downloads {
 		add_shortcode( 'lfk_product_resources', array( __CLASS__, 'render_product_shortcode' ) );
 		add_filter( 'the_content', array( __CLASS__, 'append_product_resources' ), 20 );
 		add_filter( 'script_loader_tag', array( __CLASS__, 'script_loader_tag' ), 10, 3 );
+	}
+
+	public static function add_standalone_viewer_body_class( $classes ) {
+		$classes[] = 'lfk-resource-viewer-template';
+
+		return $classes;
 	}
 
 	public static function activate() {
@@ -377,6 +383,7 @@ final class LFK_Resource_Downloads {
 		add_filter( 'rank_math/frontend/title', $title_filter, 99 );
 		add_filter( 'rank_math/opengraph/facebook/title', $title_filter, 99 );
 		add_filter( 'rank_math/opengraph/twitter/title', $title_filter, 99 );
+		add_filter( 'body_class', array( __CLASS__, 'add_standalone_viewer_body_class' ) );
 
 		get_header();
 		?>
@@ -411,6 +418,7 @@ final class LFK_Resource_Downloads {
 
 		status_header( $status_code );
 		nocache_headers();
+		add_filter( 'body_class', array( __CLASS__, 'add_standalone_viewer_body_class' ) );
 		add_filter(
 			'pre_get_document_title',
 			function () {

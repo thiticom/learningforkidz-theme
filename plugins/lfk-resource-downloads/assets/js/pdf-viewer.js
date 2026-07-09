@@ -172,6 +172,10 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 		pagesViewport.style.minHeight = '100%';
 		pagesViewport.style.overflow = 'auto';
 
+		if (viewer.classList.contains('download-pdf-viewer--standalone')) {
+			document.documentElement.classList.add('lfk-resource-viewer-html');
+		}
+
 		if (settings.workerSrc) {
 			pdfjsLib.GlobalWorkerOptions.workerSrc = settings.workerSrc;
 		}
@@ -183,6 +187,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 		const zoomMin = 0.75;
 		const zoomMax = 3;
 		const zoomStep = 0.25;
+		const mobileViewportQuery = window.matchMedia ? window.matchMedia('(max-width: 760px)') : null;
 		let zoom = 1;
 		let pageRatio = 1075 / basePageWidth;
 		let pageBaseWidth = basePageWidth;
@@ -206,6 +211,10 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			let activeMousePan = null;
 			let activeTouchPan = null;
 			let activePinch = null;
+			let pendingPinchZoom = null;
+			let pinchZoomFrame = null;
+			let needsDeferredZoomRender = false;
+			let deferredZoomRenderTimer = null;
 			let thumbnailViewportFrame = null;
 
 		const setStatus = function (message) {
@@ -373,6 +382,28 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			return Math.max(contentStage.clientWidth - paddingX, basePageMinWidth);
 		};
 
+		const isMobileViewport = function () {
+			return Boolean(mobileViewportQuery && mobileViewportQuery.matches);
+		};
+
+		const getDesiredBookWidth = function () {
+			const minWidth = Math.round(basePageMinWidth * zoom);
+
+			return Math.max(minWidth, Math.round(getStageContentWidth() * zoom));
+		};
+
+		const shouldForcePortraitZoom = function () {
+			return zoom > 1.01 && isMobileViewport();
+		};
+
+		const getLayoutMinWidth = function (desiredBookWidth) {
+			if (shouldForcePortraitZoom()) {
+				return Math.ceil(desiredBookWidth / 2) + 1;
+			}
+
+			return Math.round(basePageMinWidth * zoom);
+		};
+
 		const updateZoomControls = function () {
 			const isReady = Boolean(pdfDocument && pageFlip);
 
@@ -408,12 +439,12 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 		};
 
 		const applyBookLayout = function () {
-			const minWidth = Math.round(basePageMinWidth * zoom);
+			const desiredBookWidth = getDesiredBookWidth();
+			const minWidth = getLayoutMinWidth(desiredBookWidth);
 			const minHeight = Math.round(minWidth * pageRatio);
-			const desiredBookWidth = Math.max(minWidth, Math.round(getStageContentWidth() * zoom));
 
 			pagesRoot.style.width = 1 === zoom ? '100%' : desiredBookWidth + 'px';
-			pagesRoot.style.maxWidth = Math.max(desiredBookWidth, 2 * pageBaseWidth) + 'px';
+			pagesRoot.style.maxWidth = (shouldForcePortraitZoom() ? desiredBookWidth : Math.max(desiredBookWidth, 2 * pageBaseWidth)) + 'px';
 			pagesRoot.style.minWidth = minWidth + 'px';
 			pagesRoot.style.minHeight = minHeight + 'px';
 		};
@@ -433,9 +464,11 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 
 		const applyZoomToFlipbook = function () {
 			const currentPageIndex = pageFlip ? pageFlip.getCurrentPageIndex() : 0;
-			const minWidth = Math.round(basePageMinWidth * zoom);
+			const desiredBookWidth = getDesiredBookWidth();
+			const minWidth = getLayoutMinWidth(desiredBookWidth);
+			const maxWidth = shouldForcePortraitZoom() ? desiredBookWidth : Math.round(basePageWidth * zoom);
 
-			pageBaseWidth = Math.round(basePageWidth * zoom);
+			pageBaseWidth = maxWidth;
 			pageBaseHeight = Math.round(pageBaseWidth * pageRatio);
 			applyBookLayout();
 
@@ -448,7 +481,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			settings.width = pageBaseWidth;
 			settings.height = pageBaseHeight;
 			settings.minWidth = minWidth;
-			settings.maxWidth = pageBaseWidth;
+			settings.maxWidth = maxWidth;
 			settings.minHeight = Math.round(minWidth * pageRatio);
 			settings.maxHeight = pageBaseHeight;
 
@@ -461,7 +494,67 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			pageFlip.turnToPage(currentPageIndex);
 		};
 
-		const setZoom = function (nextZoom) {
+		const refreshZoomedPages = function () {
+			needsDeferredZoomRender = false;
+			window.clearTimeout(deferredZoomRenderTimer);
+
+			invalidateRenderedPages();
+			markSearchResults();
+			scheduleThumbnailViewportUpdate();
+
+			if (pageFlip) {
+				setCurrentPage(pageFlip.getCurrentPageIndex());
+				renderAround(pageFlip.getCurrentPageIndex());
+			}
+		};
+
+		const scheduleDeferredZoomRender = function () {
+			needsDeferredZoomRender = true;
+			window.clearTimeout(deferredZoomRenderTimer);
+			deferredZoomRenderTimer = window.setTimeout(refreshZoomedPages, 180);
+		};
+
+		const flushPendingPinchZoom = function () {
+			if (!pendingPinchZoom) {
+				return;
+			}
+
+			const pending = pendingPinchZoom;
+
+			pendingPinchZoom = null;
+			pinchZoomFrame = null;
+			zoomAtPoint(pending.zoom, pending.x, pending.y, {
+				deferRender: true,
+			});
+		};
+
+		const schedulePinchZoom = function (nextZoom, clientX, clientY) {
+			pendingPinchZoom = {
+				x: clientX,
+				y: clientY,
+				zoom: Math.round(nextZoom * 20) / 20,
+			};
+
+			if (pinchZoomFrame) {
+				return;
+			}
+
+			pinchZoomFrame = window.requestAnimationFrame(flushPendingPinchZoom);
+		};
+
+		const finishDeferredZoomRender = function () {
+			if (pinchZoomFrame) {
+				window.cancelAnimationFrame(pinchZoomFrame);
+				flushPendingPinchZoom();
+			}
+
+			if (needsDeferredZoomRender) {
+				refreshZoomedPages();
+			}
+		};
+
+		const setZoom = function (nextZoom, options) {
+			const deferRender = Boolean(options && options.deferRender);
 			const nextZoomValue = clamp(Math.round(nextZoom * 100) / 100, zoomMin, zoomMax);
 
 			if (nextZoomValue === zoom) {
@@ -470,20 +563,19 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 
 			zoom = nextZoomValue;
 			applyZoomToFlipbook();
-			invalidateRenderedPages();
-			markSearchResults();
 			updateZoomControls();
 			scheduleThumbnailViewportUpdate();
 
-			if (pageFlip) {
-				setCurrentPage(pageFlip.getCurrentPageIndex());
-				renderAround(pageFlip.getCurrentPageIndex());
+			if (deferRender) {
+				scheduleDeferredZoomRender();
+			} else {
+				refreshZoomedPages();
 			}
 
 			return true;
 		};
 
-		const zoomAtPoint = function (nextZoom, clientX, clientY) {
+		const zoomAtPoint = function (nextZoom, clientX, clientY, options) {
 			const previousZoom = zoom;
 			const rect = pagesViewport.getBoundingClientRect();
 			const localX = Number.isFinite(clientX) ? clamp(clientX - rect.left, 0, rect.width) : pagesViewport.clientWidth / 2;
@@ -491,7 +583,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			const scrollX = pagesViewport.scrollLeft + localX;
 			const scrollY = pagesViewport.scrollTop + localY;
 
-			if (!setZoom(nextZoom)) {
+			if (!setZoom(nextZoom, options)) {
 				return;
 			}
 
@@ -502,6 +594,22 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 				pagesViewport.scrollTop = Math.max(0, (scrollY * ratio) - localY);
 				updateThumbnailViewport();
 			});
+		};
+
+		const stopFlipGesture = function () {
+			if (!pageFlip) {
+				return;
+			}
+
+			if (pageFlip.getRender && pageFlip.getRender().finishAnimation) {
+				pageFlip.getRender().finishAnimation();
+			}
+
+			const flipController = pageFlip.getFlipController ? pageFlip.getFlipController() : null;
+
+			if (flipController && flipController.reset) {
+				flipController.reset();
+			}
 		};
 
 		const isInteractiveTarget = function (target) {
@@ -759,7 +867,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 			});
 		}
 
-		const markSearchResults = function () {
+		function markSearchResults() {
 			clearSearchMarks();
 
 				searchResults.forEach(function (pageNumber) {
@@ -773,16 +881,26 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 						applySearchHighlightsToPage(pageNumber);
 					}
 				});
-		};
+		}
 
-		const goToPageIndex = function (pageIndex) {
+		const goToPageIndex = function (pageIndex, options) {
 			if (!pageFlip) {
 				return;
 			}
 
-			pageFlip.turnToPage(pageIndex);
+			const targetPageIndex = pdfDocument ? clamp(pageIndex, 0, pdfDocument.numPages - 1) : pageIndex;
+
+			pageFlip.turnToPage(targetPageIndex);
 			setCurrentPage(pageFlip.getCurrentPageIndex());
 			renderAround(pageFlip.getCurrentPageIndex());
+
+			if (options && options.resetScroll) {
+				window.requestAnimationFrame(function () {
+					pagesViewport.scrollLeft = 0;
+					pagesViewport.scrollTop = 0;
+					scheduleThumbnailViewportUpdate();
+				});
+			}
 		};
 
 		const goToSearchResult = function (resultIndex) {
@@ -1266,7 +1384,14 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 		if (prevButton) {
 			prevButton.addEventListener('click', function () {
 				if (pageFlip) {
-					pageFlip.flipPrev('bottom');
+					if (zoom > 1.01) {
+						stopFlipGesture();
+						goToPageIndex(pageFlip.getCurrentPageIndex() - 1, {
+							resetScroll: true,
+						});
+					} else {
+						pageFlip.flipPrev('bottom');
+					}
 				}
 			});
 		}
@@ -1274,7 +1399,14 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 		if (nextButton) {
 			nextButton.addEventListener('click', function () {
 				if (pageFlip) {
-					pageFlip.flipNext('bottom');
+					if (zoom > 1.01) {
+						stopFlipGesture();
+						goToPageIndex(pageFlip.getCurrentPageIndex() + 1, {
+							resetScroll: true,
+						});
+					} else {
+						pageFlip.flipNext('bottom');
+					}
 				}
 			});
 		}
@@ -1386,6 +1518,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 				}
 
 				if (event.touches.length >= 2) {
+					stopFlipGesture();
 					activePinch = {
 						distance: getTouchDistance(event.touches),
 						zoom: zoom,
@@ -1397,6 +1530,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 				}
 
 				if (zoom > 1.01 && event.touches.length) {
+					stopFlipGesture();
 					activeTouchPan = {
 						x: event.touches[0].clientX,
 						y: event.touches[0].clientY,
@@ -1404,6 +1538,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 						top: pagesViewport.scrollTop,
 					};
 					viewer.classList.add('is-panning');
+					event.preventDefault();
 					event.stopPropagation();
 				}
 			}, { capture: true, passive: false });
@@ -1421,7 +1556,7 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 					event.stopPropagation();
 
 					if (activePinch.distance > 0) {
-						zoomAtPoint(activePinch.zoom * (distance / activePinch.distance), center.x, center.y);
+						schedulePinchZoom(activePinch.zoom * (distance / activePinch.distance), center.x, center.y);
 					}
 
 					return;
@@ -1438,8 +1573,19 @@ import * as pdfjsLib from '../vendor/pdfjs/pdf.min.js';
 
 			['touchend', 'touchcancel'].forEach(function (eventName) {
 				stage.addEventListener(eventName, function (event) {
-					if (event.touches.length < 2) {
+					if (event.touches.length < 2 && activePinch) {
 						activePinch = null;
+						finishDeferredZoomRender();
+					}
+
+					if (event.touches.length === 1 && zoom > 1.01 && !isInteractiveTarget(event.target)) {
+						activeTouchPan = {
+							x: event.touches[0].clientX,
+							y: event.touches[0].clientY,
+							left: pagesViewport.scrollLeft,
+							top: pagesViewport.scrollTop,
+						};
+						viewer.classList.add('is-panning');
 					}
 
 					if (!event.touches.length) {
