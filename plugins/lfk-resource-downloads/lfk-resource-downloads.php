@@ -2,7 +2,7 @@
 /**
  * Plugin Name: LFK Resource Downloads
  * Description: Gates product guides and lesson plans behind a name/email form and records leads for CRM export.
- * Version: 0.3.8
+ * Version: 0.3.9
  * Author: Learning for Kidz
  * Text Domain: lfk-resource-downloads
  */
@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 final class LFK_Resource_Downloads {
-	const VERSION           = '0.3.8';
+	const VERSION           = '0.3.9';
 	const POST_TYPE         = 'lfk_resource';
 	const DB_VERSION        = '1';
 	const DB_VERSION_OPTION = 'lfk_resource_downloads_db_version';

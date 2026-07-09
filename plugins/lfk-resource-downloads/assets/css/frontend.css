@@ -232,6 +232,10 @@
 	transition: background 150ms ease, color 150ms ease;
 }
 
+.lfk-resource-downloads .lfk-resource-downloads__banner-action {
+	color: #fff;
+}
+
 .lfk-resource-downloads__banner-action:hover,
 .lfk-resource-downloads__banner-action:focus {
 	background: #d99a35;
