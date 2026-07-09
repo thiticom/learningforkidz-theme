@@ -14,8 +14,8 @@
 
 .lfk-resource-downloads__grid {
 	display: grid;
-	gap: 10px;
-	grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+	gap: 14px;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
 }
 
 .lfk-resource-downloads--summary .lfk-resource-downloads__grid {
@@ -168,10 +168,10 @@
 }
 
 .lfk-resource-downloads__banner {
-	display: flex;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 150px;
 	gap: 20px;
 	align-items: center;
-	justify-content: space-between;
 	border-radius: 6px;
 	background: #dceffb;
 	padding: 24px 28px;
@@ -180,6 +180,8 @@
 .lfk-resource-downloads__banner-copy {
 	display: grid;
 	gap: 10px;
+	align-content: center;
+	justify-items: start;
 	min-width: 0;
 }
 
@@ -202,7 +204,7 @@
 .lfk-resource-downloads__banner-text h3 {
 	margin: 0;
 	color: #0076be;
-	font-size: 20px;
+	font-size: 19px;
 	font-weight: 700;
 	line-height: 1.35;
 }
@@ -258,9 +260,9 @@
 
 .lfk-resource-downloads__banner-pages {
 	position: relative;
-	flex: none;
 	width: 150px;
 	height: 150px;
+	justify-self: end;
 }
 
 .lfk-resource-downloads__banner-page {
