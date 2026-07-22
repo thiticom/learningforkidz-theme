@@ -23,10 +23,9 @@ fi
 commit=${BASH_REMATCH[1]}
 repository=thiticom/learningforkidz-theme
 theme_name=lfk-tailwind
-release_root=/home/thaiada/theme-releases/${environment}/${theme_name}
+release_root=${wp_root}/wp-content/themes/.lfk-releases/${theme_name}
 releases=${release_root}/releases
 release=${releases}/${commit}
-current=${release_root}/current
 theme_path=${wp_root}/wp-content/themes/${theme_name}
 
 mkdir -p "$releases"
@@ -49,17 +48,17 @@ if [[ ! -d "$release" ]]; then
   mv "$source_theme" "$release"
 fi
 
-next_link=${release_root}/.current-${commit}
-ln -s "$release" "$next_link"
-mv -Tf "$next_link" "$current"
-
-if [[ ! -L "$theme_path" ]]; then
-  backup=${theme_path}.pre-git-$(date -u +%Y%m%d-%H%M%S)
-  next_theme=${theme_path}.next
-  ln -s "$current" "$next_theme"
-  mv "$theme_path" "$backup"
-  mv "$next_theme" "$theme_path"
+next_theme=${theme_path}.next-${commit}
+previous_commit=pre-git
+if [[ -f "${release_root}/deployed-commit" ]]; then
+  previous_commit=$(cat "${release_root}/deployed-commit")
 fi
+backup=${release_root}/previous/${previous_commit}-$(date -u +%Y%m%d-%H%M%S)
+mkdir -p "${release_root}/previous"
+cp -a "$release" "$next_theme"
+mv "$theme_path" "$backup"
+mv "$next_theme" "$theme_path"
+printf '%s\n' "$commit" > "${release_root}/deployed-commit"
 
 wp --path="$wp_root" litespeed-purge all >/dev/null
 printf '%s %s\n' "$environment" "$commit"

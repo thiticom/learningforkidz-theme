@@ -14,12 +14,13 @@ repository and outside this deployment workflow.
 Each deploy creates an immutable release at:
 
 ```text
-/home/thaiada/theme-releases/<environment>/lfk-tailwind/releases/<commit>
+<wordpress-root>/wp-content/themes/.lfk-releases/lfk-tailwind/releases/<commit>
 ```
 
-The WordPress theme path points to an atomic `current` symlink. The original
-directory is retained as a timestamped `*.pre-git-*` backup during the first
-migration.
+Releases stay inside the virtual host. LiteSpeed on this host rejects assets
+served through theme symlinks, so deployment uses a same-filesystem directory
+swap instead. The prior theme directory is retained under `previous/`, and
+`deployed-commit` records the active Git commit.
 
 ## Required GitHub environment configuration
 
@@ -43,5 +44,5 @@ key cannot deploy production, and a production key cannot deploy staging.
 6. Smoke-test production and record the deployed commit.
 
 Do not edit the live theme directory or deploy it with `rsync`. Roll back by
-repointing `current` to a previously verified release and purging the LiteSpeed
-cache.
+swapping a previously verified release back into the theme path and purging the
+LiteSpeed cache.
