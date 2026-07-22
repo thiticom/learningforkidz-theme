@@ -1,0 +1,29 @@
+name: Theme CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - staging
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Confirm compiled CSS is committed
+        run: git diff --exit-code -- themes/lfk-tailwind/assets/dist/theme.css
+      - name: Lint PHP
+        run: find themes/lfk-tailwind -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Check theme JavaScript
+        run: node -c themes/lfk-tailwind/assets/js/theme.js

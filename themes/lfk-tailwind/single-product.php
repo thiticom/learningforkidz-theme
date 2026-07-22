@@ -145,14 +145,22 @@ while ( have_posts() ) :
 				</section>
 
 				<section class="lfk-single-summary">
+					<div class="lfk-single-eyebrow">
+						<?php echo esc_html( $brand && ! is_wp_error( $brand ) ? $brand[0]->name : __( 'Learning For Kidz', 'lfk-tailwind' ) ); ?>
+					</div>
 					<h2 class="lfk-single-title"><?php echo esc_html( $product->get_name() ); ?></h2>
+					<?php if ( $product->get_sku() ) : ?><div class="lfk-single-sku"><?php esc_html_e( 'SKU:', 'lfk-tailwind' ); ?> <?php echo esc_html( $product->get_sku() ); ?></div><?php endif; ?>
 					<div class="lfk-single-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 
-					<?php echo wp_kses_post( wc_get_stock_html( $product ) ); ?>
+					<div class="lfk-single-availability">
+						<?php echo wp_kses_post( wc_get_stock_html( $product ) ); ?>
+						<p class="lfk-delivery-note"><strong><?php esc_html_e( 'จัดส่งฟรี', 'lfk-tailwind' ); ?></strong> <?php esc_html_e( 'ระบบจะแสดงวันรับสินค้าที่เร็วที่สุดเมื่อระบุที่อยู่', 'lfk-tailwind' ); ?></p>
+					</div>
 
 					<?php if ( $product->is_purchasable() && $product->is_in_stock() ) : ?>
 						<div class="lfk-single-cart">
 							<?php woocommerce_template_single_add_to_cart(); ?>
+							<p class="lfk-payment-note"><?php esc_html_e( 'ชำระเงินอย่างปลอดภัย และตรวจสอบรายการก่อนยืนยันคำสั่งซื้อได้', 'lfk-tailwind' ); ?></p>
 						</div>
 					<?php endif; ?>
 

@@ -106,6 +106,14 @@ add_filter( 'script_loader_tag', function ( $tag, $handle ) {
 }, 10, 2 );
 
 add_filter( 'style_loader_tag', function ( $html, $handle, $href, $media ) {
+	if ( 'lfk-tailwind' === $handle && is_front_page() ) {
+		$href = esc_url( $href );
+
+		return '<link rel="stylesheet" id="lfk-tailwind-css" href="' . $href . '" media="(min-width: 768px)">' . "\n"
+			. '<link rel="preload" as="style" id="lfk-tailwind-mobile-preload" href="' . $href . '" media="(max-width: 767px)" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n"
+			. '<noscript><link rel="stylesheet" id="lfk-tailwind-noscript-css" href="' . $href . '" media="all"></noscript>' . "\n";
+	}
+
 	if ( 'lfk-anuphan' !== $handle ) {
 		return $html;
 	}
@@ -115,6 +123,16 @@ add_filter( 'style_loader_tag', function ( $html, $handle, $href, $media ) {
 	return '<link rel="preload" as="style" id="lfk-anuphan-preload" href="' . $href . '" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n"
 		. '<noscript><link rel="stylesheet" id="lfk-anuphan-css" href="' . $href . '" media="' . esc_attr( $media ) . '"></noscript>' . "\n";
 }, 10, 4 );
+
+add_action( 'wp_head', function () {
+	if ( ! is_front_page() ) {
+		return;
+	}
+
+	echo <<<'HTML'
+<style id="lfk-home-critical-css">body,html{overflow-x:clip}body{margin:0;background:#fff;color:#1f2937;font-family:Anuphan,Tahoma,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}a{color:inherit;text-decoration:inherit}button{font:inherit}img,svg{display:block;vertical-align:middle}img{max-width:100%;height:auto}[hidden]{display:none!important}.flex{display:flex}.hidden{display:none}.min-h-\[38px\]{min-height:38px}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.lfk-shell{margin-left:auto;margin-right:auto;width:100%;max-width:1210px;padding-left:1rem;padding-right:1rem}.lfk-topbar{background:#a9d9f6;color:#000;font-size:16px;font-weight:600;line-height:24px}.lfk-topbar-link{display:inline-flex;align-items:center;gap:12px;color:#000}.lfk-topbar-link svg{width:1rem;height:1rem}.lfk-header{background:#0076be;color:#fff}.lfk-header-inner{display:flex;min-height:100px;align-items:center;gap:2rem}.lfk-mobile-menu-button{display:inline-flex;width:2.5rem;height:2.5rem;align-items:center;justify-content:center;border-radius:.25rem;background:#d99a35;color:#fff}.lfk-logo{display:block;width:114px;flex-shrink:0}.lfk-logo img{display:block;width:114px;height:80px;object-fit:contain}.lfk-primary-nav{display:none}.lfk-icon-row{display:flex;align-items:center;justify-content:flex-end;gap:1.5rem}.lfk-icon-link{display:inline-flex;width:2.5rem;height:2.5rem;align-items:center;justify-content:center;color:#fff}.lfk-icon-link svg,.lfk-cart-link svg{width:1.5rem;height:1.5rem;flex-shrink:0}.lfk-cart-link{position:relative;display:inline-flex;height:3rem;min-width:112px;align-items:center;justify-content:center;gap:.5rem;background:#d99a35;padding:0 1rem;color:#fff;font-size:15px;font-weight:700}.lfk-cart-count{position:absolute;right:.75rem;top:.25rem;display:inline-flex;height:1.25rem;min-width:1.25rem;align-items:center;justify-content:center;border-radius:9999px;background:#0076be;padding:0 .25rem;color:#fff;font-size:11px;line-height:1}.lfk-cart-count.is-empty,.lfk-mobile-nav,.lfk-search-overlay{display:none}.lfk-age-band{background:#fac735}.lfk-age-inner{margin-left:auto;margin-right:auto;display:grid;width:100%;max-width:1010px;grid-template-columns:1fr;align-items:center;gap:1rem;padding:1.5rem 1rem;text-align:center}.lfk-age-title{margin:0;color:#0076be;font-size:26px;font-weight:600}.lfk-age-list{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem}.lfk-age-pill{display:inline-flex;border:1px solid #0076be;border-radius:9999px;background:#0076be;padding:.5rem 1.5rem;color:#fff;font-size:20px;font-weight:700;line-height:1.5rem}.lfk-hero{position:relative;overflow:hidden;background:#fff}.lfk-hero-track{position:relative;width:100%;overflow:hidden;aspect-ratio:1920/495;min-height:240px}.lfk-hero-slide{position:absolute;inset:0;opacity:0}.lfk-hero-slide.is-active{z-index:1;opacity:1}.lfk-hero-image,.lfk-hero-picture,.lfk-hero-slide img{display:block;width:100%;height:100%}.lfk-hero-slide img{max-width:none;object-fit:cover}.lfk-hero-nav{position:absolute;top:50%;bottom:auto;z-index:10;display:none;width:3rem;align-items:center;justify-content:center;color:#fff;transform:translateY(-50%)}.lfk-hero-prev{left:2rem}.lfk-hero-next{right:2rem}.lfk-hero-dots{margin-top:1.25rem;display:flex;align-items:center;justify-content:center;gap:.5rem}.lfk-hero-dot{width:1rem;height:1rem;border-radius:9999px;background:#d9d9d9}.lfk-hero-dot.is-active{background:#005c99}body.home .lfk-shell{max-width:1170px;padding-left:0;padding-right:0}body.home .lfk-age-band{padding-bottom:17px;background:#fbbc00}body.home .lfk-age-title{width:156px;color:#0076be;font-size:26px;font-weight:600;line-height:31.2px}body.home .lfk-hero{margin-bottom:46px}body.home .lfk-hero-track{height:auto;min-height:0;aspect-ratio:1920/495}body.home .lfk-hero-slide{inset:0;left:0;width:100%;height:100%;opacity:0}body.home .lfk-hero-slide.is-active{z-index:1;opacity:1}body.home .lfk-hero-slide img,body.home .lfk-hero-slide.is-active img,body.home .lfk-hero-slide.is-lfk-near-active img{width:100%;max-width:none;height:100%;object-fit:cover}@media (min-width:768px){.md\:flex{display:flex}.lfk-hero-track{min-height:0}.lfk-hero-nav{display:flex}}@media (min-width:1024px){.lfk-mobile-menu-button{display:none}.lfk-age-inner{grid-template-columns:220px 1fr;gap:2.5rem;text-align:left}.lfk-age-list{justify-content:space-between}.lfk-primary-nav{display:flex;flex:0 0 auto;justify-content:flex-start;gap:0;height:100px;margin-left:67px;font-size:16px;font-weight:600}.lfk-primary-nav>li{position:relative;list-style:none}.lfk-primary-nav>li>a{display:flex;min-height:100px;align-items:center;padding:0 10px;color:#fff;line-height:20px}.lfk-header-inner{gap:0}.lfk-icon-row{margin-left:auto;gap:18px}.lfk-icon-link{width:36px;height:25px}.lfk-topbar .lfk-shell>.hidden{transform:translateX(53px);column-gap:16px}}@media (max-width:767px){.lfk-logo{width:110px}.lfk-logo img{width:110px;height:auto}.lfk-header-inner{min-height:96px;display:grid;grid-template-columns:40px 28px minmax(110px,1fr) repeat(3,28px);column-gap:8px}.lfk-mobile-menu-button{grid-column:1;grid-row:1;align-self:center;justify-self:start}.lfk-logo{grid-column:3;grid-row:1;align-self:center;justify-self:center}.lfk-icon-row{display:contents}.lfk-icon-link{width:28px;height:28px;grid-row:1;align-self:center;justify-self:center}.lfk-search-link{grid-column:2}.lfk-wishlist-link{grid-column:4}.lfk-account-link{grid-column:5}.lfk-cart-link{grid-column:6;grid-row:1;align-self:center;justify-self:center;width:28px;height:28px;min-width:auto;padding:0;background:transparent}.lfk-cart-link .lfk-cart-total{display:none}.lfk-age-inner{padding-top:20px;padding-bottom:9px}.lfk-age-pill{padding:8px 20px;font-size:18px}.lfk-hero-track{aspect-ratio:412/540}body.home #primary{display:block}body.home .lfk-shell{max-width:none;padding-left:10px;padding-right:10px}body.home .lfk-age-band{padding-bottom:0}body.home .lfk-age-title{width:auto;font-size:26px;line-height:31.2px}body.home .lfk-hero{margin-bottom:36px}body.home .lfk-hero-track{height:auto;min-height:360px;aspect-ratio:412/540}body.home .lfk-hero-slide{left:0;width:100%;height:100%}body.home .lfk-hero-slide img,body.home .lfk-hero-slide.is-active img,body.home .lfk-hero-slide.is-lfk-near-active img{width:100%;height:100%}}</style>
+HTML;
+}, 0 );
 
 add_filter( 'wp_resource_hints', function ( $urls, $relation_type ) {
 	if ( 'preconnect' !== $relation_type || ! lfk_should_trim_plugin_assets() ) {
@@ -248,10 +266,10 @@ add_action( 'wp_head', function () {
 			$mobile_id   = ! empty( $mobile_img['ID'] ) ? (int) $mobile_img['ID'] : ( ! empty( $mobile_img['id'] ) ? (int) $mobile_img['id'] : 0 );
 
 			if ( $mobile_id ) {
-				lfk_print_image_preload( $mobile_id, 'full', '100vw', '(max-width: 767px)' );
+				lfk_print_image_preload( $mobile_id, 'full', '100vw', '(max-width: 767px)', array( 'fetchpriority' => 'high' ) );
 			}
 			if ( $desktop_id ) {
-				lfk_print_image_preload( $desktop_id, 'full', '100vw', '(min-width: 768px)' );
+				lfk_print_image_preload( $desktop_id, 'full', '100vw', '(min-width: 768px)', array( 'fetchpriority' => 'high' ) );
 			}
 		}
 	}
@@ -736,6 +754,37 @@ add_filter( 'woocommerce_enable_order_notes_field', function ( $enabled ) {
 
 	return $enabled;
 } );
+
+function lfk_checkout_vendor_asset_url( $filename ) {
+	$path = get_stylesheet_directory() . '/assets/vendor/' . $filename;
+	$url  = get_stylesheet_directory_uri() . '/assets/vendor/' . $filename;
+
+	if ( file_exists( $path ) ) {
+		$url = add_query_arg( 'ver', (string) filemtime( $path ), $url );
+	}
+
+	return $url;
+}
+
+add_filter( 'script_loader_src', function ( $src, $handle ) {
+	if ( 'wc-country-select' === $handle ) {
+		return lfk_checkout_vendor_asset_url( 'wc-country.min.js' );
+	}
+
+	if ( 'selectWoo' === $handle ) {
+		return lfk_checkout_vendor_asset_url( 'wc-choice.full.min.js' );
+	}
+
+	return $src;
+}, 20, 2 );
+
+add_filter( 'style_loader_src', function ( $src, $handle ) {
+	if ( 'select2' === $handle ) {
+		return lfk_checkout_vendor_asset_url( 'wc-choice.css' );
+	}
+
+	return $src;
+}, 20, 2 );
 
 function lfk_should_trim_plugin_assets() {
 	if ( is_admin() ) {
@@ -1603,26 +1652,31 @@ function lfk_archive_product_card( $product, $image_attributes = array() ) {
 
 	$product_id = $product->get_id();
 	$classes    = implode( ' ', array_map( 'sanitize_html_class', wc_get_product_class( 'lfk-archive-product-card', $product ) ) );
+	$brand      = get_the_terms( $product_id, 'product_brand' );
+	$ages       = get_the_terms( $product_id, 'age' );
+	$brand_name = $brand && ! is_wp_error( $brand ) ? $brand[0]->name : '';
+	$age_name   = $ages && ! is_wp_error( $ages ) ? $ages[0]->name : '';
 	?>
 	<li class="<?php echo esc_attr( $classes ); ?>">
 		<a class="lfk-product-image" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>">
 			<?php echo lfk_product_card_image( $product, $image_attributes ); ?>
 		</a>
+		<?php if ( $age_name || $brand_name ) : ?>
+			<div class="lfk-product-card-taxonomy"><span><?php echo esc_html( $age_name ); ?></span><span><?php echo esc_html( $brand_name ); ?></span></div>
+		<?php endif; ?>
 		<h2 class="lfk-product-title"><a href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php echo esc_html( lfk_archive_product_title( $product ) ); ?></a></h2>
+		<?php if ( $product->get_sku() ) : ?>
+			<div class="lfk-product-sku"><?php esc_html_e( 'SKU:', 'lfk-tailwind' ); ?> <span><?php echo esc_html( $product->get_sku() ); ?></span></div>
+		<?php endif; ?>
 		<div class="lfk-product-price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 		<a class="lfk-product-wishlist" href="<?php echo esc_url( home_url( '/wishlists/' ) ); ?>">
 			<?php echo lfk_svg_icon( 'heart' ); ?>
 			<span>Add to Wishlist</span>
 		</a>
-		<a
-			href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
-			data-quantity="1"
-			data-product_id="<?php echo esc_attr( $product_id ); ?>"
-			data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
-			class="lfk-add-to-cart button <?php echo esc_attr( $product->is_type( 'simple' ) ? 'product_type_simple add_to_cart_button ajax_add_to_cart' : 'product_type_' . $product->get_type() ); ?>"
-			aria-label="<?php echo esc_attr( $product->add_to_cart_description() ); ?>"
-			rel="nofollow"
-		><?php esc_html_e( 'หยิบใส่ตะกร้า', 'lfk-tailwind' ); ?></a>
+		<div class="lfk-product-card-purchase">
+			<span class="lfk-product-card-status"><?php echo esc_html( $product->is_in_stock() ? __( 'พร้อมส่ง', 'lfk-tailwind' ) : __( 'สินค้าหมด', 'lfk-tailwind' ) ); ?></span>
+			<a class="lfk-add-to-cart button" href="<?php echo esc_url( get_permalink( $product_id ) ); ?>"><?php esc_html_e( 'ดูรายละเอียด', 'lfk-tailwind' ); ?></a>
+		</div>
 	</li>
 	<?php
 }
@@ -1680,65 +1734,103 @@ add_filter( 'woocommerce_email_recipient_new_order', function ( $recipient, $ord
 	return $recipient;
 }, 10, 2 );
 
-add_action( 'woocommerce_thankyou_order_received_text', function () {
-	echo '<p class="woocommerce-notice woocommerce-notice--success woocommerce-thankyou-order-received"><span class="span_1">ขอบคุณมากค่ะที่เลือกซื้อของเล่นเสริมพัฒนาการกับทางร้าน! 💕</span><span class="span_2">เรารู้สึกขอบคุณอย่างมากที่คุณเลือกของเล่นเสริมพัฒนาการสำหรับน้องจากเรา เราหวังว่าของเล่นเหล่านี้จะช่วยพัฒนาทักษะและความคิดสร้างสรรค์ของน้องได้ดีค่ะ สำหรับการจัดส่ง: เมื่อของเล่นออกจากร้านแล้ว เราจะส่งเลขติดตามพัสดุให้คุณภายในวันนี้ ถ้าหากกดสั่งซื้อเข้ามาหลัง 14:00 ทางเราจะดำเนินการจัดส่งให้คุณในวันถัดไปค่ะ เพื่อให้คุณสามารถติดตามสถานะการจัดส่งได้</span><span class="span_3">หากมีข้อสงสัยเกี่ยวกับการใช้งานของเล่น สามารถติดต่อเราได้ตลอดเวลาค่ะ</span><span class="span_4">ขอบคุณอีกครั้งที่ให้ความไว้วางใจ และหวังว่าน้องจะชอบของเล่นใหม่นะคะ 🙏</span></p>';
-}, 10, 1 );
+add_filter( 'woocommerce_thankyou_order_received_text', function ( $text, $order ) {
+	return '<span class="span_1">ขอบคุณมากค่ะที่เลือกซื้อของเล่นเสริมพัฒนาการกับทางร้าน! 💕</span><span class="span_2">เรารู้สึกขอบคุณอย่างมากที่คุณเลือกของเล่นเสริมพัฒนาการสำหรับน้องจากเรา เราหวังว่าของเล่นเหล่านี้จะช่วยพัฒนาทักษะและความคิดสร้างสรรค์ของน้องได้ดีค่ะ สำหรับการจัดส่ง: เมื่อของเล่นออกจากร้านแล้ว เราจะส่งเลขติดตามพัสดุให้คุณภายในวันนี้ ถ้าหากกดสั่งซื้อเข้ามาหลัง 14:00 ทางเราจะดำเนินการจัดส่งให้คุณในวันถัดไปค่ะ เพื่อให้คุณสามารถติดตามสถานะการจัดส่งได้</span><span class="span_3">หากมีข้อสงสัยเกี่ยวกับการใช้งานของเล่น สามารถติดต่อเราได้ตลอดเวลาค่ะ</span><span class="span_4">ขอบคุณอีกครั้งที่ให้ความไว้วางใจ และหวังว่าน้องจะชอบของเล่นใหม่นะคะ 🙏</span>';
+}, 10, 2 );
+
+add_action( 'woocommerce_thankyou', function ( $order_id ) {
+	$order = $order_id ? wc_get_order( $order_id ) : null;
+	if ( ! $order || ! $order->is_paid() ) {
+		return;
+	}
+
+	$actions = array(
+		array(
+			'url'   => home_url( '/' ),
+			'label' => __( 'กลับหน้าหลัก', 'lfk-tailwind' ),
+			'class' => 'lfk-order-success-action--primary',
+		),
+		array(
+			'url'   => wc_get_page_permalink( 'shop' ),
+			'label' => __( 'เลือกซื้อสินค้าต่อ', 'lfk-tailwind' ),
+			'class' => 'lfk-order-success-action--secondary',
+		),
+	);
+
+	echo '<nav class="lfk-order-success-actions" aria-label="' . esc_attr__( 'Order next steps', 'lfk-tailwind' ) . '">';
+	foreach ( $actions as $action ) {
+		echo '<a class="lfk-order-success-action ' . esc_attr( $action['class'] ) . '" href="' . esc_url( $action['url'] ) . '">' . esc_html( $action['label'] ) . '</a>';
+	}
+	echo '</nav>';
+}, 5 );
 
 add_filter( 'woocommerce_get_stock_html', 'lfk_custom_stock_html', 10, 2 );
+
+add_action( 'woocommerce_before_quantity_input_field', function () {
+	echo '<button class="lfk-quantity-step" type="button" data-lfk-quantity-step="decrease" aria-label="' . esc_attr__( 'ลดจำนวน', 'lfk-tailwind' ) . '">−</button>';
+} );
+
+add_action( 'woocommerce_after_quantity_input_field', function () {
+	echo '<button class="lfk-quantity-step" type="button" data-lfk-quantity-step="increase" aria-label="' . esc_attr__( 'เพิ่มจำนวน', 'lfk-tailwind' ) . '">+</button>';
+} );
+
+function lfk_format_stock_sync_time( $timestamp ) {
+	$timestamp = (int) $timestamp;
+	if ( $timestamp <= 0 ) {
+		return '';
+	}
+
+	$diff = time() - $timestamp;
+	if ( $diff < 0 || $diff >= DAY_IN_SECONDS ) {
+		return wp_date( 'j M Y H:i', $timestamp );
+	}
+	if ( $diff < MINUTE_IN_SECONDS ) {
+		return __( 'เมื่อสักครู่', 'lfk-tailwind' );
+	}
+	if ( $diff < HOUR_IN_SECONDS ) {
+		return sprintf( __( '%d นาทีที่แล้ว', 'lfk-tailwind' ), (int) floor( $diff / MINUTE_IN_SECONDS ) );
+	}
+
+	return sprintf( __( '%d ชั่วโมงที่แล้ว', 'lfk-tailwind' ), (int) floor( $diff / HOUR_IN_SECONDS ) );
+}
+
 function lfk_custom_stock_html( $html, $product ) {
-	if ( ! is_product() || ! $product->managing_stock() ) {
+	if ( ! is_product() || ! $product instanceof WC_Product ) {
 		return $html;
 	}
 
-	$qty = (int) $product->get_stock_quantity();
-	if ( $qty <= 0 ) {
-		return '<p class="stock out-of-stock" style="color:#d63638;font-weight:600;">สินค้าหมด</p>';
+	$out = $html;
+	if ( ! $product->managing_stock() ) {
+		return $out;
 	}
-
-	if ( $qty > 100 ) {
-		$text  = 'มีมากกว่า 100 ชิ้น';
-		$color = '#00a32a';
-	} elseif ( $qty <= 5 ) {
-		$text  = sprintf( 'เหลือ %d ชิ้น', $qty );
-		$color = '#dba617';
-	} else {
-		$text  = sprintf( 'เหลือ %d ชิ้น', $qty );
-		$color = '#00a32a';
-	}
-
-	$out = sprintf( '<p class="stock in-stock" style="color:%s;font-weight:600;">%s</p>', esc_attr( $color ), esc_html( $text ) );
 
 	$last_sync = get_option( 'thaiadapp_odoo_last_sync', array() );
 	$sync_time = isset( $last_sync['time'] ) ? $last_sync['time'] : 0;
-	if ( $sync_time ) {
-		$minutes = (int) floor( ( time() - (int) $sync_time ) / 60 );
-		if ( $minutes < 1 ) {
-			$ago = 'เมื่อสักครู่';
-		} elseif ( $minutes < 60 ) {
-			$ago = sprintf( '%d นาทีที่แล้ว', $minutes );
-		} else {
-			$ago = sprintf( '%d ชั่วโมงที่แล้ว', (int) floor( $minutes / 60 ) );
-		}
-		$out .= sprintf( '<p class="stock-sync-time" style="font-size:0.85em;color:#999;margin-top:-8px;">อัปเดต %s</p>', esc_html( $ago ) );
+	$sync_age  = lfk_format_stock_sync_time( $sync_time );
+	if ( $sync_age ) {
+		$out .= sprintf( '<p class="stock-sync-time">ตรวจสอบสต็อกล่าสุด %s</p>', esc_html( $sync_age ) );
 	}
 
 	$incoming_qty  = get_post_meta( $product->get_id(), '_odoo_incoming_qty', true );
 	$incoming_date = get_post_meta( $product->get_id(), '_odoo_incoming_date', true );
 	if ( ! empty( $incoming_qty ) && (float) $incoming_qty > 0 ) {
-		$incoming_text = sprintf( 'สินค้ากำลังมา: %s ชิ้น', number_format( (float) $incoming_qty, 0 ) );
+		$incoming_text = sprintf( 'สินค้ากำลังมา %s ชิ้น', number_format_i18n( (float) $incoming_qty, 0 ) );
 		if ( $incoming_date ) {
-			$day   = (int) date( 'j', strtotime( $incoming_date ) );
-			$month = date( 'F', strtotime( $incoming_date ) );
-			if ( $day <= 10 ) {
-				$period = 'ต้นเดือน' . $month;
-			} elseif ( $day <= 20 ) {
-				$period = 'กลางเดือน' . $month;
-			} else {
-				$period = 'ปลายเดือน' . $month;
+			$incoming_timestamp = strtotime( $incoming_date );
+			if ( $incoming_timestamp ) {
+				$day   = (int) wp_date( 'j', $incoming_timestamp );
+				$month = wp_date( 'F Y', $incoming_timestamp );
+				if ( $day <= 10 ) {
+					$period = 'ต้นเดือน' . $month;
+				} elseif ( $day <= 20 ) {
+					$period = 'กลางเดือน' . $month;
+				} else {
+					$period = 'ปลายเดือน' . $month;
+				}
+				$incoming_text .= sprintf( ' · กำหนดเข้าตามข้อมูลล่าสุด %s', $period );
 			}
-			$incoming_text .= sprintf( ' (คาดว่าจะขายได้%s)', $period );
 		}
-		$out .= sprintf( '<p class="stock-incoming" style="font-size:0.9em;color:#2271b1;margin-top:-4px;">%s</p>', esc_html( $incoming_text ) );
+		$out .= sprintf( '<p class="stock-incoming">%s</p>', esc_html( $incoming_text ) );
 	}
 
 	return $out;

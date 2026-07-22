@@ -4,10 +4,32 @@
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script>
+		( function ( w, d, s, l, i ) {
+			w[ l ] = w[ l ] || [];
+			w[ l ].push( { 'gtm.start': new Date().getTime(), event: 'gtm.js' } );
+			function loadGtm() {
+				var f = d.getElementsByTagName( s )[0],
+					j = d.createElement( s ),
+					dl = l !== 'dataLayer' ? '&l=' + l : '';
+				j.async = true;
+				j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+				f.parentNode.insertBefore( j, f );
+			}
+			if ( 'complete' === d.readyState ) {
+				w.setTimeout( loadGtm, 2500 );
+			} else {
+				w.addEventListener( 'load', function () {
+					w.setTimeout( loadGtm, 2500 );
+				} );
+			}
+		} )( window, document, 'script', 'dataLayer', 'GTM-KRCKKWM' );
+	</script>
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRCKKWM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="lfk-site-header">
 	<div class="lfk-topbar">
 		<div class="lfk-shell flex min-h-[38px] items-center justify-between gap-4">

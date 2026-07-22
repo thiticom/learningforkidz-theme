@@ -37,6 +37,8 @@ if ( is_tax( 'product_cat' ) ) {
 	}
 }
 $show_hero_image = $hero_image_id && $child_terms;
+$result_count    = function_exists( 'lfk_product_archive_result_count' ) ? lfk_product_archive_result_count() : '';
+$search_value    = get_search_query();
 $hero_image_html = '';
 if ( $show_hero_image ) {
 	$hero_image_html = wp_get_attachment_image( $hero_image_id, 'full', false, array( 'loading' => 'eager' ) );
@@ -66,6 +68,32 @@ if ( $show_hero_image ) {
 		<?php if ( $description ) : ?>
 			<div class="lfk-archive-intro" aria-label="<?php echo esc_attr( $archive_title ); ?>">
 				<div class="lfk-archive-description"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
+			</div>
+		<?php endif; ?>
+
+		<?php if ( ! $child_terms ) : ?>
+			<header class="lfk-shop-heading">
+				<p class="lfk-shop-kicker"><?php esc_html_e( 'เลือกตามช่วงวัยและทักษะ', 'lfk-tailwind' ); ?></p>
+				<div class="lfk-shop-heading-row">
+					<div>
+						<h1><?php echo esc_html( $archive_title ); ?></h1>
+						<p><?php esc_html_e( 'ค้นหาของเล่นแนว STEM และกิจกรรมไม่ติดจอจากแบรนด์ที่ครอบครัวไว้วางใจ พร้อมข้อมูลอายุ SKU ราคา และสถานะสินค้าเพื่อช่วยตัดสินใจเร็วขึ้น', 'lfk-tailwind' ); ?></p>
+					</div>
+					<?php if ( $result_count ) : ?>
+						<div class="lfk-shop-count"><strong><?php echo esc_html( (string) $wp_query->found_posts ); ?></strong><span><?php esc_html_e( 'รายการที่ตรงกับการค้นหา', 'lfk-tailwind' ); ?></span></div>
+					<?php endif; ?>
+				</div>
+			</header>
+
+			<div class="lfk-shop-toolbar">
+				<form class="lfk-shop-search" role="search" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>">
+					<label class="screen-reader-text" for="lfk-shop-search-input"><?php esc_html_e( 'ค้นหาสินค้า', 'lfk-tailwind' ); ?></label>
+					<input id="lfk-shop-search-input" type="search" name="s" value="<?php echo esc_attr( $search_value ); ?>" placeholder="<?php esc_attr_e( 'ค้นหาชื่อสินค้า หรือ SKU', 'lfk-tailwind' ); ?>">
+					<input type="hidden" name="post_type" value="product">
+				</form>
+				<?php if ( function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
+					<div class="lfk-shop-toolbar-ordering"><?php woocommerce_catalog_ordering(); ?></div>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 
@@ -150,7 +178,8 @@ if ( $show_hero_image ) {
 					</div>
 				</details>
 				<aside class="lfk-archive-sidebar" aria-label="<?php esc_attr_e( 'Product filters', 'lfk-tailwind' ); ?>">
-					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></div>
+					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรองสินค้า', 'lfk-tailwind' ); ?></div>
+					<a class="lfk-filter-clear" href="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>"><?php esc_html_e( 'ล้างตัวกรองทั้งหมด', 'lfk-tailwind' ); ?></a>
 					<form class="lfk-filter-form" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>" data-lfk-filter-form>
 						<?php
 						lfk_archive_filter_hidden_inputs();
@@ -163,7 +192,7 @@ if ( $show_hero_image ) {
 				</aside>
 
 				<section class="lfk-archive-products" aria-label="<?php echo esc_attr( $archive_title ); ?>">
-					<?php if ( function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
+					<?php if ( $child_terms && function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
 						<div class="lfk-archive-ordering">
 							<?php woocommerce_catalog_ordering(); ?>
 						</div>

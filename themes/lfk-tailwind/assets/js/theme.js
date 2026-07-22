@@ -780,6 +780,27 @@
     });
   }
 
+  function initProductQuantityButtons() {
+    document.addEventListener('click', function (event) {
+      var button = event.target.closest ? event.target.closest('[data-lfk-quantity-step]') : null;
+      if (!button) return;
+
+      var quantity = button.closest('.quantity');
+      var input = quantity ? quantity.querySelector('input.qty') : null;
+      if (!input) return;
+
+      var step = parseFloat(input.getAttribute('step')) || 1;
+      var min = parseFloat(input.getAttribute('min'));
+      var max = parseFloat(input.getAttribute('max'));
+      var value = parseFloat(input.value) || (isNaN(min) ? 1 : min);
+      value += button.getAttribute('data-lfk-quantity-step') === 'increase' ? step : -step;
+      if (!isNaN(min)) value = Math.max(min, value);
+      if (!isNaN(max)) value = Math.min(max, value);
+      input.value = String(value);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+  }
+
   function initCommerceFeedback() {
     var toastTimer = null;
     var pendingButtons = [];
@@ -805,7 +826,7 @@
       if (toastTimer) window.clearTimeout(toastTimer);
       toastTimer = window.setTimeout(function () {
         toast.classList.remove('is-visible');
-      }, 2600);
+      }, 5000);
     }
 
     function pulseCart() {
@@ -1040,6 +1061,61 @@
         var placeOrder = checkout.querySelector('#place_order');
         if (placeOrder) placeOrder.classList.add('loading');
       });
+
+      var recoverPlaceOrderTimer = null;
+      var recoverPlaceOrder = function () {
+        var placeOrder = checkout.querySelector('#place_order');
+        if (!placeOrder) return;
+
+        placeOrder.classList.remove('loading');
+        placeOrder.removeAttribute('disabled');
+        placeOrder.disabled = false;
+        checkout.classList.remove('processing');
+        Array.prototype.slice.call(checkout.querySelectorAll('.blockUI.blockOverlay, .blockUI.blockMsg')).forEach(function (overlay) {
+          overlay.parentNode.removeChild(overlay);
+        });
+      };
+      var queuePlaceOrderRecovery = function () {
+        window.clearTimeout(recoverPlaceOrderTimer);
+        recoverPlaceOrderTimer = window.setTimeout(recoverPlaceOrder, 150);
+        window.setTimeout(recoverPlaceOrder, 800);
+        window.setTimeout(recoverPlaceOrder, 1800);
+        window.setTimeout(recoverPlaceOrder, 3500);
+      };
+      var hasCheckoutError = function () {
+        return !!checkout.querySelector('.woocommerce-NoticeGroup, .woocommerce-NoticeGroup-checkout, .woocommerce-error');
+      };
+
+      checkout.addEventListener('input', function () {
+        if (hasCheckoutError()) queuePlaceOrderRecovery();
+      });
+
+      checkout.addEventListener('change', function () {
+        if (hasCheckoutError()) queuePlaceOrderRecovery();
+      });
+
+      window.addEventListener('message', function () {
+        if (hasCheckoutError()) queuePlaceOrderRecovery();
+      });
+
+      window.addEventListener('focus', function () {
+        if (hasCheckoutError()) queuePlaceOrderRecovery();
+      });
+
+      function bindCheckoutEvents(attempt) {
+        if (!window.jQuery) {
+          if (attempt < 20) {
+            window.setTimeout(function () {
+              bindCheckoutEvents(attempt + 1);
+            }, 250);
+          }
+          return;
+        }
+
+        window.jQuery(document.body).on('checkout_error', queuePlaceOrderRecovery);
+      }
+
+      bindCheckoutEvents(0);
     }
   }
 
@@ -1052,6 +1128,7 @@
     initCatalogOrdering();
     initArchiveEnhancements();
     initProductGallery();
+    initProductQuantityButtons();
     initCommerceFeedback();
   });
 })();

@@ -18,6 +18,7 @@ settings, and private credentials are not included.
 - `docs/application-context.md` explains the theme, runtime assumptions, and external dependencies.
 - `docs/remote-development.md` covers the Hetzner Codex development folder and Docker workflow.
 - `docs/staging-deployment.md` lists the staging inputs and audit commands needed before a real staging deploy.
+- `docs/theme-deployment.md` documents Git-based staging and production promotion.
 - `docs/verification.md` lists build and runtime checks.
 
 ## Local Theme Build
