@@ -86,14 +86,32 @@ if ( $show_hero_image ) {
 			</header>
 
 			<div class="lfk-shop-toolbar">
-				<form class="lfk-shop-search" role="search" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>">
+				<form class="lfk-shop-search" role="search" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>" data-lfk-shop-search>
 					<label class="screen-reader-text" for="lfk-shop-search-input"><?php esc_html_e( 'ค้นหาสินค้า', 'lfk-tailwind' ); ?></label>
 					<input id="lfk-shop-search-input" type="search" name="s" value="<?php echo esc_attr( $search_value ); ?>" placeholder="<?php esc_attr_e( 'ค้นหาชื่อสินค้า หรือ SKU', 'lfk-tailwind' ); ?>">
 					<input type="hidden" name="post_type" value="product">
 				</form>
-				<?php if ( function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
-					<div class="lfk-shop-toolbar-ordering"><?php woocommerce_catalog_ordering(); ?></div>
-				<?php endif; ?>
+				<div class="lfk-shop-toolbar-actions">
+					<?php if ( have_posts() ) : ?>
+						<details class="lfk-mobile-filters lfk-shop-mobile-filters">
+							<summary><?php esc_html_e( 'ตัวกรอง', 'lfk-tailwind' ); ?></summary>
+							<div class="lfk-mobile-filters-panel">
+								<form class="lfk-filter-form" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>" data-lfk-filter-form>
+									<?php
+									lfk_archive_filter_hidden_inputs();
+									lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
+									lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
+									lfk_archive_price_filters();
+									?>
+									<noscript><button class="lfk-filter-submit" type="submit"><?php esc_html_e( 'ใช้ตัวกรอง', 'lfk-tailwind' ); ?></button></noscript>
+								</form>
+							</div>
+						</details>
+					<?php endif; ?>
+					<?php if ( function_exists( 'woocommerce_catalog_ordering' ) ) : ?>
+						<div class="lfk-shop-toolbar-ordering"><?php woocommerce_catalog_ordering(); ?></div>
+					<?php endif; ?>
+				</div>
 			</div>
 		<?php endif; ?>
 
@@ -163,20 +181,6 @@ if ( $show_hero_image ) {
 
 		<?php elseif ( have_posts() ) : ?>
 			<div class="lfk-archive-layout">
-				<details class="lfk-mobile-filters">
-					<summary><?php esc_html_e( 'กรอง', 'lfk-tailwind' ); ?></summary>
-					<div class="lfk-mobile-filters-panel">
-						<form class="lfk-filter-form" method="get" action="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>" data-lfk-filter-form>
-							<?php
-							lfk_archive_filter_hidden_inputs();
-							lfk_archive_filter_terms( 'product_brand', __( 'กรองตามยี่ห้อ', 'lfk-tailwind' ) );
-							lfk_archive_filter_terms( 'age', __( 'กรองตามอายุ', 'lfk-tailwind' ) );
-							lfk_archive_price_filters();
-							?>
-							<noscript><button class="lfk-filter-submit" type="submit"><?php esc_html_e( 'ใช้ตัวกรอง', 'lfk-tailwind' ); ?></button></noscript>
-						</form>
-					</div>
-				</details>
 				<aside class="lfk-archive-sidebar" aria-label="<?php esc_attr_e( 'Product filters', 'lfk-tailwind' ); ?>">
 					<div class="lfk-sidebar-title"><?php esc_html_e( 'กรองสินค้า', 'lfk-tailwind' ); ?></div>
 					<a class="lfk-filter-clear" href="<?php echo esc_url( lfk_archive_filter_action_url() ); ?>"><?php esc_html_e( 'ล้างตัวกรองทั้งหมด', 'lfk-tailwind' ); ?></a>

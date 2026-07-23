@@ -93,6 +93,20 @@ body.single-product .lfk-topbar {
   margin-bottom: 24px;
 }
 
+.lfk-shop-toolbar-actions {
+  display: contents;
+}
+
+.lfk-shop-search .screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .lfk-shop-search input[type="search"],
 .lfk-shop-toolbar-ordering select {
   width: 100%;
@@ -604,7 +618,7 @@ body.single-product .lfk-topbar {
 
 @media (max-width: 1023px) {
   .lfk-product-archive:not(.lfk-product-archive--category-directory) {
-    padding-top: 32px;
+    padding-top: 16px;
   }
 
   .lfk-product-archive:not(.lfk-product-archive--category-directory) .lfk-breadcrumbs,
@@ -616,14 +630,25 @@ body.single-product .lfk-topbar {
     transform: none;
   }
 
+  .lfk-product-archive:not(.lfk-product-archive--category-directory) .lfk-breadcrumbs {
+    margin: 0 12px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
   .lfk-product-archive:not(.lfk-product-archive--category-directory) .lfk-shell,
   .lfk-single-product .lfk-shell {
     padding: 0;
   }
 
   .lfk-shop-heading {
-    margin: 14px 16px 20px;
-    padding-bottom: 16px;
+    margin: 8px 12px 10px;
+    padding-bottom: 10px;
+  }
+
+  .lfk-shop-kicker {
+    margin-bottom: 2px;
+    font-size: 12px;
   }
 
   .lfk-shop-heading-row {
@@ -631,45 +656,85 @@ body.single-product .lfk-topbar {
   }
 
   .lfk-shop-heading h1 {
-    font-size: 30px;
+    font-size: 28px;
   }
 
   .lfk-shop-heading-row > div:first-child > p {
-    font-size: 13px;
+    display: none;
   }
 
   .lfk-shop-count {
-    margin-top: 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 6px;
     text-align: left;
+  }
+
+  .lfk-shop-count strong {
+    font-size: 18px;
+  }
+
+  .lfk-shop-count span {
+    margin-top: 0;
   }
 
   .lfk-shop-toolbar {
     grid-template-columns: 1fr;
-    margin: 0 12px 22px 74px;
+    margin: 0 12px 12px;
     gap: 8px;
   }
 
-  .lfk-shop-toolbar::before {
-    position: absolute;
-    left: 12px;
-    display: inline-flex;
-    width: 54px;
+  .lfk-shop-search input[type="search"] {
     height: 48px;
+  }
+
+  .lfk-shop-toolbar-actions {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .lfk-shop-toolbar .lfk-shop-mobile-filters {
+    display: contents;
+    margin: 0;
+    border: 0;
+  }
+
+  .lfk-shop-toolbar .lfk-shop-mobile-filters summary {
+    display: inline-flex;
+    min-height: 46px;
+    grid-column: 1;
     align-items: center;
     justify-content: center;
+    border: 1px solid #0076be;
     border-radius: 8px;
-    background: #111111;
+    background: #0076be;
+    padding: 0 12px;
     color: #ffffff;
-    content: "ตัวกรอง";
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+  }
+
+  .lfk-shop-toolbar .lfk-shop-mobile-filters summary::before {
+    content: none;
+  }
+
+  .lfk-shop-toolbar .lfk-shop-mobile-filters-panel {
+    grid-column: 1 / -1;
+    margin-top: 0;
+    border: 1px solid #d8e1ea;
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .lfk-shop-toolbar-ordering {
+    grid-column: 2;
   }
 
   .lfk-shop-toolbar-ordering select {
     height: 46px;
-  }
-
-  .lfk-mobile-filters {
-    margin-bottom: 16px;
   }
 
   .lfk-product-archive:not(.lfk-product-archive--category-directory) .lfk-archive-products {

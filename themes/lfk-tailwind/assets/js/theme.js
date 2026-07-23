@@ -553,6 +553,7 @@
     var observer = null;
     var nextPageLoading = false;
     var request = null;
+    var searchTimer = null;
 
     if (!products || !list) return;
 
@@ -675,6 +676,31 @@
       return url.toString();
     }
 
+    function searchUrlFromForm(form) {
+      var url = pageOneUrl(window.location.href);
+      var formData = new FormData(form);
+      var searchValue = String(formData.get('s') || '').trim();
+
+      url.searchParams.delete('s');
+      url.searchParams.delete('post_type');
+      if (searchValue) {
+        url.searchParams.set('s', searchValue);
+        url.searchParams.set('post_type', 'product');
+      }
+
+      return url.toString();
+    }
+
+    archive.addEventListener('input', function (event) {
+      var searchForm = event.target.closest ? event.target.closest('[data-lfk-shop-search]') : null;
+      if (!searchForm) return;
+
+      window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(function () {
+        fetchArchive(searchUrlFromForm(searchForm), { push: true });
+      }, 450);
+    });
+
     archive.addEventListener('change', function (event) {
       var filterForm = event.target.closest ? event.target.closest('[data-lfk-filter-form]') : null;
       if (filterForm) {
@@ -695,6 +721,14 @@
     });
 
     archive.addEventListener('submit', function (event) {
+      var searchForm = event.target.closest ? event.target.closest('[data-lfk-shop-search]') : null;
+      if (searchForm) {
+        event.preventDefault();
+        window.clearTimeout(searchTimer);
+        fetchArchive(searchUrlFromForm(searchForm), { push: true });
+        return;
+      }
+
       var filterForm = event.target.closest ? event.target.closest('[data-lfk-filter-form]') : null;
       if (filterForm) {
         event.preventDefault();
