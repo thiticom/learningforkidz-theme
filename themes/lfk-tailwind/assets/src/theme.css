@@ -682,6 +682,10 @@ body.single-product .lfk-topbar {
   .lfk-shop-toolbar {
     grid-template-columns: 1fr;
     margin: 0 12px 12px;
+    border: 1px solid #d8e1ea;
+    border-radius: 8px;
+    background: #f7fafc;
+    padding: 10px;
     gap: 8px;
   }
 
@@ -691,20 +695,23 @@ body.single-product .lfk-topbar {
 
   .lfk-shop-toolbar-actions {
     display: grid;
-    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-columns: 140px minmax(0, 1fr);
+    align-items: start;
     gap: 8px;
   }
 
   .lfk-shop-toolbar .lfk-shop-mobile-filters {
-    display: contents;
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
     margin: 0;
     border: 0;
   }
 
   .lfk-shop-toolbar .lfk-shop-mobile-filters summary {
     display: inline-flex;
+    width: 100%;
     min-height: 46px;
-    grid-column: 1;
     align-items: center;
     justify-content: center;
     border: 1px solid #0076be;
@@ -722,19 +729,34 @@ body.single-product .lfk-topbar {
   }
 
   .lfk-shop-toolbar .lfk-shop-mobile-filters-panel {
-    grid-column: 1 / -1;
-    margin-top: 0;
+    width: 100%;
+    margin-top: 8px;
     border: 1px solid #d8e1ea;
     border-radius: 8px;
+    background: #ffffff;
     padding: 14px;
   }
 
   .lfk-shop-toolbar-ordering {
     grid-column: 2;
+    grid-row: 1;
   }
 
   .lfk-shop-toolbar-ordering select {
     height: 46px;
+    border-color: #b9c9d6;
+  }
+
+  .lfk-shop-toolbar .lfk-shop-mobile-filters[open] {
+    grid-column: 1 / -1;
+  }
+
+  .lfk-shop-toolbar .lfk-shop-mobile-filters[open] summary {
+    width: 140px;
+  }
+
+  .lfk-shop-toolbar-actions:has(.lfk-shop-mobile-filters[open]) .lfk-shop-toolbar-ordering {
+    display: none;
   }
 
   .lfk-product-archive:not(.lfk-product-archive--category-directory) .lfk-archive-products {
