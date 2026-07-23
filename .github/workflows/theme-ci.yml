@@ -27,3 +27,41 @@ jobs:
         run: find themes/lfk-tailwind -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Check theme JavaScript
         run: node -c themes/lfk-tailwind/assets/js/theme.js
+
+  deploy-staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/staging'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Deploy tested commit to staging
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/lfk-deploy
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/lfk-deploy ~/.ssh/known_hosts
+          ssh -i ~/.ssh/lfk-deploy -o IdentitiesOnly=yes -p "$DEPLOY_PORT" "thaiada@$DEPLOY_HOST" "deploy $GITHUB_SHA"
+
+  deploy-production:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy tested commit to production
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/lfk-deploy
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/lfk-deploy ~/.ssh/known_hosts
+          ssh -i ~/.ssh/lfk-deploy -o IdentitiesOnly=yes -p "$DEPLOY_PORT" "thaiada@$DEPLOY_HOST" "deploy $GITHUB_SHA"
