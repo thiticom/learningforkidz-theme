@@ -11,8 +11,8 @@
 			</a>
 		</div>
 
-		<div class="lfk-instagram-feed" data-lfk-juicer-feed data-lfk-juicer-src="https://www.juicer.io/embed/learningforkidz-th/embed-code.js?per=4&amp;pages=1">
-			<div class="juicer-feed" data-feed-id="learningforkidz-th" data-per="4" data-pages="1">
+		<div class="lfk-instagram-feed" data-lfk-juicer-feed data-lfk-juicer-src="https://www.juicer.io/embed/learningforkidz-th/embed-code.js?per=8&amp;pages=1">
+			<div class="juicer-feed" data-feed-id="learningforkidz-th" data-per="8" data-pages="1">
 				<p class="lfk-instagram-loading" role="status">กำลังโหลดอัปเดตล่าสุด…</p>
 			</div>
 			<noscript>
