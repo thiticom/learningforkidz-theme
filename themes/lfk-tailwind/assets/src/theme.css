@@ -8652,3 +8652,194 @@ body.woocommerce-cart .lfk-cart-page .return-to-shop .button:focus {
     font-size: 15px;
   }
 }
+
+/* Juicer social feed on the homepage. */
+.lfk-instagram-section {
+  border-top: 1px solid #eef1f4;
+  border-bottom: 1px solid #eef1f4;
+  background: #ffffff;
+  padding: 48px 0;
+}
+
+.lfk-instagram-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 26px;
+}
+
+.lfk-instagram-copy h2 {
+  margin: 0;
+  color: #222222;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.lfk-instagram-copy p {
+  max-width: 760px;
+  margin: 8px 0 0;
+  color: #666666;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.lfk-instagram-link {
+  display: inline-flex;
+  min-height: 46px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid #0076be;
+  border-radius: 999px;
+  padding: 0 20px;
+  color: #0076be;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lfk-instagram-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.lfk-instagram-link:hover,
+.lfk-instagram-link:focus {
+  background: #0076be;
+  color: #ffffff;
+}
+
+.lfk-instagram-link:focus-visible {
+  outline: 3px solid rgba(0, 118, 190, 0.24);
+  outline-offset: 3px;
+}
+
+.lfk-instagram-feed {
+  min-width: 0;
+}
+
+.lfk-instagram-feed > .juicer-feed {
+  min-width: 0;
+  min-height: 280px;
+}
+
+.lfk-instagram-loading {
+  display: flex;
+  min-height: 280px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0;
+  color: #667985;
+  font-size: 15px;
+  text-align: center;
+}
+
+.lfk-instagram-loading::before {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 3px solid #d9e8f1;
+  border-top-color: #0076be;
+  border-radius: 999px;
+  content: "";
+  animation: lfk-instagram-spin 0.8s linear infinite;
+}
+
+@keyframes lfk-instagram-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lfk-instagram-feed .jcr-post {
+  overflow: hidden;
+  border: 1px solid rgba(20, 54, 73, 0.08);
+  box-shadow: 0 10px 26px rgba(20, 54, 73, 0.1);
+}
+
+.lfk-instagram-feed .jcr-post-image:has(video) {
+  display: flex !important;
+}
+
+.lfk-instagram-feed .swiper-button-next,
+.lfk-instagram-feed .swiper-button-prev {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #e5ebef;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #0076be;
+  box-shadow: 0 5px 16px rgba(20, 54, 73, 0.13);
+}
+
+.lfk-instagram-feed .swiper-button-next::after,
+.lfk-instagram-feed .swiper-button-prev::after {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.lfk-instagram-fallback {
+  margin: 0;
+  text-align: center;
+}
+
+.lfk-instagram-fallback a {
+  color: #0076be;
+  font-weight: 600;
+}
+
+@media (max-width: 1023px) {
+  .lfk-instagram-feed .jcr-feed-slider .swiper-slide {
+    width: calc((100% - 8px) / 2) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .lfk-instagram-section {
+    margin-top: 0;
+    padding: 36px 0;
+  }
+
+  .lfk-instagram-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .lfk-instagram-copy h2 {
+    font-size: 27px;
+  }
+
+  .lfk-instagram-copy p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .lfk-instagram-link {
+    width: 100%;
+  }
+
+  .lfk-instagram-feed > .juicer-feed {
+    min-height: 420px;
+  }
+
+  .lfk-instagram-feed .jcr-feed-slider .swiper-slide {
+    width: 100% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lfk-instagram-link {
+    transition: none;
+  }
+
+  .lfk-instagram-loading::before {
+    animation: none;
+  }
+}

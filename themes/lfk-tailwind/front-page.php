@@ -8,6 +8,7 @@ get_header();
 	<?php get_template_part( 'template-parts/home-brands' ); ?>
 	<?php get_template_part( 'template-parts/home-products' ); ?>
 	<?php get_template_part( 'template-parts/home-media' ); ?>
+	<?php get_template_part( 'template-parts/home-instagram' ); ?>
 	<?php get_template_part( 'template-parts/home-articles' ); ?>
 </main>
 <?php

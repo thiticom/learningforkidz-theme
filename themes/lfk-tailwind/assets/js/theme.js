@@ -519,6 +519,47 @@
     });
   }
 
+  function initJuicerFeed() {
+    var root = document.querySelector('[data-lfk-juicer-feed]');
+    if (!root) return;
+
+    function loadFeed() {
+      if ('1' === root.getAttribute('data-lfk-juicer-loaded')) return;
+
+      var source = root.getAttribute('data-lfk-juicer-src');
+      if (!source) return;
+
+      root.setAttribute('data-lfk-juicer-loaded', '1');
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = source;
+      script.async = true;
+      script.defer = true;
+      script.addEventListener('error', function () {
+        var status = root.querySelector('.lfk-instagram-loading');
+        if (status) status.textContent = 'โหลดฟีดไม่ได้ในขณะนี้ กรุณาดูโพสต์ล่าสุดบน Instagram';
+      });
+      root.appendChild(script);
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      loadFeed();
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      if (!entries.some(function (entry) { return entry.isIntersecting; })) return;
+
+      observer.disconnect();
+      loadFeed();
+    }, {
+      rootMargin: '600px 0px'
+    });
+
+    observer.observe(root);
+  }
+
   function initBackToTop() {
     var button = document.querySelector('[data-lfk-back-top]');
     if (!button) return;
@@ -1158,6 +1199,7 @@
     initSearchOverlay();
     initHeroSlider();
     initCarousels();
+    initJuicerFeed();
     initBackToTop();
     initCatalogOrdering();
     initArchiveEnhancements();
