@@ -7304,7 +7304,8 @@ body.home .lfk-brand-logo img {
   }
 
   body.home .lfk-logo-track {
-    overflow-x: auto;
+    overflow-x: visible;
+    scroll-snap-type: none;
     transform: translateX(0);
   }
 
